@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import Navbar from './Navbar';
+import { AppProvider } from '@shopify/polaris';
 
 function Example() {
     return (
@@ -23,8 +25,12 @@ if (document.getElementById('root')) {
     const Index = ReactDOM.createRoot(document.getElementById('root'));
 
     Index.render(
+
         <React.StrictMode>
-            <Example/>
+            <AppProvider>
+                <Navbar />
+            </AppProvider>
         </React.StrictMode>
+
     )
 }

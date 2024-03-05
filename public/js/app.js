@@ -3011,6 +3011,3351 @@ function withinMaxClamp(min, value, max) {
 
 /***/ }),
 
+/***/ "./node_modules/@shopify/polaris/build/esm/components/AppProvider/AppProvider.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/AppProvider/AppProvider.js ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AppProvider: () => (/* binding */ AppProvider)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shopify/polaris-tokens */ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs");
+/* harmony import */ var _utilities_use_theme_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utilities/use-theme.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-theme.js");
+/* harmony import */ var _utilities_sticky_manager_sticky_manager_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/sticky-manager/sticky-manager.js */ "./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/sticky-manager.js");
+/* harmony import */ var _utilities_scroll_lock_manager_scroll_lock_manager_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/scroll-lock-manager/scroll-lock-manager.js */ "./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/scroll-lock-manager.js");
+/* harmony import */ var _utilities_i18n_I18n_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/i18n/I18n.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/I18n.js");
+/* harmony import */ var _utilities_features_context_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/features/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/features/context.js");
+/* harmony import */ var _utilities_i18n_context_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/i18n/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/context.js");
+/* harmony import */ var _utilities_scroll_lock_manager_context_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/scroll-lock-manager/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/context.js");
+/* harmony import */ var _utilities_sticky_manager_context_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utilities/sticky-manager/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/context.js");
+/* harmony import */ var _utilities_link_context_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utilities/link/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/link/context.js");
+/* harmony import */ var _MediaQueryProvider_MediaQueryProvider_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../MediaQueryProvider/MediaQueryProvider.js */ "./node_modules/@shopify/polaris/build/esm/components/MediaQueryProvider/MediaQueryProvider.js");
+/* harmony import */ var _PortalsManager_PortalsManager_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../PortalsManager/PortalsManager.js */ "./node_modules/@shopify/polaris/build/esm/components/PortalsManager/PortalsManager.js");
+/* harmony import */ var _FocusManager_FocusManager_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../FocusManager/FocusManager.js */ "./node_modules/@shopify/polaris/build/esm/components/FocusManager/FocusManager.js");
+/* harmony import */ var _EphemeralPresenceManager_EphemeralPresenceManager_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../EphemeralPresenceManager/EphemeralPresenceManager.js */ "./node_modules/@shopify/polaris/build/esm/components/EphemeralPresenceManager/EphemeralPresenceManager.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const MAX_SCROLLBAR_WIDTH = 20;
+const SCROLLBAR_TEST_ELEMENT_PARENT_SIZE = 30;
+const SCROLLBAR_TEST_ELEMENT_CHILD_SIZE = SCROLLBAR_TEST_ELEMENT_PARENT_SIZE + 10;
+function measureScrollbars() {
+  const parentEl = document.createElement('div');
+  parentEl.setAttribute('style', `position: absolute; opacity: 0; transform: translate3d(-9999px, -9999px, 0); pointer-events: none; width:${SCROLLBAR_TEST_ELEMENT_PARENT_SIZE}px; height:${SCROLLBAR_TEST_ELEMENT_PARENT_SIZE}px;`);
+  const child = document.createElement('div');
+  child.setAttribute('style', `width:100%; height: ${SCROLLBAR_TEST_ELEMENT_CHILD_SIZE}; overflow:scroll; scrollbar-width: thin;`);
+  parentEl.appendChild(child);
+  document.body.appendChild(parentEl);
+  const scrollbarWidth = SCROLLBAR_TEST_ELEMENT_PARENT_SIZE - (parentEl.firstElementChild?.clientWidth ?? 0);
+  const scrollbarWidthWithSafetyHatch = Math.min(scrollbarWidth, MAX_SCROLLBAR_WIDTH);
+  document.documentElement.style.setProperty('--pc-app-provider-scrollbar-width', `${scrollbarWidthWithSafetyHatch}px`);
+  document.body.removeChild(parentEl);
+}
+class AppProvider extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
+  constructor(props) {
+    super(props);
+    this.setBodyStyles = () => {
+      document.body.style.backgroundColor = 'var(--p-color-bg)';
+      document.body.style.color = 'var(--p-color-text)';
+    };
+    this.setRootAttributes = () => {
+      const activeThemeName = this.getThemeName();
+      _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.themeNames.forEach(themeName => {
+        document.documentElement.classList.toggle((0,_shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.createThemeClassName)(themeName), themeName === activeThemeName);
+      });
+    };
+    this.getThemeName = () => this.props.theme ?? _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.themeNameDefault;
+    this.stickyManager = new _utilities_sticky_manager_sticky_manager_js__WEBPACK_IMPORTED_MODULE_2__.StickyManager();
+    this.scrollLockManager = new _utilities_scroll_lock_manager_scroll_lock_manager_js__WEBPACK_IMPORTED_MODULE_3__.ScrollLockManager();
+    const {
+      i18n,
+      linkComponent
+    } = this.props;
+
+    // eslint-disable-next-line react/state-in-constructor
+    this.state = {
+      link: linkComponent,
+      intl: new _utilities_i18n_I18n_js__WEBPACK_IMPORTED_MODULE_4__.I18n(i18n)
+    };
+  }
+  componentDidMount() {
+    if (document != null) {
+      this.stickyManager.setContainer(document);
+      this.setBodyStyles();
+      this.setRootAttributes();
+      const isSafari16 = navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') && (navigator.userAgent.includes('Version/16.1') || navigator.userAgent.includes('Version/16.2') || navigator.userAgent.includes('Version/16.3'));
+      if (isSafari16) {
+        document.documentElement.classList.add('Polaris-Safari-16-Font-Optical-Sizing-Patch');
+      }
+    }
+    measureScrollbars();
+  }
+  componentDidUpdate({
+    i18n: prevI18n,
+    linkComponent: prevLinkComponent
+  }) {
+    const {
+      i18n,
+      linkComponent
+    } = this.props;
+    this.setRootAttributes();
+    if (i18n === prevI18n && linkComponent === prevLinkComponent) {
+      return;
+    }
+    this.setState({
+      link: linkComponent,
+      intl: new _utilities_i18n_I18n_js__WEBPACK_IMPORTED_MODULE_4__.I18n(i18n)
+    });
+  }
+  render() {
+    const {
+      children,
+      features
+    } = this.props;
+    const themeName = this.getThemeName();
+    const {
+      intl,
+      link
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_use_theme_js__WEBPACK_IMPORTED_MODULE_5__.ThemeContext.Provider, {
+      value: (0,_utilities_use_theme_js__WEBPACK_IMPORTED_MODULE_5__.getTheme)(themeName)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_features_context_js__WEBPACK_IMPORTED_MODULE_6__.FeaturesContext.Provider, {
+      value: features
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_i18n_context_js__WEBPACK_IMPORTED_MODULE_7__.I18nContext.Provider, {
+      value: intl
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_scroll_lock_manager_context_js__WEBPACK_IMPORTED_MODULE_8__.ScrollLockManagerContext.Provider, {
+      value: this.scrollLockManager
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_sticky_manager_context_js__WEBPACK_IMPORTED_MODULE_9__.StickyManagerContext.Provider, {
+      value: this.stickyManager
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_link_context_js__WEBPACK_IMPORTED_MODULE_10__.LinkContext.Provider, {
+      value: link
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_MediaQueryProvider_MediaQueryProvider_js__WEBPACK_IMPORTED_MODULE_11__.MediaQueryProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_PortalsManager_PortalsManager_js__WEBPACK_IMPORTED_MODULE_12__.PortalsManager, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_FocusManager_FocusManager_js__WEBPACK_IMPORTED_MODULE_13__.FocusManager, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_EphemeralPresenceManager_EphemeralPresenceManager_js__WEBPACK_IMPORTED_MODULE_14__.EphemeralPresenceManager, null, children))))))))));
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Badge: () => (/* binding */ Badge)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _utilities_within_filter_context_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/within-filter-context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/within-filter-context.js");
+/* harmony import */ var _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Badge.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.scss.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/utils.js");
+/* harmony import */ var _components_Pip_Pip_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Pip/Pip.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.js");
+/* harmony import */ var _utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/i18n/hooks.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js");
+/* harmony import */ var _Icon_Icon_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Icon/Icon.js */ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js");
+/* harmony import */ var _Text_Text_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Text/Text.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+
+
+
+
+
+
+
+
+
+
+const DEFAULT_SIZE = 'medium';
+const progressIconMap = {
+  complete: () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 20 20"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M6 10c0-.93 0-1.395.102-1.776a3 3 0 0 1 2.121-2.122C8.605 6 9.07 6 10 6c.93 0 1.395 0 1.776.102a3 3 0 0 1 2.122 2.122C14 8.605 14 9.07 14 10s0 1.395-.102 1.777a3 3 0 0 1-2.122 2.12C11.395 14 10.93 14 10 14s-1.395 0-1.777-.102a3 3 0 0 1-2.12-2.121C6 11.395 6 10.93 6 10Z"
+  })),
+  partiallyComplete: () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 20 20"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    fillRule: "evenodd",
+    d: "m8.888 6.014-.017-.018-.02.02c-.253.013-.45.038-.628.086a3 3 0 0 0-2.12 2.122C6 8.605 6 9.07 6 10s0 1.395.102 1.777a3 3 0 0 0 2.121 2.12C8.605 14 9.07 14 10 14c.93 0 1.395 0 1.776-.102a3 3 0 0 0 2.122-2.121C14 11.395 14 10.93 14 10c0-.93 0-1.395-.102-1.776a3 3 0 0 0-2.122-2.122C11.395 6 10.93 6 10 6c-.475 0-.829 0-1.112.014ZM8.446 7.34a1.75 1.75 0 0 0-1.041.94l4.314 4.315c.443-.2.786-.576.941-1.042L8.446 7.34Zm4.304 2.536L10.124 7.25c.908.001 1.154.013 1.329.06a1.75 1.75 0 0 1 1.237 1.237c.047.175.059.42.06 1.329ZM8.547 12.69c.182.05.442.06 1.453.06h.106L7.25 9.894V10c0 1.01.01 1.27.06 1.453a1.75 1.75 0 0 0 1.237 1.237Z"
+  })),
+  incomplete: () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 20 20"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    fillRule: "evenodd",
+    d: "M8.547 12.69c.183.05.443.06 1.453.06s1.27-.01 1.453-.06a1.75 1.75 0 0 0 1.237-1.237c.05-.182.06-.443.06-1.453s-.01-1.27-.06-1.453a1.75 1.75 0 0 0-1.237-1.237c-.182-.05-.443-.06-1.453-.06s-1.27.01-1.453.06A1.75 1.75 0 0 0 7.31 8.547c-.05.183-.06.443-.06 1.453s.01 1.27.06 1.453a1.75 1.75 0 0 0 1.237 1.237ZM6.102 8.224C6 8.605 6 9.07 6 10s0 1.395.102 1.777a3 3 0 0 0 2.122 2.12C8.605 14 9.07 14 10 14s1.395 0 1.777-.102a3 3 0 0 0 2.12-2.121C14 11.395 14 10.93 14 10c0-.93 0-1.395-.102-1.776a3 3 0 0 0-2.121-2.122C11.395 6 10.93 6 10 6c-.93 0-1.395 0-1.776.102a3 3 0 0 0-2.122 2.122Z"
+  }))
+};
+function Badge({
+  children,
+  tone,
+  progress,
+  icon,
+  size = DEFAULT_SIZE,
+  toneAndProgressLabelOverride
+}) {
+  const i18n = (0,_utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__.useI18n)();
+  const withinFilter = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_utilities_within_filter_context_js__WEBPACK_IMPORTED_MODULE_2__.WithinFilterContext);
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_3__.classNames)(_Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"].Badge, tone && _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_3__.variationName)('tone', tone)], size && size !== DEFAULT_SIZE && _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_3__.variationName)('size', size)], withinFilter && _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"].withinFilter);
+  const accessibilityLabel = toneAndProgressLabelOverride ? toneAndProgressLabelOverride : (0,_utils_js__WEBPACK_IMPORTED_MODULE_5__.getDefaultAccessibilityLabel)(i18n, progress, tone);
+  let accessibilityMarkup = Boolean(accessibilityLabel) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_6__.Text, {
+    as: "span",
+    visuallyHidden: true
+  }, accessibilityLabel);
+  if (progress && !icon) {
+    accessibilityMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      className: _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"].Icon
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Icon_Icon_js__WEBPACK_IMPORTED_MODULE_7__.Icon, {
+      accessibilityLabel: accessibilityLabel,
+      source: progressIconMap[progress]
+    }));
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: className
+  }, accessibilityMarkup, icon && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: _Badge_scss_js__WEBPACK_IMPORTED_MODULE_4__["default"].Icon
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Icon_Icon_js__WEBPACK_IMPORTED_MODULE_7__.Icon, {
+    source: icon
+  })), children && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_6__.Text, {
+    as: "span",
+    variant: "bodySm",
+    fontWeight: tone === 'new' ? 'medium' : undefined
+  }, children));
+}
+Badge.Pip = _components_Pip_Pip_js__WEBPACK_IMPORTED_MODULE_8__.Pip;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.scss.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.scss.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "Badge": "Polaris-Badge",
+  "toneSuccess": "Polaris-Badge--toneSuccess",
+  "toneSuccess-strong": "Polaris-Badge__toneSuccess--strong",
+  "toneInfo": "Polaris-Badge--toneInfo",
+  "toneInfo-strong": "Polaris-Badge__toneInfo--strong",
+  "toneAttention": "Polaris-Badge--toneAttention",
+  "toneAttention-strong": "Polaris-Badge__toneAttention--strong",
+  "toneWarning": "Polaris-Badge--toneWarning",
+  "toneWarning-strong": "Polaris-Badge__toneWarning--strong",
+  "toneCritical": "Polaris-Badge--toneCritical",
+  "toneCritical-strong": "Polaris-Badge__toneCritical--strong",
+  "toneNew": "Polaris-Badge--toneNew",
+  "toneMagic": "Polaris-Badge--toneMagic",
+  "toneRead-only": "Polaris-Badge__toneRead--only",
+  "toneEnabled": "Polaris-Badge--toneEnabled",
+  "sizeLarge": "Polaris-Badge--sizeLarge",
+  "withinFilter": "Polaris-Badge--withinFilter",
+  "Icon": "Polaris-Badge__Icon",
+  "PipContainer": "Polaris-Badge__PipContainer"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.js ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Pip: () => (/* binding */ Pip)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/utils.js");
+/* harmony import */ var _Pip_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Pip.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.scss.js");
+/* harmony import */ var _utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../utilities/i18n/hooks.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js");
+/* harmony import */ var _Text_Text_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Text/Text.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+
+
+
+
+
+
+
+function Pip({
+  tone,
+  progress = 'complete',
+  accessibilityLabelOverride
+}) {
+  const i18n = (0,_utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__.useI18n)();
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.classNames)(_Pip_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Pip, tone && _Pip_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('tone', tone)], progress && _Pip_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('progress', progress)]);
+  const accessibilityLabel = accessibilityLabelOverride ? accessibilityLabelOverride : (0,_utils_js__WEBPACK_IMPORTED_MODULE_4__.getDefaultAccessibilityLabel)(i18n, progress, tone);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: className
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_5__.Text, {
+    as: "span",
+    visuallyHidden: true
+  }, accessibilityLabel));
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.scss.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.scss.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "Pip": "Polaris-Badge-Pip",
+  "toneInfo": "Polaris-Badge-Pip--toneInfo",
+  "toneSuccess": "Polaris-Badge-Pip--toneSuccess",
+  "toneNew": "Polaris-Badge-Pip--toneNew",
+  "toneAttention": "Polaris-Badge-Pip--toneAttention",
+  "toneWarning": "Polaris-Badge-Pip--toneWarning",
+  "toneCritical": "Polaris-Badge-Pip--toneCritical",
+  "progressIncomplete": "Polaris-Badge-Pip--progressIncomplete",
+  "progressPartiallyComplete": "Polaris-Badge-Pip--progressPartiallyComplete",
+  "progressComplete": "Polaris-Badge-Pip--progressComplete"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/types.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/types.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ProgressValue: () => (/* binding */ ProgressValue),
+/* harmony export */   ToneValue: () => (/* binding */ ToneValue)
+/* harmony export */ });
+let ToneValue;
+(function (ToneValue) {
+  ToneValue["Info"] = "info";
+  ToneValue["Success"] = "success";
+  ToneValue["Warning"] = "warning";
+  ToneValue["Critical"] = "critical";
+  ToneValue["Attention"] = "attention";
+  ToneValue["New"] = "new";
+  ToneValue["Magic"] = "magic";
+  ToneValue["InfoStrong"] = "info-strong";
+  ToneValue["SuccessStrong"] = "success-strong";
+  ToneValue["WarningStrong"] = "warning-strong";
+  ToneValue["CriticalStrong"] = "critical-strong";
+  ToneValue["AttentionStrong"] = "attention-strong";
+  ToneValue["ReadOnly"] = "read-only";
+  ToneValue["Enabled"] = "enabled";
+})(ToneValue || (ToneValue = {}));
+let ProgressValue;
+(function (ProgressValue) {
+  ProgressValue["Incomplete"] = "incomplete";
+  ProgressValue["PartiallyComplete"] = "partiallyComplete";
+  ProgressValue["Complete"] = "complete";
+})(ProgressValue || (ProgressValue = {}));
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Badge/utils.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Badge/utils.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getDefaultAccessibilityLabel: () => (/* binding */ getDefaultAccessibilityLabel)
+/* harmony export */ });
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types.js */ "./node_modules/@shopify/polaris/build/esm/components/Badge/types.js");
+
+
+function getDefaultAccessibilityLabel(i18n, progress, tone) {
+  let progressLabel = '';
+  let toneLabel = '';
+  if (!progress && !tone) {
+    return '';
+  }
+  switch (progress) {
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ProgressValue.Incomplete:
+      progressLabel = i18n.translate('Polaris.Badge.PROGRESS_LABELS.incomplete');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ProgressValue.PartiallyComplete:
+      progressLabel = i18n.translate('Polaris.Badge.PROGRESS_LABELS.partiallyComplete');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ProgressValue.Complete:
+      progressLabel = i18n.translate('Polaris.Badge.PROGRESS_LABELS.complete');
+      break;
+  }
+  switch (tone) {
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Info:
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.InfoStrong:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.info');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Success:
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.SuccessStrong:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.success');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Warning:
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.WarningStrong:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.warning');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Critical:
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.CriticalStrong:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.critical');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Attention:
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.AttentionStrong:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.attention');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.New:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.new');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.ReadOnly:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.readOnly');
+      break;
+    case _types_js__WEBPACK_IMPORTED_MODULE_0__.ToneValue.Enabled:
+      toneLabel = i18n.translate('Polaris.Badge.TONE_LABELS.enabled');
+      break;
+  }
+  if (!tone && progress) {
+    return progressLabel;
+  } else if (tone && !progress) {
+    return toneLabel;
+  } else {
+    return i18n.translate('Polaris.Badge.progressAndTone', {
+      progressLabel,
+      toneLabel
+    });
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.js ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ButtonGroup: () => (/* binding */ ButtonGroup)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _utilities_components_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/components.js */ "./node_modules/@shopify/polaris/build/esm/utilities/components.js");
+/* harmony import */ var _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ButtonGroup.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.scss.js");
+/* harmony import */ var _components_Item_Item_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Item/Item.js */ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/components/Item/Item.js");
+
+
+
+
+
+
+function ButtonGroup({
+  children,
+  gap,
+  variant,
+  fullWidth,
+  connectedTop,
+  noWrap
+}) {
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_1__.classNames)(_ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].ButtonGroup, gap && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][gap], variant && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_1__.variationName)('variant', variant)], fullWidth && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].fullWidth, noWrap && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].noWrap);
+  const contents = (0,_utilities_components_js__WEBPACK_IMPORTED_MODULE_3__.elementChildren)(children).map((child, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Item_Item_js__WEBPACK_IMPORTED_MODULE_4__.Item, {
+    button: child,
+    key: index
+  }));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: className,
+    "data-buttongroup-variant": variant,
+    "data-buttongroup-connected-top": connectedTop,
+    "data-buttongroup-full-width": fullWidth,
+    "data-buttongroup-no-wrap": noWrap
+  }, contents);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.scss.js":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.scss.js ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "ButtonGroup": "Polaris-ButtonGroup",
+  "Item": "Polaris-ButtonGroup__Item",
+  "Item-plain": "Polaris-ButtonGroup__Item--plain",
+  "variantSegmented": "Polaris-ButtonGroup--variantSegmented",
+  "Item-focused": "Polaris-ButtonGroup__Item--focused",
+  "fullWidth": "Polaris-ButtonGroup--fullWidth",
+  "extraTight": "Polaris-ButtonGroup--extraTight",
+  "tight": "Polaris-ButtonGroup--tight",
+  "loose": "Polaris-ButtonGroup--loose",
+  "noWrap": "Polaris-ButtonGroup--noWrap"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/components/Item/Item.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/components/Item/Item.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Item: () => (/* binding */ Item)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_use_toggle_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../utilities/use-toggle.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-toggle.js");
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ButtonGroup.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.scss.js");
+
+
+
+
+
+function Item({
+  button
+}) {
+  const {
+    value: focused,
+    setTrue: forceTrueFocused,
+    setFalse: forceFalseFocused
+  } = (0,_utilities_use_toggle_js__WEBPACK_IMPORTED_MODULE_1__.useToggle)(false);
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.classNames)(_ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Item, focused && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"]['Item-focused'], button.props.variant === 'plain' && _ButtonGroup_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"]['Item-plain']);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: className,
+    onFocus: forceTrueFocused,
+    onBlur: forceFalseFocused
+  }, button);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Button/Button.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Button/Button.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Button: () => (/* binding */ Button)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @shopify/polaris-icons */ "./node_modules/@shopify/polaris-icons/dist/icons/ChevronUpIcon.svg.mjs");
+/* harmony import */ var _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @shopify/polaris-icons */ "./node_modules/@shopify/polaris-icons/dist/icons/ChevronDownIcon.svg.mjs");
+/* harmony import */ var _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @shopify/polaris-icons */ "./node_modules/@shopify/polaris-icons/dist/icons/SelectIcon.svg.mjs");
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _utilities_focus_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/focus.js */ "./node_modules/@shopify/polaris/build/esm/utilities/focus.js");
+/* harmony import */ var _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Button.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Button/Button.scss.js");
+/* harmony import */ var _Icon_Icon_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Icon/Icon.js */ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js");
+/* harmony import */ var _Spinner_Spinner_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Spinner/Spinner.js */ "./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.js");
+/* harmony import */ var _UnstyledButton_UnstyledButton_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../UnstyledButton/UnstyledButton.js */ "./node_modules/@shopify/polaris/build/esm/components/UnstyledButton/UnstyledButton.js");
+/* harmony import */ var _utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/i18n/hooks.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js");
+
+
+
+
+
+
+
+
+
+
+function Button({
+  id,
+  children,
+  url,
+  disabled,
+  external,
+  download,
+  target,
+  submit,
+  loading,
+  pressed,
+  accessibilityLabel,
+  role,
+  ariaControls,
+  ariaExpanded,
+  ariaDescribedBy,
+  ariaChecked,
+  onClick,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  onKeyPress,
+  onKeyUp,
+  onMouseEnter,
+  onTouchStart,
+  onPointerDown,
+  icon,
+  disclosure,
+  removeUnderline,
+  size = 'medium',
+  textAlign = 'center',
+  fullWidth,
+  dataPrimaryLink,
+  tone,
+  variant = 'secondary'
+}) {
+  const i18n = (0,_utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__.useI18n)();
+  const isDisabled = disabled || loading;
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.classNames)(_Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Button, _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].pressable, _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('variant', variant)], _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('size', size)], _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('textAlign', textAlign)], fullWidth && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].fullWidth, disclosure && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].disclosure, icon && children && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].iconWithText, icon && children == null && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].iconOnly, isDisabled && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].disabled, loading && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].loading, pressed && !disabled && !url && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].pressed, removeUnderline && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].removeUnderline, tone && _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('tone', tone)]);
+  const disclosureMarkup = disclosure ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: loading ? _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].hidden : _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Icon
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Icon_Icon_js__WEBPACK_IMPORTED_MODULE_4__.Icon, {
+    source: loading ? 'placeholder' : getDisclosureIconSource(disclosure, _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_5__.S, _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_6__.S)
+  })) : null;
+  const iconSource = isIconSource(icon) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Icon_Icon_js__WEBPACK_IMPORTED_MODULE_4__.Icon, {
+    source: loading ? 'placeholder' : icon
+  }) : icon;
+  const iconMarkup = iconSource ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: loading ? _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].hidden : _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Icon
+  }, iconSource) : null;
+  const childMarkup = children ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: removeUnderline ? _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].removeUnderline : ''
+    // Fixes Safari bug that doesn't re-render button text to correct color
+    ,
+    key: disabled ? 'text-disabled' : 'text'
+  }, children) : null;
+  const spinnerSVGMarkup = loading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: _Button_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Spinner
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Spinner_Spinner_js__WEBPACK_IMPORTED_MODULE_7__.Spinner, {
+    size: "small",
+    accessibilityLabel: i18n.translate('Polaris.Button.spinnerAccessibilityLabel')
+  })) : null;
+  const commonProps = {
+    id,
+    className,
+    accessibilityLabel,
+    ariaDescribedBy,
+    role,
+    onClick,
+    onFocus,
+    onBlur,
+    onMouseUp: _utilities_focus_js__WEBPACK_IMPORTED_MODULE_8__.handleMouseUpByBlurring,
+    onMouseEnter,
+    onTouchStart,
+    'data-primary-link': dataPrimaryLink
+  };
+  const linkProps = {
+    url,
+    external,
+    download,
+    target
+  };
+  const actionProps = {
+    submit,
+    disabled: isDisabled,
+    loading,
+    ariaControls,
+    ariaExpanded,
+    ariaChecked,
+    pressed,
+    onKeyDown,
+    onKeyUp,
+    onKeyPress,
+    onPointerDown
+  };
+  const buttonMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_UnstyledButton_UnstyledButton_js__WEBPACK_IMPORTED_MODULE_9__.UnstyledButton, Object.assign({}, commonProps, linkProps, actionProps), spinnerSVGMarkup, iconMarkup, childMarkup, disclosureMarkup);
+  return buttonMarkup;
+}
+function isIconSource(x) {
+  return typeof x === 'string' || typeof x === 'object' && x.body || typeof x === 'function';
+}
+function getDisclosureIconSource(disclosure, upIcon, downIcon) {
+  if (disclosure === 'select') {
+    return _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_10__.S;
+  }
+  return disclosure === 'up' ? upIcon : downIcon;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Button/Button.scss.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Button/Button.scss.js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "Button": "Polaris-Button",
+  "disabled": "Polaris-Button--disabled",
+  "pressed": "Polaris-Button--pressed",
+  "variantPrimary": "Polaris-Button--variantPrimary",
+  "variantSecondary": "Polaris-Button--variantSecondary",
+  "variantTertiary": "Polaris-Button--variantTertiary",
+  "variantPlain": "Polaris-Button--variantPlain",
+  "variantMonochromePlain": "Polaris-Button--variantMonochromePlain",
+  "toneSuccess": "Polaris-Button--toneSuccess",
+  "toneCritical": "Polaris-Button--toneCritical",
+  "sizeMicro": "Polaris-Button--sizeMicro",
+  "sizeSlim": "Polaris-Button--sizeSlim",
+  "sizeMedium": "Polaris-Button--sizeMedium",
+  "sizeLarge": "Polaris-Button--sizeLarge",
+  "textAlignCenter": "Polaris-Button--textAlignCenter",
+  "textAlignStart": "Polaris-Button--textAlignStart",
+  "textAlignLeft": "Polaris-Button--textAlignLeft",
+  "textAlignEnd": "Polaris-Button--textAlignEnd",
+  "textAlignRight": "Polaris-Button--textAlignRight",
+  "fullWidth": "Polaris-Button--fullWidth",
+  "iconOnly": "Polaris-Button--iconOnly",
+  "iconWithText": "Polaris-Button--iconWithText",
+  "disclosure": "Polaris-Button--disclosure",
+  "loading": "Polaris-Button--loading",
+  "pressable": "Polaris-Button--pressable",
+  "hidden": "Polaris-Button--hidden",
+  "Icon": "Polaris-Button__Icon",
+  "Spinner": "Polaris-Button__Spinner"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/EphemeralPresenceManager/EphemeralPresenceManager.js":
+/*!*****************************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/EphemeralPresenceManager/EphemeralPresenceManager.js ***!
+  \*****************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EphemeralPresenceManager: () => (/* binding */ EphemeralPresenceManager)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_ephemeral_presence_manager_context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/ephemeral-presence-manager/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/ephemeral-presence-manager/context.js");
+
+
+
+const defaultState = {
+  tooltip: 0,
+  hovercard: 0
+};
+function EphemeralPresenceManager({
+  children
+}) {
+  const [presenceCounter, setPresenceCounter] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultState);
+  const addPresence = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(key => {
+    setPresenceCounter(prevList => ({
+      ...prevList,
+      [key]: prevList[key] + 1
+    }));
+  }, []);
+  const removePresence = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(key => {
+    setPresenceCounter(prevList => ({
+      ...prevList,
+      [key]: prevList[key] - 1
+    }));
+  }, []);
+  const value = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    presenceList: Object.entries(presenceCounter).reduce((previousValue, currentValue) => {
+      const [key, value] = currentValue;
+      return {
+        ...previousValue,
+        [key]: value >= 1
+      };
+    }, {}),
+    presenceCounter,
+    addPresence,
+    removePresence
+  }), [addPresence, removePresence, presenceCounter]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_ephemeral_presence_manager_context_js__WEBPACK_IMPORTED_MODULE_1__.EphemeralPresenceManagerContext.Provider, {
+    value: value
+  }, children);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/EventListener/EventListener.js":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/EventListener/EventListener.js ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EventListener: () => (/* binding */ EventListener)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/** @deprecated Use the useEventListener hook instead. */
+class EventListener extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent {
+  componentDidMount() {
+    this.attachListener();
+  }
+  componentDidUpdate({
+    passive,
+    ...detachProps
+  }) {
+    this.detachListener(detachProps);
+    this.attachListener();
+  }
+  componentWillUnmount() {
+    this.detachListener();
+  }
+  render() {
+    return null;
+  }
+  attachListener() {
+    const {
+      event,
+      handler,
+      capture,
+      passive
+    } = this.props;
+    window.addEventListener(event, handler, {
+      capture,
+      passive
+    });
+  }
+  detachListener(prevProps) {
+    const {
+      event,
+      handler,
+      capture
+    } = prevProps || this.props;
+    window.removeEventListener(event, handler, capture);
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/FocusManager/FocusManager.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/FocusManager/FocusManager.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FocusManager: () => (/* binding */ FocusManager)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_focus_manager_context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/focus-manager/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/focus-manager/context.js");
+
+
+
+function FocusManager({
+  children
+}) {
+  const [trapFocusList, setTrapFocusList] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const add = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(id => {
+    setTrapFocusList(list => [...list, id]);
+  }, []);
+  const remove = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(id => {
+    let removed = true;
+    setTrapFocusList(list => {
+      const clone = [...list];
+      const index = clone.indexOf(id);
+      if (index === -1) {
+        removed = false;
+      } else {
+        clone.splice(index, 1);
+      }
+      return clone;
+    });
+    return removed;
+  }, []);
+  const value = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    trapFocusList,
+    add,
+    remove
+  }), [add, trapFocusList, remove]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_focus_manager_context_js__WEBPACK_IMPORTED_MODULE_1__.FocusManagerContext.Provider, {
+    value: value
+  }, children);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.js":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.js ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FullscreenBar: () => (/* binding */ FullscreenBar)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @shopify/polaris-icons */ "./node_modules/@shopify/polaris-icons/dist/icons/ExitIcon.svg.mjs");
+/* harmony import */ var _FullscreenBar_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FullscreenBar.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.scss.js");
+/* harmony import */ var _utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/i18n/hooks.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js");
+/* harmony import */ var _Text_Text_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Text/Text.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+/* harmony import */ var _Icon_Icon_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Icon/Icon.js */ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js");
+
+
+
+
+
+
+
+function FullscreenBar({
+  onAction,
+  children
+}) {
+  const i18n = (0,_utilities_i18n_hooks_js__WEBPACK_IMPORTED_MODULE_1__.useI18n)();
+  const backButtonMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_2__.Text, {
+    as: "span",
+    variant: "bodyLg"
+  }, i18n.translate('Polaris.FullscreenBar.back'));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: _FullscreenBar_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].FullscreenBar
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: _FullscreenBar_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].BackAction,
+    onClick: onAction,
+    "aria-label": i18n.translate('Polaris.FullscreenBar.accessibilityLabel')
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Icon_Icon_js__WEBPACK_IMPORTED_MODULE_4__.Icon, {
+    source: _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_5__.S
+  }), backButtonMarkup), children);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.scss.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.scss.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "FullscreenBar": "Polaris-FullscreenBar",
+  "BackAction": "Polaris-FullscreenBar__BackAction"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Icon: () => (/* binding */ Icon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Icon.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.scss.js");
+/* harmony import */ var _Text_Text_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Text/Text.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+
+
+
+
+
+function Icon({
+  source,
+  tone,
+  accessibilityLabel
+}) {
+  let sourceType;
+  if (typeof source === 'function') {
+    sourceType = 'function';
+  } else if (source === 'placeholder') {
+    sourceType = 'placeholder';
+  } else {
+    sourceType = 'external';
+  }
+  if (tone && sourceType === 'external' && "development" === 'development') {
+    // eslint-disable-next-line no-console
+    console.warn('Recoloring external SVGs is not supported. Set the intended color on your SVG instead.');
+  }
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_1__.classNames)(_Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].Icon, tone && _Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_1__.variationName)('tone', tone)]);
+  const SourceComponent = source;
+  const contentMarkup = {
+    function: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(SourceComponent, {
+      className: _Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].Svg,
+      focusable: "false",
+      "aria-hidden": "true"
+    }),
+    placeholder: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: _Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].Placeholder
+    }),
+    external: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      className: _Icon_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].Img,
+      src: `data:image/svg+xml;utf8,${source}`,
+      alt: "",
+      "aria-hidden": "true"
+    })
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: className
+  }, accessibilityLabel && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_3__.Text, {
+    as: "span",
+    visuallyHidden: true
+  }, accessibilityLabel), contentMarkup[sourceType]);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.scss.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Icon/Icon.scss.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "Icon": "Polaris-Icon",
+  "toneInherit": "Polaris-Icon--toneInherit",
+  "toneBase": "Polaris-Icon--toneBase",
+  "toneSubdued": "Polaris-Icon--toneSubdued",
+  "toneCaution": "Polaris-Icon--toneCaution",
+  "toneWarning": "Polaris-Icon--toneWarning",
+  "toneCritical": "Polaris-Icon--toneCritical",
+  "toneInteractive": "Polaris-Icon--toneInteractive",
+  "toneInfo": "Polaris-Icon--toneInfo",
+  "toneSuccess": "Polaris-Icon--toneSuccess",
+  "tonePrimary": "Polaris-Icon--tonePrimary",
+  "toneEmphasis": "Polaris-Icon--toneEmphasis",
+  "toneMagic": "Polaris-Icon--toneMagic",
+  "toneTextCaution": "Polaris-Icon--toneTextCaution",
+  "toneTextWarning": "Polaris-Icon--toneTextWarning",
+  "toneTextCritical": "Polaris-Icon--toneTextCritical",
+  "toneTextInfo": "Polaris-Icon--toneTextInfo",
+  "toneTextPrimary": "Polaris-Icon--toneTextPrimary",
+  "toneTextSuccess": "Polaris-Icon--toneTextSuccess",
+  "toneTextMagic": "Polaris-Icon--toneTextMagic",
+  "Svg": "Polaris-Icon__Svg",
+  "Img": "Polaris-Icon__Img",
+  "Placeholder": "Polaris-Icon__Placeholder"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/MediaQueryProvider/MediaQueryProvider.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/MediaQueryProvider/MediaQueryProvider.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MediaQueryProvider: () => (/* binding */ MediaQueryProvider)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_debounce_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/debounce.js */ "./node_modules/@shopify/polaris/build/esm/utilities/debounce.js");
+/* harmony import */ var _utilities_breakpoints_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/breakpoints.js */ "./node_modules/@shopify/polaris/build/esm/utilities/breakpoints.js");
+/* harmony import */ var _utilities_media_query_context_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/media-query/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/media-query/context.js");
+/* harmony import */ var _EventListener_EventListener_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../EventListener/EventListener.js */ "./node_modules/@shopify/polaris/build/esm/components/EventListener/EventListener.js");
+
+
+
+
+
+
+const MediaQueryProvider = function MediaQueryProvider({
+  children
+}) {
+  const [isNavigationCollapsed, setIsNavigationCollapsed] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((0,_utilities_breakpoints_js__WEBPACK_IMPORTED_MODULE_1__.navigationBarCollapsed)().matches);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleResize = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((0,_utilities_debounce_js__WEBPACK_IMPORTED_MODULE_2__.debounce)(() => {
+    if (isNavigationCollapsed !== (0,_utilities_breakpoints_js__WEBPACK_IMPORTED_MODULE_1__.navigationBarCollapsed)().matches) {
+      setIsNavigationCollapsed(!isNavigationCollapsed);
+    }
+  }, 40, {
+    trailing: true,
+    leading: true,
+    maxWait: 40
+  }), [isNavigationCollapsed]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setIsNavigationCollapsed((0,_utilities_breakpoints_js__WEBPACK_IMPORTED_MODULE_1__.navigationBarCollapsed)().matches);
+  }, []);
+  const context = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    isNavigationCollapsed
+  }), [isNavigationCollapsed]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_media_query_context_js__WEBPACK_IMPORTED_MODULE_3__.MediaQueryContext.Provider, {
+    value: context
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_EventListener_EventListener_js__WEBPACK_IMPORTED_MODULE_4__.EventListener, {
+    event: "resize",
+    handler: handleResize
+  }), children);
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/PortalsManager/PortalsManager.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/PortalsManager/PortalsManager.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PortalsManager: () => (/* binding */ PortalsManager)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_use_is_after_initial_mount_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/use-is-after-initial-mount.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-is-after-initial-mount.js");
+/* harmony import */ var _utilities_portals_context_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/portals/context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/portals/context.js");
+/* harmony import */ var _components_PortalsContainer_PortalsContainer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/PortalsContainer/PortalsContainer.js */ "./node_modules/@shopify/polaris/build/esm/components/PortalsManager/components/PortalsContainer/PortalsContainer.js");
+
+
+
+
+
+function PortalsManager({
+  children,
+  container
+}) {
+  const isMounted = (0,_utilities_use_is_after_initial_mount_js__WEBPACK_IMPORTED_MODULE_1__.useIsAfterInitialMount)();
+  const ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const contextValue = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    if (container) {
+      return {
+        container
+      };
+    } else if (isMounted) {
+      return {
+        container: ref.current
+      };
+    } else {
+      return {
+        container: null
+      };
+    }
+  }, [container, isMounted]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_utilities_portals_context_js__WEBPACK_IMPORTED_MODULE_2__.PortalsManagerContext.Provider, {
+    value: contextValue
+  }, children, container ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_PortalsContainer_PortalsContainer_js__WEBPACK_IMPORTED_MODULE_3__.PortalsContainer, {
+    ref: ref
+  }));
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/PortalsManager/components/PortalsContainer/PortalsContainer.js":
+/*!***************************************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/PortalsManager/components/PortalsContainer/PortalsContainer.js ***!
+  \***************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PortalsContainer: () => (/* binding */ PortalsContainer)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function PortalsContainerComponent(_props, ref) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "PolarisPortalsContainer",
+    ref: ref
+  });
+}
+const PortalsContainer = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(PortalsContainerComponent);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Spinner: () => (/* binding */ Spinner)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _utilities_use_is_after_initial_mount_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/use-is-after-initial-mount.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-is-after-initial-mount.js");
+/* harmony import */ var _Spinner_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Spinner.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.scss.js");
+/* harmony import */ var _Text_Text_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Text/Text.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+
+
+
+
+
+
+function Spinner({
+  size = 'large',
+  accessibilityLabel,
+  hasFocusableParent
+}) {
+  const isAfterInitialMount = (0,_utilities_use_is_after_initial_mount_js__WEBPACK_IMPORTED_MODULE_1__.useIsAfterInitialMount)();
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.classNames)(_Spinner_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"].Spinner, size && _Spinner_scss_js__WEBPACK_IMPORTED_MODULE_3__["default"][(0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_2__.variationName)('size', size)]);
+  const spinnerSVGMarkup = size === 'large' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 44 44",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M15.542 1.487A21.507 21.507 0 00.5 22c0 11.874 9.626 21.5 21.5 21.5 9.847 0 18.364-6.675 20.809-16.072a1.5 1.5 0 00-2.904-.756C37.803 34.755 30.473 40.5 22 40.5 11.783 40.5 3.5 32.217 3.5 22c0-8.137 5.3-15.247 12.942-17.65a1.5 1.5 0 10-.9-2.863z"
+  })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    viewBox: "0 0 20 20",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M7.229 1.173a9.25 9.25 0 1011.655 11.412 1.25 1.25 0 10-2.4-.698 6.75 6.75 0 11-8.506-8.329 1.25 1.25 0 10-.75-2.385z"
+  }));
+  const spanAttributes = {
+    ...(!hasFocusableParent && {
+      role: 'status'
+    })
+  };
+  const accessibilityLabelMarkup = (isAfterInitialMount || !hasFocusableParent) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Text_Text_js__WEBPACK_IMPORTED_MODULE_4__.Text, {
+    as: "span",
+    visuallyHidden: true
+  }, accessibilityLabel);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: className
+  }, spinnerSVGMarkup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", spanAttributes, accessibilityLabelMarkup));
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.scss.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.scss.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "Spinner": "Polaris-Spinner",
+  "sizeSmall": "Polaris-Spinner--sizeSmall",
+  "sizeLarge": "Polaris-Spinner--sizeLarge"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Text/Text.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Text: () => (/* binding */ Text)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_css_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/css.js */ "./node_modules/@shopify/polaris/build/esm/utilities/css.js");
+/* harmony import */ var _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Text.scss.js */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.scss.js");
+
+
+
+
+const deprecatedVariants = {
+  heading2xl: 'headingXl',
+  heading3xl: 'headingXl'
+};
+const Text = ({
+  alignment,
+  as,
+  breakWord,
+  children,
+  tone,
+  fontWeight,
+  id,
+  numeric = false,
+  truncate = false,
+  variant,
+  visuallyHidden = false,
+  textDecorationLine
+}) => {
+  if ( true && variant && Object.prototype.hasOwnProperty.call(deprecatedVariants, variant)) {
+    // eslint-disable-next-line no-console
+    console.warn(`Deprecation: <Text variant="${variant}" />. The value "${variant}" will be removed in a future major version of Polaris. Use "${deprecatedVariants[variant]}" instead.`);
+  }
+  const Component = as || (visuallyHidden ? 'span' : 'p');
+  const className = (0,_utilities_css_js__WEBPACK_IMPORTED_MODULE_1__.classNames)(_Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].root, variant && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][variant], fontWeight && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][fontWeight], (alignment || truncate) && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].block, alignment && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][alignment], breakWord && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].break, tone && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][tone], numeric && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].numeric, truncate && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].truncate, visuallyHidden && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"].visuallyHidden, textDecorationLine && _Text_scss_js__WEBPACK_IMPORTED_MODULE_2__["default"][textDecorationLine]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, Object.assign({
+    className: className
+  }, id && {
+    id
+  }), children);
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.scss.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/Text/Text.scss.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ styles)
+/* harmony export */ });
+var styles = {
+  "root": "Polaris-Text--root",
+  "block": "Polaris-Text--block",
+  "truncate": "Polaris-Text--truncate",
+  "visuallyHidden": "Polaris-Text--visuallyHidden",
+  "start": "Polaris-Text--start",
+  "center": "Polaris-Text--center",
+  "end": "Polaris-Text--end",
+  "justify": "Polaris-Text--justify",
+  "success": "Polaris-Text--success",
+  "critical": "Polaris-Text--critical",
+  "caution": "Polaris-Text--caution",
+  "subdued": "Polaris-Text--subdued",
+  "magic": "Polaris-Text--magic",
+  "magic-subdued": "Polaris-Text__magic--subdued",
+  "text-inverse": "Polaris-Text__text--inverse",
+  "headingXs": "Polaris-Text--headingXs",
+  "headingSm": "Polaris-Text--headingSm",
+  "headingMd": "Polaris-Text--headingMd",
+  "headingLg": "Polaris-Text--headingLg",
+  "headingXl": "Polaris-Text--headingXl",
+  "heading2xl": "Polaris-Text--heading2xl",
+  "heading3xl": "Polaris-Text--heading3xl",
+  "bodyXs": "Polaris-Text--bodyXs",
+  "bodySm": "Polaris-Text--bodySm",
+  "bodyMd": "Polaris-Text--bodyMd",
+  "bodyLg": "Polaris-Text--bodyLg",
+  "regular": "Polaris-Text--regular",
+  "medium": "Polaris-Text--medium",
+  "semibold": "Polaris-Text--semibold",
+  "bold": "Polaris-Text--bold",
+  "break": "Polaris-Text--break",
+  "numeric": "Polaris-Text--numeric",
+  "line-through": "Polaris-Text__line--through"
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/UnstyledButton/UnstyledButton.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/UnstyledButton/UnstyledButton.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   UnstyledButton: () => (/* binding */ UnstyledButton)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_focus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/focus.js */ "./node_modules/@shopify/polaris/build/esm/utilities/focus.js");
+/* harmony import */ var _utilities_use_disable_interaction_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/use-disable-interaction.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-disable-interaction.js");
+/* harmony import */ var _UnstyledLink_UnstyledLink_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../UnstyledLink/UnstyledLink.js */ "./node_modules/@shopify/polaris/build/esm/components/UnstyledLink/UnstyledLink.js");
+
+
+
+
+
+function UnstyledButton({
+  id,
+  children,
+  className,
+  url,
+  external,
+  target,
+  download,
+  submit,
+  disabled,
+  loading,
+  pressed,
+  accessibilityLabel,
+  role,
+  ariaControls,
+  ariaExpanded,
+  ariaDescribedBy,
+  ariaChecked,
+  onClick,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  onKeyPress,
+  onKeyUp,
+  onMouseEnter,
+  onTouchStart,
+  ...rest
+}) {
+  let buttonMarkup;
+  const commonProps = {
+    id,
+    className,
+    'aria-label': accessibilityLabel
+  };
+  const interactiveProps = {
+    ...commonProps,
+    role,
+    onClick,
+    onFocus,
+    onBlur,
+    onMouseUp: _utilities_focus_js__WEBPACK_IMPORTED_MODULE_1__.handleMouseUpByBlurring,
+    onMouseEnter,
+    onTouchStart
+  };
+  const handleClick = (0,_utilities_use_disable_interaction_js__WEBPACK_IMPORTED_MODULE_2__.useDisableClick)(disabled, onClick);
+  if (url) {
+    buttonMarkup = disabled ?
+    /*#__PURE__*/
+    // Render an `<a>` so toggling disabled/enabled state changes only the
+    // `href` attribute instead of replacing the whole element.
+    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", commonProps, children) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_UnstyledLink_UnstyledLink_js__WEBPACK_IMPORTED_MODULE_3__.UnstyledLink, Object.assign({}, interactiveProps, {
+      url: url,
+      external: external,
+      target: target,
+      download: download
+    }, rest), children);
+  } else {
+    buttonMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", Object.assign({}, interactiveProps, {
+      "aria-disabled": disabled,
+      type: submit ? 'submit' : 'button',
+      "aria-busy": loading ? true : undefined,
+      "aria-controls": ariaControls,
+      "aria-expanded": ariaExpanded,
+      "aria-describedby": ariaDescribedBy,
+      "aria-checked": ariaChecked,
+      "aria-pressed": pressed,
+      onKeyDown: onKeyDown,
+      onKeyUp: onKeyUp,
+      onKeyPress: onKeyPress,
+      onClick: handleClick,
+      tabIndex: disabled ? -1 : undefined
+    }, rest), children);
+  }
+  return buttonMarkup;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/UnstyledLink/UnstyledLink.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/UnstyledLink/UnstyledLink.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   UnstyledLink: () => (/* binding */ UnstyledLink)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared.js */ "./node_modules/@shopify/polaris/build/esm/components/shared.js");
+/* harmony import */ var _utilities_link_hooks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/link/hooks.js */ "./node_modules/@shopify/polaris/build/esm/utilities/link/hooks.js");
+
+
+
+
+// The script in the styleguide that generates the Props Explorer data expects
+// that the interface defining the props is defined in this file, not imported
+// from elsewhere. This silly workaround ensures that the Props Explorer table
+// is generated correctly.
+// Wrapping forwardRef in a memo gets a name set since
+// https://github.com/facebook/react/issues/16722
+// but eslint-plugin-react doesn't know that just yet
+// eslint-disable-next-line react/display-name
+const UnstyledLink = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.memo)( /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(function UnstyledLink(props, _ref) {
+  const LinkComponent = (0,_utilities_link_hooks_js__WEBPACK_IMPORTED_MODULE_1__.useLink)();
+  if (LinkComponent) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(LinkComponent, Object.assign({}, _shared_js__WEBPACK_IMPORTED_MODULE_2__.unstyled.props, props, {
+      ref: _ref
+    }));
+  }
+  const {
+    external,
+    url,
+    target: targetProp,
+    ...rest
+  } = props;
+  let target;
+  if (external) {
+    target = '_blank';
+  } else {
+    target = targetProp ?? undefined;
+  }
+  const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", Object.assign({
+    target: target
+  }, rest, {
+    href: url,
+    rel: rel
+  }, _shared_js__WEBPACK_IMPORTED_MODULE_2__.unstyled.props, {
+    ref: _ref
+  }));
+}));
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/components/shared.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/components/shared.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DATA_ATTRIBUTE: () => (/* binding */ DATA_ATTRIBUTE),
+/* harmony export */   dataPolarisTopBar: () => (/* binding */ dataPolarisTopBar),
+/* harmony export */   headerCell: () => (/* binding */ headerCell),
+/* harmony export */   layer: () => (/* binding */ layer),
+/* harmony export */   overlay: () => (/* binding */ overlay),
+/* harmony export */   portal: () => (/* binding */ portal),
+/* harmony export */   scrollable: () => (/* binding */ scrollable),
+/* harmony export */   unstyled: () => (/* binding */ unstyled)
+/* harmony export */ });
+const scrollable = {
+  props: {
+    'data-polaris-scrollable': true
+  },
+  selector: '[data-polaris-scrollable]'
+};
+const overlay = {
+  props: {
+    'data-polaris-overlay': true
+  },
+  selector: '[data-polaris-overlay]'
+};
+const layer = {
+  props: {
+    'data-polaris-layer': true
+  },
+  selector: '[data-polaris-layer]'
+};
+const unstyled = {
+  props: {
+    'data-polaris-unstyled': true
+  },
+  selector: '[data-polaris-unstyled]'
+};
+const dataPolarisTopBar = {
+  props: {
+    'data-polaris-top-bar': true
+  },
+  selector: '[data-polaris-top-bar]'
+};
+const headerCell = {
+  props: {
+    'data-polaris-header-cell': true
+  },
+  selector: '[data-polaris-header-cell]'
+};
+const portal = {
+  props: ['data-portal-id'],
+  selector: '[data-portal-id]'
+};
+const DATA_ATTRIBUTE = {
+  overlay,
+  layer
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/breakpoints.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/breakpoints.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getBreakpointsQueryEntries: () => (/* binding */ getBreakpointsQueryEntries),
+/* harmony export */   navigationBarCollapsed: () => (/* binding */ navigationBarCollapsed),
+/* harmony export */   stackedContent: () => (/* binding */ stackedContent),
+/* harmony export */   useBreakpoints: () => (/* binding */ useBreakpoints)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shopify/polaris-tokens */ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs");
+/* harmony import */ var _target_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./target.js */ "./node_modules/@shopify/polaris/build/esm/utilities/target.js");
+/* harmony import */ var _use_isomorphic_layout_effect_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./use-isomorphic-layout-effect.js */ "./node_modules/@shopify/polaris/build/esm/utilities/use-isomorphic-layout-effect.js");
+
+
+
+
+
+const Breakpoints = {
+  // TODO: Update to smDown
+  navigationBarCollapsed: '767.95px',
+  // TODO: Update to lgDown
+  stackedContent: '1039.95px'
+};
+const noWindowMatches = {
+  media: '',
+  addListener: noop,
+  removeListener: noop,
+  matches: false,
+  onchange: noop,
+  addEventListener: noop,
+  removeEventListener: noop,
+  dispatchEvent: _ => true
+};
+function noop() {}
+function navigationBarCollapsed() {
+  return typeof window === 'undefined' ? noWindowMatches : window.matchMedia(`(max-width: ${Breakpoints.navigationBarCollapsed})`);
+}
+function stackedContent() {
+  return typeof window === 'undefined' ? noWindowMatches : window.matchMedia(`(max-width: ${Breakpoints.stackedContent})`);
+}
+
+/**
+ * Directional alias for each Polaris `breakpoints` token.
+ *
+ * @example 'smUp' | 'smDown' | 'smOnly' | 'mdUp' | etc.
+ */
+
+/**
+ * Match results for each directional Polaris `breakpoints` alias.
+ */
+
+const breakpointsQueryEntries = getBreakpointsQueryEntries(_shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.themeDefault.breakpoints);
+function getMatches(defaults,
+/**
+ * Used to force defaults on initial client side render so they match SSR
+ * values and hence avoid a Hydration error.
+ */
+forceDefaults) {
+  if (!_target_js__WEBPACK_IMPORTED_MODULE_2__.isServer && !forceDefaults) {
+    return Object.fromEntries(breakpointsQueryEntries.map(([directionAlias, query]) => [directionAlias, window.matchMedia(query).matches]));
+  }
+  if (typeof defaults === 'object' && defaults !== null) {
+    return Object.fromEntries(breakpointsQueryEntries.map(([directionAlias]) => [directionAlias, defaults[directionAlias] ?? false]));
+  }
+  return Object.fromEntries(breakpointsQueryEntries.map(([directionAlias]) => [directionAlias, defaults ?? false]));
+}
+/**
+ * Retrieves media query matches for each directional Polaris `breakpoints` alias.
+ *
+ * @example
+ * const {smUp} = useBreakpoints();
+ * return smUp && 'Hello world';
+ *
+ * @example
+ * const {mdUp} = useBreakpoints({defaults: {mdUp: true}});
+ * mdUp //=> `true` during SSR
+ *
+ * @example
+ * const breakpoints = useBreakpoints({defaults: true});
+ * breakpoints //=> All values will be `true` during SSR
+ */
+function useBreakpoints(options) {
+  // On SSR, and initial CSR, we force usage of the defaults to avoid a
+  // hydration mismatch error.
+  // Later, in the effect, we will call this again on the client side without
+  // any defaults to trigger a more accurate client side evaluation.
+  const [breakpoints, setBreakpoints] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(getMatches(options?.defaults, true));
+  (0,_use_isomorphic_layout_effect_js__WEBPACK_IMPORTED_MODULE_3__.useIsomorphicLayoutEffect)(() => {
+    const mediaQueryLists = breakpointsQueryEntries.map(([_, query]) => window.matchMedia(query));
+    const handler = () => setBreakpoints(getMatches());
+    mediaQueryLists.forEach(mql => {
+      if (mql.addListener) {
+        mql.addListener(handler);
+      } else {
+        mql.addEventListener('change', handler);
+      }
+    });
+
+    // Trigger the breakpoint recalculation at least once client-side to ensure
+    // we don't have stale default values from SSR.
+    handler();
+    return () => {
+      mediaQueryLists.forEach(mql => {
+        if (mql.removeListener) {
+          mql.removeListener(handler);
+        } else {
+          mql.removeEventListener('change', handler);
+        }
+      });
+    };
+  }, []);
+  return breakpoints;
+}
+
+/**
+ * Converts `breakpoints` tokens into directional media query entries.
+ *
+ * @example
+ * const breakpointsQueryEntries = getBreakpointsQueryEntries(breakpoints);
+ * breakpointsQueryEntries === [
+ *   ['xsUp', '(min-width: ...)'],
+ *   ['xsDown', '(max-width: ...)'],
+ *   ['xsOnly', '(min-width: ...) and (max-width: ...)'],
+ *   ['smUp', '(min-width: ...) and (max-width: ...)'],
+ *   ['mdUp', '(min-width: ...) and (max-width: ...)'],
+ *   // etc.
+ * ]
+ */
+function getBreakpointsQueryEntries(breakpoints) {
+  const mediaConditionEntries = Object.entries((0,_shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.getMediaConditions)(breakpoints));
+  return mediaConditionEntries.map(([breakpointsToken, mediaConditions]) => Object.entries(mediaConditions).map(([direction, mediaCondition]) => {
+    const breakpointsAlias = breakpointsToken.split('-')[1];
+
+    // e.g. smUp, smDown, smOnly, etc.
+    const directionAlias = `${breakpointsAlias}${capitalize(direction)}`;
+    return [directionAlias, mediaCondition];
+  })).flat();
+}
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/components.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/components.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ConditionalRender: () => (/* binding */ ConditionalRender),
+/* harmony export */   ConditionalWrapper: () => (/* binding */ ConditionalWrapper),
+/* harmony export */   elementChildren: () => (/* binding */ elementChildren),
+/* harmony export */   isElementOfType: () => (/* binding */ isElementOfType),
+/* harmony export */   wrapWithComponent: () => (/* binding */ wrapWithComponent)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+// Wraps `element` in `Component`, if it is not already an instance of
+// `Component`. If `props` is passed, those will be added as props on the
+// wrapped component. If `element` is null, the component is not wrapped.
+function wrapWithComponent(element, Component, props) {
+  if (element == null) {
+    return null;
+  }
+  return isElementOfType(element, Component) ? element : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, props, element);
+}
+
+// In development, we compare based on the name of the function because
+// React Hot Loader proxies React components in order to make updates. In
+// production we can simply compare the components for equality.
+const isComponent =  true ? hotReloadComponentCheck : 0;
+
+// Checks whether `element` is a React element of type `Component` (or one of
+// the passed components, if `Component` is an array of React components).
+function isElementOfType(element, Component) {
+  if (element == null || ! /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.isValidElement)(element) || typeof element.type === 'string') {
+    return false;
+  }
+  const {
+    type: defaultType
+  } = element;
+  // Type override allows components to bypass default wrapping behavior. Ex: Stack, ResourceList...
+  // See https://github.com/Shopify/app-extension-libs/issues/996#issuecomment-710437088
+  const overrideType = element.props?.__type__;
+  const type = overrideType || defaultType;
+  const Components = Array.isArray(Component) ? Component : [Component];
+  return Components.some(AComponent => typeof type !== 'string' && isComponent(AComponent, type));
+}
+
+// Returns all children that are valid elements as an array. Can optionally be
+// filtered by passing `predicate`.
+function elementChildren(children, predicate = () => true) {
+  return react__WEBPACK_IMPORTED_MODULE_0__.Children.toArray(children).filter(child => /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.isValidElement)(child) && predicate(child));
+}
+function ConditionalWrapper({
+  condition,
+  wrapper,
+  children
+}) {
+  return condition ? wrapper(children) : children;
+}
+function ConditionalRender({
+  condition,
+  children
+}) {
+  return condition ? children : null;
+}
+function hotReloadComponentCheck(AComponent, AnotherComponent) {
+  const componentName = AComponent.name;
+  const anotherComponentName = AnotherComponent.displayName;
+  return AComponent === AnotherComponent || Boolean(componentName) && componentName === anotherComponentName;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/css.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/css.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   classNames: () => (/* binding */ classNames),
+/* harmony export */   getResponsiveProps: () => (/* binding */ getResponsiveProps),
+/* harmony export */   getResponsiveValue: () => (/* binding */ getResponsiveValue),
+/* harmony export */   sanitizeCustomProperties: () => (/* binding */ sanitizeCustomProperties),
+/* harmony export */   variationName: () => (/* binding */ variationName)
+/* harmony export */ });
+/* harmony import */ var _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @shopify/polaris-tokens */ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs");
+/* harmony import */ var _is_object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./is-object.js */ "./node_modules/@shopify/polaris/build/esm/utilities/is-object.js");
+
+
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
+function variationName(name, value) {
+  return `${name}${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+function sanitizeCustomProperties(styles) {
+  const nonNullValues = Object.entries(styles).filter(([_, value]) => value != null);
+  return nonNullValues.length ? Object.fromEntries(nonNullValues) : undefined;
+}
+
+/**
+ * Given params like so:
+ * (
+ *   'button',
+ *   'padding',
+ *   'spacing',
+ *   {
+ *     sm: "4",
+ *     lg: "6"
+ *   }
+ * )
+ * Converts it to an object like so:
+ * {
+ *   '--pc-button-padding-sm': 'var(--p-spacing-4)',
+ *   '--pc-button-padding-lg': 'var(--p-spacing-6)'
+ * }
+ *
+ */
+function getResponsiveProps(componentName, componentProp, tokenSubgroup, responsiveProp) {
+  if (!responsiveProp) return {};
+  let result;
+  if (!(0,_is_object_js__WEBPACK_IMPORTED_MODULE_1__.isObject)(responsiveProp)) {
+    result = {
+      [_shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_0__.breakpointsAliases[0]]: `var(--p-${tokenSubgroup}-${responsiveProp})`
+    };
+  } else {
+    result = Object.fromEntries(Object.entries(responsiveProp).map(([breakpointAlias, aliasOrScale]) => [breakpointAlias, `var(--p-${tokenSubgroup}-${aliasOrScale})`]));
+  }
+
+  // Prefix each responsive key with the correct token name
+  return Object.fromEntries(Object.entries(result).map(([breakpointAlias, value]) => [`--pc-${componentName}-${componentProp}-${breakpointAlias}`, value]));
+}
+function getResponsiveValue(componentName, componentProp, responsiveProp) {
+  if (!responsiveProp) return {};
+  if (!(0,_is_object_js__WEBPACK_IMPORTED_MODULE_1__.isObject)(responsiveProp)) {
+    return {
+      [`--pc-${componentName}-${componentProp}-${_shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_0__.breakpointsAliases[0]}`]: responsiveProp
+    };
+  }
+  return Object.fromEntries(Object.entries(responsiveProp).map(([breakpointAlias, responsiveValue]) => [`--pc-${componentName}-${componentProp}-${breakpointAlias}`, responsiveValue]));
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/debounce.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/debounce.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   debounce: () => (/* binding */ debounce)
+/* harmony export */ });
+function debounce(func, waitArg, options) {
+  let lastArgs;
+  let lastThis;
+  let maxWait;
+  let result;
+  let timerId;
+  let lastCallTime;
+  let lastInvokeTime = 0;
+  let leading = false;
+  let maxing = false;
+  let trailing = true;
+
+  // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+  const useRAF = !waitArg && waitArg !== 0;
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+  const wait = waitArg || 0;
+  if (typeof options === 'object') {
+    leading = Boolean(options.leading);
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? Math.max(Number(options.maxWait) || 0, wait) : undefined;
+    trailing = 'trailing' in options ? Boolean(options.trailing) : trailing;
+  }
+  function invokeFunc(time) {
+    const args = lastArgs;
+    const thisArg = lastThis;
+    lastArgs = undefined;
+    lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+  function startTimer(pendingFunc, wait) {
+    if (useRAF) {
+      cancelAnimationFrame(timerId);
+      return requestAnimationFrame(pendingFunc);
+    }
+    return setTimeout(pendingFunc, wait);
+  }
+  function cancelTimer(id) {
+    if (useRAF) {
+      return cancelAnimationFrame(id);
+    }
+    clearTimeout(id);
+  }
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = startTimer(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+  function remainingWait(time) {
+    const timeSinceLastCall = time - lastCallTime;
+    const timeSinceLastInvoke = time - lastInvokeTime;
+    const timeWaiting = wait - timeSinceLastCall;
+    return maxing && maxWait ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+  }
+  function shouldInvoke(time) {
+    const timeSinceLastCall = time - lastCallTime;
+    const timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && maxWait && timeSinceLastInvoke >= maxWait;
+  }
+  function timerExpired() {
+    const time = Date.now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = startTimer(timerExpired, remainingWait(time));
+  }
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    // eslint-disable-next-line no-multi-assign
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+  function cancel() {
+    if (timerId !== undefined) {
+      cancelTimer(timerId);
+    }
+    lastInvokeTime = 0;
+    // eslint-disable-next-line no-multi-assign
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(Date.now());
+  }
+  function pending() {
+    return timerId !== undefined;
+  }
+  function debounced(...args) {
+    const time = Date.now();
+    const isInvoking = shouldInvoke(time);
+    lastArgs = args;
+    // eslint-disable-next-line consistent-this, @typescript-eslint/no-this-alias
+    lastThis = this;
+    lastCallTime = time;
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = startTimer(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = startTimer(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  debounced.pending = pending;
+  return debounced;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/ephemeral-presence-manager/context.js":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/ephemeral-presence-manager/context.js ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EphemeralPresenceManagerContext: () => (/* binding */ EphemeralPresenceManagerContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const EphemeralPresenceManagerContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/errors.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/errors.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MissingAppProviderError: () => (/* binding */ MissingAppProviderError)
+/* harmony export */ });
+class MissingAppProviderError extends Error {
+  constructor(message = '') {
+    super(`${message ? `${message} ` : message}Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.`);
+    this.name = 'MissingAppProviderError';
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/features/context.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/features/context.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FeaturesContext: () => (/* binding */ FeaturesContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const FeaturesContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/focus-manager/context.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/focus-manager/context.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FocusManagerContext: () => (/* binding */ FocusManagerContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const FocusManagerContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/focus.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/focus.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   findFirstFocusableNode: () => (/* binding */ findFirstFocusableNode),
+/* harmony export */   findFirstFocusableNodeIncludingDisabled: () => (/* binding */ findFirstFocusableNodeIncludingDisabled),
+/* harmony export */   findFirstKeyboardFocusableNode: () => (/* binding */ findFirstKeyboardFocusableNode),
+/* harmony export */   findLastKeyboardFocusableNode: () => (/* binding */ findLastKeyboardFocusableNode),
+/* harmony export */   focusFirstFocusableNode: () => (/* binding */ focusFirstFocusableNode),
+/* harmony export */   focusFirstKeyboardFocusableNode: () => (/* binding */ focusFirstKeyboardFocusableNode),
+/* harmony export */   focusLastKeyboardFocusableNode: () => (/* binding */ focusLastKeyboardFocusableNode),
+/* harmony export */   focusNextFocusableNode: () => (/* binding */ focusNextFocusableNode),
+/* harmony export */   handleMouseUpByBlurring: () => (/* binding */ handleMouseUpByBlurring),
+/* harmony export */   nextFocusableNode: () => (/* binding */ nextFocusableNode),
+/* harmony export */   wrapFocusNextFocusableMenuItem: () => (/* binding */ wrapFocusNextFocusableMenuItem),
+/* harmony export */   wrapFocusPreviousFocusableMenuItem: () => (/* binding */ wrapFocusPreviousFocusableMenuItem)
+/* harmony export */ });
+/* harmony import */ var _is_element_in_viewport_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-element-in-viewport.js */ "./node_modules/@shopify/polaris/build/esm/utilities/is-element-in-viewport.js");
+
+
+const FOCUSABLE_SELECTOR = 'a,frame,iframe,input:not([type=hidden]):not(:disabled),select:not(:disabled),textarea:not(:disabled),button:not([aria-disabled="true"]):not([tabindex="-1"]):not(:disabled),*[tabindex]';
+const KEYBOARD_FOCUSABLE_SELECTORS = 'a,frame,iframe,input:not([type=hidden]):not(:disabled),select:not(:disabled),textarea:not(:disabled),button:not([aria-disabled="true"]):not([tabindex="-1"]):not(:disabled),*[tabindex]:not([tabindex="-1"])';
+const MENUITEM_FOCUSABLE_SELECTORS = 'a[role="menuitem"],frame[role="menuitem"],iframe[role="menuitem"],input[role="menuitem"]:not([type=hidden]):not(:disabled),select[role="menuitem"]:not(:disabled),textarea[role="menuitem"]:not(:disabled),button[role="menuitem"]:not(:disabled),*[tabindex]:not([tabindex="-1"])';
+const handleMouseUpByBlurring = ({
+  currentTarget
+}) => currentTarget.blur();
+function nextFocusableNode(node, filter) {
+  const allFocusableElements = [...document.querySelectorAll(FOCUSABLE_SELECTOR)];
+  const sliceLocation = allFocusableElements.indexOf(node) + 1;
+  const focusableElementsAfterNode = allFocusableElements.slice(sliceLocation);
+  for (const focusableElement of focusableElementsAfterNode) {
+    if ((0,_is_element_in_viewport_js__WEBPACK_IMPORTED_MODULE_0__.isElementInViewport)(focusableElement) && (!filter || filter && filter(focusableElement))) {
+      return focusableElement;
+    }
+  }
+  return null;
+}
+function findFirstFocusableNode(element, onlyDescendants = true) {
+  if (!onlyDescendants && matches(element, FOCUSABLE_SELECTOR)) {
+    return element;
+  }
+  return element.querySelector(FOCUSABLE_SELECTOR);
+}
+
+// Popover needs to be able to find its activator even if it is disabled, which FOCUSABLE_SELECTOR doesn't support.
+function findFirstFocusableNodeIncludingDisabled(element) {
+  const focusableSelector = `a,button,frame,iframe,input:not([type=hidden]),select,textarea,*[tabindex]`;
+  if (matches(element, focusableSelector)) {
+    return element;
+  }
+  return element.querySelector(focusableSelector);
+}
+function focusFirstFocusableNode(element, onlyDescendants = true) {
+  findFirstFocusableNode(element, onlyDescendants)?.focus();
+}
+function focusNextFocusableNode(node, filter) {
+  const nextFocusable = nextFocusableNode(node, filter);
+  if (nextFocusable && nextFocusable instanceof HTMLElement) {
+    nextFocusable.focus();
+    return true;
+  }
+  return false;
+}
+function findFirstKeyboardFocusableNode(element, onlyDescendants = true) {
+  if (!onlyDescendants && matches(element, KEYBOARD_FOCUSABLE_SELECTORS)) {
+    return element;
+  }
+  return element.querySelector(KEYBOARD_FOCUSABLE_SELECTORS);
+}
+function focusFirstKeyboardFocusableNode(element, onlyDescendants = true) {
+  const firstFocusable = findFirstKeyboardFocusableNode(element, onlyDescendants);
+  if (firstFocusable) {
+    firstFocusable.focus();
+    return true;
+  }
+  return false;
+}
+function findLastKeyboardFocusableNode(element, onlyDescendants = true) {
+  if (!onlyDescendants && matches(element, KEYBOARD_FOCUSABLE_SELECTORS)) {
+    return element;
+  }
+  const allFocusable = element.querySelectorAll(KEYBOARD_FOCUSABLE_SELECTORS);
+  return allFocusable[allFocusable.length - 1];
+}
+function focusLastKeyboardFocusableNode(element, onlyDescendants = true) {
+  const lastFocusable = findLastKeyboardFocusableNode(element, onlyDescendants);
+  if (lastFocusable) {
+    lastFocusable.focus();
+    return true;
+  }
+  return false;
+}
+function wrapFocusPreviousFocusableMenuItem(parentElement, currentFocusedElement) {
+  const allFocusableChildren = getMenuFocusableDescendants(parentElement);
+  const currentItemIdx = getCurrentFocusedElementIndex(allFocusableChildren, currentFocusedElement);
+  if (currentItemIdx === -1) {
+    allFocusableChildren[0].focus();
+  } else {
+    allFocusableChildren[(currentItemIdx - 1 + allFocusableChildren.length) % allFocusableChildren.length].focus();
+  }
+}
+function wrapFocusNextFocusableMenuItem(parentElement, currentFocusedElement) {
+  const allFocusableChildren = getMenuFocusableDescendants(parentElement);
+  const currentItemIdx = getCurrentFocusedElementIndex(allFocusableChildren, currentFocusedElement);
+  if (currentItemIdx === -1) {
+    allFocusableChildren[0].focus();
+  } else {
+    allFocusableChildren[(currentItemIdx + 1) % allFocusableChildren.length].focus();
+  }
+}
+function getMenuFocusableDescendants(element) {
+  return element.querySelectorAll(MENUITEM_FOCUSABLE_SELECTORS);
+}
+function getCurrentFocusedElementIndex(allFocusableChildren, currentFocusedElement) {
+  let currentItemIdx = 0;
+  for (const focusableChild of allFocusableChildren) {
+    if (focusableChild === currentFocusedElement) {
+      break;
+    }
+    currentItemIdx++;
+  }
+  return currentItemIdx === allFocusableChildren.length ? -1 : currentItemIdx;
+}
+function matches(node, selector) {
+  if (node.matches) {
+    return node.matches(selector);
+  }
+  const matches = (node.ownerDocument || document).querySelectorAll(selector);
+  let i = matches.length;
+  while (--i >= 0 && matches.item(i) !== node) return i > -1;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/geometry.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/geometry.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Rect: () => (/* binding */ Rect),
+/* harmony export */   getRectForNode: () => (/* binding */ getRectForNode)
+/* harmony export */ });
+class Rect {
+  static get zero() {
+    return new Rect();
+  }
+  constructor({
+    top = 0,
+    left = 0,
+    width = 0,
+    height = 0
+  } = {}) {
+    this.top = top;
+    this.left = left;
+    this.width = width;
+    this.height = height;
+  }
+  get center() {
+    return {
+      x: this.left + this.width / 2,
+      y: this.top + this.height / 2
+    };
+  }
+}
+function getRectForNode(node) {
+  if (!(node instanceof Element)) {
+    return new Rect({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  }
+  const rect = node.getBoundingClientRect();
+  return new Rect({
+    top: rect.top,
+    left: rect.left,
+    width: rect.width,
+    height: rect.height
+  });
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/get.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/get.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   get: () => (/* binding */ get)
+/* harmony export */ });
+const OBJECT_NOTATION_MATCHER = /\[(.*?)\]|(\w+)/g;
+function get(obj, keypath, defaultValue) {
+  if (obj == null) return undefined;
+  const keys = Array.isArray(keypath) ? keypath : getKeypath(keypath);
+  let acc = obj;
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
+  for (let i = 0; i < keys.length; i++) {
+    const val = acc[keys[i]];
+    if (val === undefined) return defaultValue;
+    acc = val;
+  }
+  return acc;
+}
+function getKeypath(str) {
+  const path = [];
+  let result;
+  while (result = OBJECT_NOTATION_MATCHER.exec(str)) {
+    const [, first, second] = result;
+    path.push(first || second);
+  }
+  return path;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/I18n.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/i18n/I18n.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   I18n: () => (/* binding */ I18n)
+/* harmony export */ });
+/* harmony import */ var _get_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../get.js */ "./node_modules/@shopify/polaris/build/esm/utilities/get.js");
+/* harmony import */ var _merge_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../merge.js */ "./node_modules/@shopify/polaris/build/esm/utilities/merge.js");
+
+
+
+const REPLACE_REGEX = /{([^}]*)}/g;
+class I18n {
+  /**
+   * @param translation A locale object or array of locale objects that overrides default translations. If specifying an array then your desired language dictionary should come first, followed by your fallback language dictionaries
+   */
+  constructor(translation) {
+    this.translation = {};
+    // slice the array to make a shallow copy of it, so we don't accidentally
+    // modify the original translation array
+    this.translation = Array.isArray(translation) ? (0,_merge_js__WEBPACK_IMPORTED_MODULE_0__.merge)(...translation.slice().reverse()) : translation;
+  }
+  translate(id, replacements) {
+    const text = (0,_get_js__WEBPACK_IMPORTED_MODULE_1__.get)(this.translation, id, '');
+    if (!text) {
+      return '';
+    }
+    if (replacements) {
+      return text.replace(REPLACE_REGEX, match => {
+        const replacement = match.substring(1, match.length - 1);
+        if (replacements[replacement] === undefined) {
+          const replacementData = JSON.stringify(replacements);
+          throw new Error(`Error in translation for key '${id}'. No replacement found for key '${replacement}'. The following replacements were passed: '${replacementData}'`);
+        }
+
+        // This could be a string or a number, but JS doesn't mind which it gets
+        // and can handle that cast internally. So let it, to save us calling
+        // toString() on what's already a string in 90% of cases.
+        return replacements[replacement];
+      });
+    }
+    return text;
+  }
+  translationKeyExists(path) {
+    return Boolean((0,_get_js__WEBPACK_IMPORTED_MODULE_1__.get)(this.translation, path));
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/context.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/i18n/context.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   I18nContext: () => (/* binding */ I18nContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const I18nContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useI18n: () => (/* binding */ useI18n)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _errors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../errors.js */ "./node_modules/@shopify/polaris/build/esm/utilities/errors.js");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/i18n/context.js");
+
+
+
+
+function useI18n() {
+  const i18n = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_js__WEBPACK_IMPORTED_MODULE_1__.I18nContext);
+  if (!i18n) {
+    throw new _errors_js__WEBPACK_IMPORTED_MODULE_2__.MissingAppProviderError('No i18n was provided.');
+  }
+  return i18n;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/is-element-in-viewport.js":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/is-element-in-viewport.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isElementInViewport: () => (/* binding */ isElementInViewport)
+/* harmony export */ });
+function isElementInViewport(element) {
+  const {
+    top,
+    left,
+    bottom,
+    right
+  } = element.getBoundingClientRect();
+  return top >= 0 && right <= window.innerWidth && bottom <= window.innerHeight && left >= 0;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/is-object.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/is-object.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isObject: () => (/* binding */ isObject)
+/* harmony export */ });
+function isObject(value) {
+  const type = typeof value;
+  return value != null && (type === 'object' || type === 'function');
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/link/context.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/link/context.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LinkContext: () => (/* binding */ LinkContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const LinkContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/link/hooks.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/link/hooks.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useLink: () => (/* binding */ useLink)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context.js */ "./node_modules/@shopify/polaris/build/esm/utilities/link/context.js");
+
+
+
+function useLink() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_js__WEBPACK_IMPORTED_MODULE_1__.LinkContext);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/media-query/context.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/media-query/context.js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MediaQueryContext: () => (/* binding */ MediaQueryContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+// This is internal, but TS throws a build-time error if we don't export it
+
+const MediaQueryContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/merge.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/merge.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   merge: () => (/* binding */ merge)
+/* harmony export */ });
+// Unfortunately, this is how we have to type this at the moment.
+// There is currently a proposal to support variadic kinds.
+// https://github.com/Microsoft/TypeScript/issues/5453
+
+function merge(...objs) {
+  let final = {};
+  for (const obj of objs) {
+    final = mergeRecursively(final, obj);
+  }
+  return final;
+}
+function mergeRecursively(inputObjA, objB) {
+  const objA = Array.isArray(inputObjA) ? [...inputObjA] : {
+    ...inputObjA
+  };
+  for (const key in objB) {
+    if (!Object.prototype.hasOwnProperty.call(objB, key)) {
+      continue;
+    } else if (isMergeableValue(objB[key]) && isMergeableValue(objA[key])) {
+      objA[key] = mergeRecursively(objA[key], objB[key]);
+    } else {
+      objA[key] = objB[key];
+    }
+  }
+  return objA;
+}
+function isMergeableValue(value) {
+  return value !== null && typeof value === 'object';
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/portals/context.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/portals/context.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PortalsManagerContext: () => (/* binding */ PortalsManagerContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const PortalsManagerContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/context.js":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/context.js ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ScrollLockManagerContext: () => (/* binding */ ScrollLockManagerContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const ScrollLockManagerContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/scroll-lock-manager.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/scroll-lock-manager.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SCROLL_LOCKING_ATTRIBUTE: () => (/* binding */ SCROLL_LOCKING_ATTRIBUTE),
+/* harmony export */   ScrollLockManager: () => (/* binding */ ScrollLockManager)
+/* harmony export */ });
+/* harmony import */ var _target_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../target.js */ "./node_modules/@shopify/polaris/build/esm/utilities/target.js");
+
+
+const SCROLL_LOCKING_ATTRIBUTE = 'data-lock-scrolling';
+const SCROLL_LOCKING_HIDDEN_ATTRIBUTE = 'data-lock-scrolling-hidden';
+const SCROLL_LOCKING_WRAPPER_ATTRIBUTE = 'data-lock-scrolling-wrapper';
+let scrollPosition = 0;
+function isScrollBarVisible() {
+  const {
+    body
+  } = document;
+  return body.scrollHeight > body.clientHeight;
+}
+class ScrollLockManager {
+  constructor() {
+    this.scrollLocks = 0;
+    this.locked = false;
+  }
+  registerScrollLock() {
+    this.scrollLocks += 1;
+    this.handleScrollLocking();
+  }
+  unregisterScrollLock() {
+    this.scrollLocks -= 1;
+    this.handleScrollLocking();
+  }
+  handleScrollLocking() {
+    if (_target_js__WEBPACK_IMPORTED_MODULE_0__.isServer) return;
+    const {
+      scrollLocks
+    } = this;
+    const {
+      body
+    } = document;
+    const wrapper = body.firstElementChild;
+    if (scrollLocks === 0) {
+      body.removeAttribute(SCROLL_LOCKING_ATTRIBUTE);
+      body.removeAttribute(SCROLL_LOCKING_HIDDEN_ATTRIBUTE);
+      if (wrapper) {
+        wrapper.removeAttribute(SCROLL_LOCKING_WRAPPER_ATTRIBUTE);
+      }
+      window.scroll(0, scrollPosition);
+      this.locked = false;
+    } else if (scrollLocks > 0 && !this.locked) {
+      scrollPosition = window.pageYOffset;
+      body.setAttribute(SCROLL_LOCKING_ATTRIBUTE, '');
+      if (!isScrollBarVisible()) {
+        body.setAttribute(SCROLL_LOCKING_HIDDEN_ATTRIBUTE, '');
+      }
+      if (wrapper) {
+        wrapper.setAttribute(SCROLL_LOCKING_WRAPPER_ATTRIBUTE, '');
+        wrapper.scrollTop = scrollPosition;
+      }
+      this.locked = true;
+    }
+  }
+  resetScrollPosition() {
+    scrollPosition = 0;
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/context.js":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/context.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StickyManagerContext: () => (/* binding */ StickyManagerContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const StickyManagerContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(undefined);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/sticky-manager.js":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/sticky-manager/sticky-manager.js ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StickyManager: () => (/* binding */ StickyManager)
+/* harmony export */ });
+/* harmony import */ var _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @shopify/polaris-tokens */ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs");
+/* harmony import */ var _debounce_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../debounce.js */ "./node_modules/@shopify/polaris/build/esm/utilities/debounce.js");
+/* harmony import */ var _components_shared_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/shared.js */ "./node_modules/@shopify/polaris/build/esm/components/shared.js");
+/* harmony import */ var _breakpoints_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../breakpoints.js */ "./node_modules/@shopify/polaris/build/esm/utilities/breakpoints.js");
+/* harmony import */ var _geometry_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../geometry.js */ "./node_modules/@shopify/polaris/build/esm/utilities/geometry.js");
+
+
+
+
+
+
+const SIXTY_FPS = 1000 / 60;
+class StickyManager {
+  constructor(container) {
+    this.stickyItems = [];
+    this.stuckItems = [];
+    this.container = null;
+    this.topBarOffset = 0;
+    this.handleResize = (0,_debounce_js__WEBPACK_IMPORTED_MODULE_1__.debounce)(() => {
+      this.manageStickyItems();
+    }, SIXTY_FPS, {
+      leading: true,
+      trailing: true,
+      maxWait: SIXTY_FPS
+    });
+    this.handleScroll = (0,_debounce_js__WEBPACK_IMPORTED_MODULE_1__.debounce)(() => {
+      this.manageStickyItems();
+    }, SIXTY_FPS, {
+      leading: true,
+      trailing: true,
+      maxWait: SIXTY_FPS
+    });
+    if (container) {
+      this.setContainer(container);
+    }
+  }
+  registerStickyItem(stickyItem) {
+    this.stickyItems.push(stickyItem);
+  }
+  unregisterStickyItem(nodeToRemove) {
+    const nodeIndex = this.stickyItems.findIndex(({
+      stickyNode
+    }) => nodeToRemove === stickyNode);
+    this.stickyItems.splice(nodeIndex, 1);
+  }
+  setContainer(el) {
+    this.container = el;
+    if (isDocument(el)) {
+      this.setTopBarOffset(el);
+    }
+    this.container.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('resize', this.handleResize);
+    this.manageStickyItems();
+  }
+  removeScrollListener() {
+    if (this.container) {
+      this.container.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('resize', this.handleResize);
+    }
+  }
+  manageStickyItems() {
+    if (this.stickyItems.length <= 0) {
+      return;
+    }
+    const scrollTop = this.container ? scrollTopFor(this.container) : 0;
+    const containerTop = (0,_geometry_js__WEBPACK_IMPORTED_MODULE_2__.getRectForNode)(this.container).top + this.topBarOffset;
+    this.stickyItems.forEach(stickyItem => {
+      const {
+        handlePositioning
+      } = stickyItem;
+      const {
+        sticky,
+        top,
+        left,
+        width
+      } = this.evaluateStickyItem(stickyItem, scrollTop, containerTop);
+      this.updateStuckItems(stickyItem, sticky);
+      handlePositioning(sticky, top, left, width);
+    });
+  }
+  evaluateStickyItem(stickyItem, scrollTop, containerTop) {
+    const {
+      stickyNode,
+      placeHolderNode,
+      boundingElement,
+      offset,
+      disableWhenStacked
+    } = stickyItem;
+    if (disableWhenStacked && (0,_breakpoints_js__WEBPACK_IMPORTED_MODULE_3__.stackedContent)().matches) {
+      return {
+        sticky: false,
+        top: 0,
+        left: 0,
+        width: 'auto'
+      };
+    }
+    const stickyOffset = offset ? this.getOffset(stickyNode) + parseInt(
+    // Important: This will not update when the active theme changes.
+    // Update this to `useTheme` once converted to a function component.
+    _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_0__.themeDefault.space['space-500'], 10) : this.getOffset(stickyNode);
+    const scrollPosition = scrollTop + stickyOffset;
+    const placeHolderNodeCurrentTop = placeHolderNode.getBoundingClientRect().top - containerTop + scrollTop;
+    const top = containerTop + stickyOffset;
+    const width = placeHolderNode.getBoundingClientRect().width;
+    const left = placeHolderNode.getBoundingClientRect().left;
+    let sticky;
+    if (boundingElement == null) {
+      sticky = scrollPosition >= placeHolderNodeCurrentTop;
+    } else {
+      const stickyItemHeight = stickyNode.getBoundingClientRect().height || stickyNode.firstElementChild?.getBoundingClientRect().height || 0;
+      const stickyItemBottomPosition = boundingElement.getBoundingClientRect().bottom - stickyItemHeight + scrollTop - containerTop;
+      sticky = scrollPosition >= placeHolderNodeCurrentTop && scrollPosition < stickyItemBottomPosition;
+    }
+    return {
+      sticky,
+      top,
+      left,
+      width
+    };
+  }
+  updateStuckItems(item, sticky) {
+    const {
+      stickyNode
+    } = item;
+    if (sticky && !this.isNodeStuck(stickyNode)) {
+      this.addStuckItem(item);
+    } else if (!sticky && this.isNodeStuck(stickyNode)) {
+      this.removeStuckItem(item);
+    }
+  }
+  addStuckItem(stickyItem) {
+    this.stuckItems.push(stickyItem);
+  }
+  removeStuckItem(stickyItem) {
+    const {
+      stickyNode: nodeToRemove
+    } = stickyItem;
+    const nodeIndex = this.stuckItems.findIndex(({
+      stickyNode
+    }) => nodeToRemove === stickyNode);
+    this.stuckItems.splice(nodeIndex, 1);
+  }
+  getOffset(node) {
+    if (this.stuckItems.length === 0) {
+      return 0;
+    }
+    let offset = 0;
+    let count = 0;
+    const stuckNodesLength = this.stuckItems.length;
+    const nodeRect = (0,_geometry_js__WEBPACK_IMPORTED_MODULE_2__.getRectForNode)(node);
+    while (count < stuckNodesLength) {
+      const stuckNode = this.stuckItems[count].stickyNode;
+      if (stuckNode !== node) {
+        const stuckNodeRect = (0,_geometry_js__WEBPACK_IMPORTED_MODULE_2__.getRectForNode)(stuckNode);
+        if (!horizontallyOverlaps(nodeRect, stuckNodeRect)) {
+          offset += (0,_geometry_js__WEBPACK_IMPORTED_MODULE_2__.getRectForNode)(stuckNode).height;
+        }
+      } else {
+        break;
+      }
+      count++;
+    }
+    return offset;
+  }
+  isNodeStuck(node) {
+    const nodeFound = this.stuckItems.findIndex(({
+      stickyNode
+    }) => node === stickyNode);
+    return nodeFound >= 0;
+  }
+  setTopBarOffset(container) {
+    const topbarElement = container.querySelector(`:not(${_components_shared_js__WEBPACK_IMPORTED_MODULE_4__.scrollable.selector}) ${_components_shared_js__WEBPACK_IMPORTED_MODULE_4__.dataPolarisTopBar.selector}`);
+    this.topBarOffset = topbarElement ? topbarElement.clientHeight : 0;
+  }
+}
+function isDocument(node) {
+  return node === document;
+}
+function scrollTopFor(container) {
+  return isDocument(container) ? document.body.scrollTop || document.documentElement.scrollTop : container.scrollTop;
+}
+function horizontallyOverlaps(rect1, rect2) {
+  const rect1Left = rect1.left;
+  const rect1Right = rect1.left + rect1.width;
+  const rect2Left = rect2.left;
+  const rect2Right = rect2.left + rect2.width;
+  return rect2Right < rect1Left || rect1Right < rect2Left;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/target.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/target.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isServer: () => (/* binding */ isServer)
+/* harmony export */ });
+const isServer = typeof window === 'undefined' || typeof document === 'undefined';
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/use-disable-interaction.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/use-disable-interaction.js ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useDisableClick: () => (/* binding */ useDisableClick)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * useDisableInteraction provides the original event handler but disables interaction
+ * if the boolean passed is true.
+ * @param disabled - A boolean value that determines if the button should
+ * be disabled
+ * @param handleEvent - The original event handler
+ * @returns Function - The original event handler but with interactions disabled if the
+ * provided boolean is true
+ * @example
+ * function ComponentExample() {
+ * const handleClick = () => {
+ *  console.log('disable me');
+ * };
+ * const handleClickEvent = useDisableInteraction(true, handleClick);
+ * return <button onClick={handleClickEvent}>Im Disabled</button>;
+ * }
+ */
+
+function useDisableClick(disabled, handleClick) {
+  const handleClickWrapper = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(event => {
+    if (disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, [disabled]);
+  if (!disabled) {
+    return handleClick;
+  }
+  return handleClickWrapper;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/use-is-after-initial-mount.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/use-is-after-initial-mount.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useIsAfterInitialMount: () => (/* binding */ useIsAfterInitialMount)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * useIsAfterInitialMount will trigger a re-render to provide
+ * you with an updated value. Using this you enhance server-side
+ * code that can only run on the client.
+ * @returns MutableRefObject<T> - Returns a ref object with the
+ * results from invoking initial value
+ * @example
+ * function ComponentExample({children}) {
+ *  const isMounted = useIsAfterInitialMount();
+ *  const content = isMounted ? children : null;
+ *
+ *  return <>{content}</>;
+ * }
+ */
+function useIsAfterInitialMount() {
+  const [isAfterInitialMount, setIsAfterInitialMount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setIsAfterInitialMount(true);
+  }, []);
+  return isAfterInitialMount;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/use-isomorphic-layout-effect.js":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/use-isomorphic-layout-effect.js ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useIsomorphicLayoutEffect: () => (/* binding */ useIsomorphicLayoutEffect)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _target_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./target.js */ "./node_modules/@shopify/polaris/build/esm/utilities/target.js");
+
+
+
+// eslint-disable-next-line no-restricted-imports
+const useIsomorphicLayoutEffect = _target_js__WEBPACK_IMPORTED_MODULE_1__.isServer ? react__WEBPACK_IMPORTED_MODULE_0__.useEffect : react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect;
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/use-theme.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/use-theme.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ThemeContext: () => (/* binding */ ThemeContext),
+/* harmony export */   UseTheme: () => (/* binding */ UseTheme),
+/* harmony export */   getTheme: () => (/* binding */ getTheme),
+/* harmony export */   useTheme: () => (/* binding */ useTheme)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shopify/polaris-tokens */ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs");
+
+
+
+function getTheme(themeName) {
+  return _shopify_polaris_tokens__WEBPACK_IMPORTED_MODULE_1__.themes[themeName];
+}
+const ThemeContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+function useTheme() {
+  const theme = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(ThemeContext);
+  if (!theme) {
+    throw new Error('No theme was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.');
+  }
+  return theme;
+}
+function UseTheme(props) {
+  const theme = useTheme();
+  return props.children(theme);
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/use-toggle.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/use-toggle.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useToggle: () => (/* binding */ useToggle)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * Returns a stateful value, and a set of memoized functions to toggle it,
+ * set it to true and set it to false
+ */
+function useToggle(initialState) {
+  const [value, setState] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(initialState);
+  return {
+    value,
+    toggle: (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setState(state => !state), []),
+    setTrue: (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setState(true), []),
+    setFalse: (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setState(false), [])
+  };
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris/build/esm/utilities/within-filter-context.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris/build/esm/utilities/within-filter-context.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   WithinFilterContext: () => (/* binding */ WithinFilterContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const WithinFilterContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(false);
+
+
+
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -3019,8 +6364,16 @@ function withinMaxClamp(min, value, max) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _components_Example__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Example */ "./resources/js/components/Example.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/AppProvider/AppProvider.js");
+/* harmony import */ var _components_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Navbar */ "./resources/js/components/Navbar.jsx");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+
+
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
@@ -3035,7 +6388,12 @@ __webpack_require__.r(__webpack_exports__);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+// import './components/Example';
 
+if (document.getElementById('root')) {
+  var Index = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById('root'));
+  Index.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
+}
 
 /***/ }),
 
@@ -3085,41 +6443,85 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/components/Example.jsx":
-/*!*********************************************!*\
-  !*** ./resources/js/components/Example.jsx ***!
-  \*********************************************/
+/***/ "./resources/js/components/Navbar.jsx":
+/*!********************************************!*\
+  !*** ./resources/js/components/Navbar.jsx ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "default": () => (/* binding */ Navbar)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/FullscreenBar/FullscreenBar.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/Badge/Badge.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/Text/Text.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.js");
+/* harmony import */ var _shopify_polaris__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @shopify/polaris */ "./node_modules/@shopify/polaris/build/esm/components/Button/Button.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-function Example() {
+
+function Navbar() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState2 = _slicedToArray(_useState, 2),
+    isFullscreen = _useState2[0],
+    setFullscreen = _useState2[1];
+  var handleActionClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+    setFullscreen(false);
+  }, []);
+  var fullscreenBarMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_1__.FullscreenBar, {
+    onAction: handleActionClick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: {
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingLeft: '1rem',
+      paddingRight: '1rem'
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_2__.Badge, {
+    tone: "info"
+  }, "Draft"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: {
+      marginLeft: '1rem',
+      flexGrow: 1
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_3__.Text, {
+    variant: "headingLg",
+    as: "p"
+  }, "Page title")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_4__.ButtonGroup, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_5__.Button, {
+    onClick: function onClick() {}
+  }, "Secondary Action"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_5__.Button, {
+    variant: "primary",
+    onClick: function onClick() {}
+  }, "Primary Action"))));
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "row justify-content-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "col-md-8"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "card-header"
-  }, "Example Component"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "card-body"
-  }, "I'm an example component!")))));
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Example);
-if (document.getElementById('root')) {
-  var Index = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById('root'));
-  Index.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Example, null)));
+    style: {
+      height: '250px',
+      width: '100%'
+    }
+  }, isFullscreen && fullscreenBarMarkup, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: {
+      padding: '1rem'
+    }
+  }, !isFullscreen && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_5__.Button, {
+    onClick: function onClick() {
+      return setFullscreen(true);
+    }
+  }, "Go Fullscreen"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_3__.Text, {
+    variant: "headingLg",
+    as: "p"
+  }, "Page content")));
 }
 
 /***/ }),
@@ -9556,6 +12958,150 @@ function blitBuffer (src, dst, offset, length) {
 function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/deepmerge/dist/cjs.js":
+/*!********************************************!*\
+  !*** ./node_modules/deepmerge/dist/cjs.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
+}
+
+function emptyTarget(val) {
+	return Array.isArray(val) ? [] : {}
+}
+
+function cloneUnlessOtherwiseSpecified(value, options) {
+	return (options.clone !== false && options.isMergeableObject(value))
+		? deepmerge(emptyTarget(value), value, options)
+		: value
+}
+
+function defaultArrayMerge(target, source, options) {
+	return target.concat(source).map(function(element) {
+		return cloneUnlessOtherwiseSpecified(element, options)
+	})
+}
+
+function getMergeFunction(key, options) {
+	if (!options.customMerge) {
+		return deepmerge
+	}
+	var customMerge = options.customMerge(key);
+	return typeof customMerge === 'function' ? customMerge : deepmerge
+}
+
+function getEnumerableOwnPropertySymbols(target) {
+	return Object.getOwnPropertySymbols
+		? Object.getOwnPropertySymbols(target).filter(function(symbol) {
+			return Object.propertyIsEnumerable.call(target, symbol)
+		})
+		: []
+}
+
+function getKeys(target) {
+	return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
+}
+
+function propertyIsOnObject(object, property) {
+	try {
+		return property in object
+	} catch(_) {
+		return false
+	}
+}
+
+// Protects from prototype poisoning and unexpected merging up the prototype chain.
+function propertyIsUnsafe(target, key) {
+	return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
+		&& !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
+			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
+}
+
+function mergeObject(target, source, options) {
+	var destination = {};
+	if (options.isMergeableObject(target)) {
+		getKeys(target).forEach(function(key) {
+			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
+		});
+	}
+	getKeys(source).forEach(function(key) {
+		if (propertyIsUnsafe(target, key)) {
+			return
+		}
+
+		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+			destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
+		} else {
+			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
+		}
+	});
+	return destination
+}
+
+function deepmerge(target, source, options) {
+	options = options || {};
+	options.arrayMerge = options.arrayMerge || defaultArrayMerge;
+	options.isMergeableObject = options.isMergeableObject || isMergeableObject;
+	// cloneUnlessOtherwiseSpecified is added to `options` so that custom arrayMerge()
+	// implementations can use it. The caller may not replace it.
+	options.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;
+
+	var sourceIsArray = Array.isArray(source);
+	var targetIsArray = Array.isArray(target);
+	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+
+	if (!sourceAndTargetTypesMatch) {
+		return cloneUnlessOtherwiseSpecified(source, options)
+	} else if (sourceIsArray) {
+		return options.arrayMerge(target, source, options)
+	} else {
+		return mergeObject(target, source, options)
+	}
+}
+
+deepmerge.all = function deepmergeAll(array, options) {
+	if (!Array.isArray(array)) {
+		throw new Error('first argument should be an array')
+	}
+
+	return array.reduce(function(prev, next) {
+		return deepmerge(prev, next, options)
+	}, {})
+};
+
+var deepmerge_1 = deepmerge;
+
+module.exports = deepmerge_1;
 
 
 /***/ }),
@@ -43058,6 +46604,4395 @@ if (
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/scheduler.development.js */ "./node_modules/scheduler/cjs/scheduler.development.js");
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-icons/dist/icons/ChevronDownIcon.svg.mjs":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-icons/dist/icons/ChevronDownIcon.svg.mjs ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   S: () => (/* binding */ SvgChevronDownIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+var SvgChevronDownIcon = function SvgChevronDownIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    fillRule: "evenodd",
+    d: "M5.72 8.47a.75.75 0 0 1 1.06 0l3.47 3.47 3.47-3.47a.75.75 0 1 1 1.06 1.06l-4 4a.75.75 0 0 1-1.06 0l-4-4a.75.75 0 0 1 0-1.06Z"
+  }));
+};
+SvgChevronDownIcon.displayName = "ChevronDownIcon";
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-icons/dist/icons/ChevronUpIcon.svg.mjs":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-icons/dist/icons/ChevronUpIcon.svg.mjs ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   S: () => (/* binding */ SvgChevronUpIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+var SvgChevronUpIcon = function SvgChevronUpIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    fillRule: "evenodd",
+    d: "M14.53 12.28a.75.75 0 0 1-1.06 0l-3.47-3.47-3.47 3.47a.75.75 0 0 1-1.06-1.06l4-4a.75.75 0 0 1 1.06 0l4 4a.75.75 0 0 1 0 1.06Z"
+  }));
+};
+SvgChevronUpIcon.displayName = "ChevronUpIcon";
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-icons/dist/icons/ExitIcon.svg.mjs":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-icons/dist/icons/ExitIcon.svg.mjs ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   S: () => (/* binding */ SvgExitIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+var SvgExitIcon = function SvgExitIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    d: "M9.75 3c-1.243 0-2.25 1.007-2.25 2.25 0 .414.336.75.75.75s.75-.336.75-.75.336-.75.75-.75h3.5c.69 0 1.25.56 1.25 1.25v8.5c0 .69-.56 1.25-1.25 1.25h-3.5c-.414 0-.75-.336-.75-.75s-.336-.75-.75-.75-.75.336-.75.75c0 1.243 1.007 2.25 2.25 2.25h3.5c1.519 0 2.75-1.231 2.75-2.75v-8.5c0-1.519-1.231-2.75-2.75-2.75h-3.5Z"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    d: "M12.25 10.75c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-5.69l.97-.97c.293-.293.293-.767 0-1.06-.293-.293-.767-.293-1.06 0l-2.25 2.25c-.141.14-.22.331-.22.53s.079.39.22.53l2.25 2.25c.293.293.767.293 1.06 0 .293-.293.293-.767 0-1.06l-.97-.97h5.69Z"
+  }));
+};
+SvgExitIcon.displayName = "ExitIcon";
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-icons/dist/icons/SelectIcon.svg.mjs":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-icons/dist/icons/SelectIcon.svg.mjs ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   S: () => (/* binding */ SvgSelectIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+var SvgSelectIcon = function SvgSelectIcon(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    d: "M10.884 4.323a1.25 1.25 0 0 0-1.768 0l-2.646 2.647a.75.75 0 0 0 1.06 1.06l2.47-2.47 2.47 2.47a.75.75 0 1 0 1.06-1.06l-2.646-2.647Z"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    d: "m13.53 13.03-2.646 2.647a1.25 1.25 0 0 1-1.768 0l-2.646-2.647a.75.75 0 0 1 1.06-1.06l2.47 2.47 2.47-2.47a.75.75 0 0 1 1.06 1.06Z"
+  }));
+};
+SvgSelectIcon.displayName = "SelectIcon";
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/_virtual/_rollupPluginBabelHelpers.mjs":
+/*!**********************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/_virtual/_rollupPluginBabelHelpers.mjs ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   arrayLikeToArray: () => (/* binding */ _arrayLikeToArray),
+/* harmony export */   arrayWithHoles: () => (/* binding */ _arrayWithHoles),
+/* harmony export */   iterableToArrayLimit: () => (/* binding */ _iterableToArrayLimit),
+/* harmony export */   nonIterableRest: () => (/* binding */ _nonIterableRest),
+/* harmony export */   slicedToArray: () => (/* binding */ _slicedToArray),
+/* harmony export */   taggedTemplateLiteralLoose: () => (/* binding */ _taggedTemplateLiteralLoose),
+/* harmony export */   unsupportedIterableToArray: () => (/* binding */ _unsupportedIterableToArray)
+/* harmony export */ });
+function _iterableToArrayLimit(arr, i) {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
+    try {
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
+    } finally {
+      try {
+        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+}
+function _taggedTemplateLiteralLoose(strings, raw) {
+  if (!raw) {
+    raw = strings.slice(0);
+  }
+  strings.raw = raw;
+  return strings;
+}
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+  return arr2;
+}
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/build/index.mjs ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   breakpointsAliases: () => (/* reexport safe */ _src_themes_base_breakpoints_mjs__WEBPACK_IMPORTED_MODULE_0__.breakpointsAliases),
+/* harmony export */   createThemeClassName: () => (/* reexport safe */ _src_themes_utils_mjs__WEBPACK_IMPORTED_MODULE_4__.createThemeClassName),
+/* harmony export */   createVar: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createVar),
+/* harmony export */   createVarName: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createVarName),
+/* harmony export */   getMediaConditions: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.getMediaConditions),
+/* harmony export */   getThemeVarNames: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.getThemeVarNames),
+/* harmony export */   isTokenName: () => (/* binding */ isTokenName),
+/* harmony export */   metaThemeDefault: () => (/* reexport safe */ _src_themes_index_mjs__WEBPACK_IMPORTED_MODULE_2__.metaThemeDefault),
+/* harmony export */   metaThemes: () => (/* reexport safe */ _src_themes_index_mjs__WEBPACK_IMPORTED_MODULE_2__.metaThemes),
+/* harmony export */   themeDefault: () => (/* binding */ themeDefault),
+/* harmony export */   themeNameDefault: () => (/* reexport safe */ _src_themes_constants_mjs__WEBPACK_IMPORTED_MODULE_3__.themeNameDefault),
+/* harmony export */   themeNames: () => (/* reexport safe */ _src_themes_constants_mjs__WEBPACK_IMPORTED_MODULE_3__.themeNames),
+/* harmony export */   themes: () => (/* binding */ themes),
+/* harmony export */   toPx: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.toPx),
+/* harmony export */   toPxs: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.toPxs),
+/* harmony export */   toRem: () => (/* reexport safe */ _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.toRem)
+/* harmony export */ });
+/* harmony import */ var _src_themes_base_breakpoints_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../src/themes/base/breakpoints.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/breakpoints.mjs");
+/* harmony import */ var _src_utils_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../src/utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+/* harmony import */ var _src_themes_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../src/themes/index.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/index.mjs");
+/* harmony import */ var _src_themes_constants_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/themes/constants.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/constants.mjs");
+/* harmony import */ var _src_themes_utils_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../src/themes/utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs");
+
+
+
+
+
+
+
+
+var themes = {
+  "light": {
+    "border": {
+      "border-radius-0": "0rem",
+      "border-radius-050": "0.125rem",
+      "border-radius-100": "0.25rem",
+      "border-radius-150": "0.375rem",
+      "border-radius-200": "0.5rem",
+      "border-radius-300": "0.75rem",
+      "border-radius-400": "1rem",
+      "border-radius-500": "1.25rem",
+      "border-radius-750": "1.875rem",
+      "border-radius-full": "624.9375rem",
+      "border-width-0": "0rem",
+      "border-width-0165": "0.04125rem",
+      "border-width-025": "0.0625rem",
+      "border-width-050": "0.125rem",
+      "border-width-100": "0.25rem"
+    },
+    "breakpoints": {
+      "breakpoints-xs": "0rem",
+      "breakpoints-sm": "30.625rem",
+      "breakpoints-md": "48rem",
+      "breakpoints-lg": "65rem",
+      "breakpoints-xl": "90rem"
+    },
+    "color": {
+      "color-bg": "rgba(241, 241, 241, 1)",
+      "color-bg-inverse": "rgba(26, 26, 26, 1)",
+      "color-bg-surface": "rgba(255, 255, 255, 1)",
+      "color-bg-surface-hover": "rgba(247, 247, 247, 1)",
+      "color-bg-surface-active": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-surface-secondary": "rgba(247, 247, 247, 1)",
+      "color-bg-surface-secondary-hover": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-secondary-active": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-secondary-selected": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-tertiary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-brand-active": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-brand-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-info": "rgba(234, 244, 255, 1)",
+      "color-bg-surface-info-hover": "rgba(224, 240, 255, 1)",
+      "color-bg-surface-info-active": "rgba(202, 230, 255, 1)",
+      "color-bg-surface-success": "rgba(205, 254, 225, 1)",
+      "color-bg-surface-success-hover": "rgba(180, 254, 210, 1)",
+      "color-bg-surface-success-active": "rgba(146, 254, 194, 1)",
+      "color-bg-surface-caution": "rgba(255, 248, 219, 1)",
+      "color-bg-surface-caution-hover": "rgba(255, 244, 191, 1)",
+      "color-bg-surface-caution-active": "rgba(255, 239, 157, 1)",
+      "color-bg-surface-warning": "rgba(255, 241, 227, 1)",
+      "color-bg-surface-warning-hover": "rgba(255, 235, 213, 1)",
+      "color-bg-surface-warning-active": "rgba(255, 228, 198, 1)",
+      "color-bg-surface-critical": "rgba(254, 233, 232, 1)",
+      "color-bg-surface-critical-hover": "rgba(254, 226, 225, 1)",
+      "color-bg-surface-critical-active": "rgba(254, 218, 217, 1)",
+      "color-bg-surface-emphasis": "rgba(240, 242, 255, 1)",
+      "color-bg-surface-emphasis-hover": "rgba(234, 237, 255, 1)",
+      "color-bg-surface-emphasis-active": "rgba(226, 231, 255, 1)",
+      "color-bg-surface-magic": "rgba(248, 247, 255, 1)",
+      "color-bg-surface-magic-hover": "rgba(243, 241, 255, 1)",
+      "color-bg-surface-magic-active": "rgba(233, 229, 255, 1)",
+      "color-bg-surface-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-surface-transparent": "rgba(0, 0, 0, 0)",
+      "color-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-bg-fill-hover": "rgba(250, 250, 250, 1)",
+      "color-bg-fill-active": "rgba(247, 247, 247, 1)",
+      "color-bg-fill-selected": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-secondary": "rgba(241, 241, 241, 1)",
+      "color-bg-fill-secondary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-fill-secondary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary-hover": "rgba(212, 212, 212, 1)",
+      "color-bg-fill-tertiary-active": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-brand": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-hover": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-active": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-selected": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-disabled": "rgba(0, 0, 0, 0.17)",
+      "color-bg-fill-info": "rgba(145, 208, 255, 1)",
+      "color-bg-fill-info-hover": "rgba(81, 192, 255, 1)",
+      "color-bg-fill-info-active": "rgba(0, 148, 213, 1)",
+      "color-bg-fill-info-secondary": "rgba(213, 235, 255, 1)",
+      "color-bg-fill-success": "rgba(41, 132, 90, 1)",
+      "color-bg-fill-success-hover": "rgba(19, 111, 69, 1)",
+      "color-bg-fill-success-active": "rgba(12, 81, 50, 1)",
+      "color-bg-fill-success-secondary": "rgba(180, 254, 210, 1)",
+      "color-bg-fill-warning": "rgba(255, 184, 0, 1)",
+      "color-bg-fill-warning-hover": "rgba(229, 165, 0, 1)",
+      "color-bg-fill-warning-active": "rgba(178, 132, 0, 1)",
+      "color-bg-fill-warning-secondary": "rgba(255, 214, 164, 1)",
+      "color-bg-fill-caution": "rgba(255, 230, 0, 1)",
+      "color-bg-fill-caution-hover": "rgba(234, 211, 0, 1)",
+      "color-bg-fill-caution-active": "rgba(225, 203, 0, 1)",
+      "color-bg-fill-caution-secondary": "rgba(255, 235, 120, 1)",
+      "color-bg-fill-critical": "rgba(229, 28, 0, 1)",
+      "color-bg-fill-critical-hover": "rgba(181, 38, 11, 1)",
+      "color-bg-fill-critical-active": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-selected": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-secondary": "rgba(254, 211, 209, 1)",
+      "color-bg-fill-emphasis": "rgba(0, 91, 211, 1)",
+      "color-bg-fill-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-bg-fill-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-bg-fill-magic": "rgba(128, 81, 255, 1)",
+      "color-bg-fill-magic-secondary": "rgba(233, 229, 255, 1)",
+      "color-bg-fill-magic-secondary-hover": "rgba(228, 222, 255, 1)",
+      "color-bg-fill-magic-secondary-active": "rgba(223, 217, 255, 1)",
+      "color-bg-fill-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-inverse-hover": "rgba(74, 74, 74, 1)",
+      "color-bg-fill-inverse-active": "rgba(97, 97, 97, 1)",
+      "color-bg-fill-transparent": "rgba(0, 0, 0, 0.02)",
+      "color-bg-fill-transparent-hover": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-transparent-active": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-selected": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary": "rgba(0, 0, 0, 0.06)",
+      "color-bg-fill-transparent-secondary-hover": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary-active": "rgba(0, 0, 0, 0.11)",
+      "color-text": "rgba(48, 48, 48, 1)",
+      "color-text-secondary": "rgba(97, 97, 97, 1)",
+      "color-text-disabled": "rgba(181, 181, 181, 1)",
+      "color-text-link": "rgba(0, 91, 211, 1)",
+      "color-text-link-hover": "rgba(0, 66, 153, 1)",
+      "color-text-link-active": "rgba(0, 46, 106, 1)",
+      "color-text-brand": "rgba(74, 74, 74, 1)",
+      "color-text-brand-hover": "rgba(48, 48, 48, 1)",
+      "color-text-brand-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-text-brand-on-bg-fill-hover": "rgba(227, 227, 227, 1)",
+      "color-text-brand-on-bg-fill-active": "rgba(204, 204, 204, 1)",
+      "color-text-brand-on-bg-fill-disabled": "rgba(255, 255, 255, 1)",
+      "color-text-info": "rgba(0, 58, 90, 1)",
+      "color-text-info-hover": "rgba(0, 58, 90, 1)",
+      "color-text-info-active": "rgba(0, 33, 51, 1)",
+      "color-text-info-secondary": "rgba(0, 124, 180, 1)",
+      "color-text-info-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-text-success": "rgba(12, 81, 50, 1)",
+      "color-text-success-hover": "rgba(8, 61, 37, 1)",
+      "color-text-success-active": "rgba(9, 42, 27, 1)",
+      "color-text-success-secondary": "rgba(41, 132, 90, 1)",
+      "color-text-success-on-bg-fill": "rgba(248, 255, 251, 1)",
+      "color-text-caution": "rgba(79, 71, 0, 1)",
+      "color-text-caution-hover": "rgba(51, 46, 0, 1)",
+      "color-text-caution-active": "rgba(31, 28, 0, 1)",
+      "color-text-caution-secondary": "rgba(130, 117, 0, 1)",
+      "color-text-caution-on-bg-fill": "rgba(51, 46, 0, 1)",
+      "color-text-warning": "rgba(94, 66, 0, 1)",
+      "color-text-warning-hover": "rgba(65, 45, 0, 1)",
+      "color-text-warning-active": "rgba(37, 26, 0, 1)",
+      "color-text-warning-secondary": "rgba(149, 111, 0, 1)",
+      "color-text-warning-on-bg-fill": "rgba(37, 26, 0, 1)",
+      "color-text-critical": "rgba(142, 31, 11, 1)",
+      "color-text-critical-hover": "rgba(95, 21, 7, 1)",
+      "color-text-critical-active": "rgba(47, 10, 4, 1)",
+      "color-text-critical-secondary": "rgba(229, 28, 0, 1)",
+      "color-text-critical-on-bg-fill": "rgba(255, 251, 251, 1)",
+      "color-text-emphasis": "rgba(0, 91, 211, 1)",
+      "color-text-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-text-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-text-emphasis-on-bg-fill": "rgba(252, 253, 255, 1)",
+      "color-text-emphasis-on-bg-fill-hover": "rgba(226, 231, 255, 1)",
+      "color-text-emphasis-on-bg-fill-active": "rgba(213, 220, 255, 1)",
+      "color-text-magic": "rgba(87, 0, 209, 1)",
+      "color-text-magic-secondary": "rgba(113, 38, 255, 1)",
+      "color-text-magic-on-bg-fill": "rgba(253, 253, 255, 1)",
+      "color-text-inverse": "rgba(227, 227, 227, 1)",
+      "color-text-inverse-secondary": "rgba(181, 181, 181, 1)",
+      "color-text-link-inverse": "rgba(197, 208, 255, 1)",
+      "color-border": "rgba(227, 227, 227, 1)",
+      "color-border-hover": "rgba(204, 204, 204, 1)",
+      "color-border-disabled": "rgba(235, 235, 235, 1)",
+      "color-border-secondary": "rgba(235, 235, 235, 1)",
+      "color-border-tertiary": "rgba(204, 204, 204, 1)",
+      "color-border-focus": "rgba(0, 91, 211, 1)",
+      "color-border-brand": "rgba(227, 227, 227, 1)",
+      "color-border-info": "rgba(168, 216, 255, 1)",
+      "color-border-success": "rgba(146, 254, 194, 1)",
+      "color-border-caution": "rgba(255, 235, 120, 1)",
+      "color-border-warning": "rgba(255, 200, 121, 1)",
+      "color-border-critical": "rgba(254, 195, 193, 1)",
+      "color-border-critical-secondary": "rgba(142, 31, 11, 1)",
+      "color-border-emphasis": "rgba(0, 91, 211, 1)",
+      "color-border-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-border-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-border-magic": "rgba(228, 222, 255, 1)",
+      "color-border-magic-secondary": "rgba(148, 116, 255, 1)",
+      "color-border-magic-secondary-hover": "rgba(128, 81, 255, 1)",
+      "color-border-inverse": "rgba(97, 97, 97, 1)",
+      "color-border-inverse-hover": "rgba(204, 204, 204, 1)",
+      "color-border-inverse-active": "rgba(227, 227, 227, 1)",
+      "color-icon": "rgba(74, 74, 74, 1)",
+      "color-icon-hover": "rgba(48, 48, 48, 1)",
+      "color-icon-active": "rgba(26, 26, 26, 1)",
+      "color-icon-disabled": "rgba(204, 204, 204, 1)",
+      "color-icon-secondary": "rgba(138, 138, 138, 1)",
+      "color-icon-secondary-hover": "rgba(97, 97, 97, 1)",
+      "color-icon-secondary-active": "rgba(74, 74, 74, 1)",
+      "color-icon-brand": "rgba(26, 26, 26, 1)",
+      "color-icon-info": "rgba(0, 148, 213, 1)",
+      "color-icon-success": "rgba(41, 132, 90, 1)",
+      "color-icon-caution": "rgba(153, 138, 0, 1)",
+      "color-icon-warning": "rgba(178, 132, 0, 1)",
+      "color-icon-critical": "rgba(239, 77, 47, 1)",
+      "color-icon-emphasis": "rgba(0, 91, 211, 1)",
+      "color-icon-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-icon-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-icon-magic": "rgba(128, 81, 255, 1)",
+      "color-icon-inverse": "rgba(227, 227, 227, 1)",
+      "color-avatar-bg-fill": "rgba(181, 181, 181, 1)",
+      "color-avatar-five-bg-fill": "rgba(253, 75, 146, 1)",
+      "color-avatar-five-text-on-bg-fill": "rgba(255, 246, 248, 1)",
+      "color-avatar-four-bg-fill": "rgba(81, 192, 255, 1)",
+      "color-avatar-four-text-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-avatar-one-bg-fill": "rgba(197, 48, 197, 1)",
+      "color-avatar-one-text-on-bg-fill": "rgba(253, 239, 253, 1)",
+      "color-avatar-seven-bg-fill": "rgba(148, 116, 255, 1)",
+      "color-avatar-seven-text-on-bg-fill": "rgba(248, 247, 255, 1)",
+      "color-avatar-six-bg-fill": "rgba(37, 232, 43, 1)",
+      "color-avatar-six-text-on-bg-fill": "rgba(3, 61, 5, 1)",
+      "color-avatar-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-avatar-three-bg-fill": "rgba(44, 224, 212, 1)",
+      "color-avatar-three-text-on-bg-fill": "rgba(3, 60, 57, 1)",
+      "color-avatar-two-bg-fill": "rgba(56, 250, 163, 1)",
+      "color-avatar-two-text-on-bg-fill": "rgba(12, 81, 50, 1)",
+      "color-backdrop-bg": "rgba(0, 0, 0, 0.71)",
+      "color-button-gradient-bg-fill": "linear-gradient(180deg, rgba(48, 48, 48, 0) 63.53%, rgba(255, 255, 255, 0.15) 100%)",
+      "color-checkbox-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-checkbox-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-input-bg-surface": "rgba(253, 253, 253, 1)",
+      "color-input-bg-surface-hover": "rgba(250, 250, 250, 1)",
+      "color-input-bg-surface-active": "rgba(247, 247, 247, 1)",
+      "color-input-border": "rgba(138, 138, 138, 1)",
+      "color-input-border-hover": "rgba(97, 97, 97, 1)",
+      "color-input-border-active": "rgba(26, 26, 26, 1)",
+      "color-nav-bg": "rgba(235, 235, 235, 1)",
+      "color-nav-bg-surface": "rgba(0, 0, 0, 0.02)",
+      "color-nav-bg-surface-hover": "rgba(241, 241, 241, 1)",
+      "color-nav-bg-surface-active": "rgba(250, 250, 250, 1)",
+      "color-nav-bg-surface-selected": "rgba(250, 250, 250, 1)",
+      "color-radio-button-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-radio-button-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-video-thumbnail-play-button-bg-fill-hover": "rgba(0, 0, 0, 0.81)",
+      "color-video-thumbnail-play-button-bg-fill": "rgba(0, 0, 0, 0.71)",
+      "color-video-thumbnail-play-button-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-scrollbar-thumb-bg-hover": "rgba(138, 138, 138, 1)"
+    },
+    "font": {
+      "font-family-sans": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "font-family-mono": "ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace",
+      "font-size-275": "0.6875rem",
+      "font-size-300": "0.75rem",
+      "font-size-325": "0.8125rem",
+      "font-size-350": "0.875rem",
+      "font-size-400": "1rem",
+      "font-size-450": "1.125rem",
+      "font-size-500": "1.25rem",
+      "font-size-550": "1.375rem",
+      "font-size-600": "1.5rem",
+      "font-size-750": "1.875rem",
+      "font-size-800": "2rem",
+      "font-size-900": "2.25rem",
+      "font-size-1000": "2.5rem",
+      "font-weight-regular": "450",
+      "font-weight-medium": "550",
+      "font-weight-semibold": "650",
+      "font-weight-bold": "700",
+      "font-letter-spacing-densest": "-0.03375rem",
+      "font-letter-spacing-denser": "-0.01875rem",
+      "font-letter-spacing-dense": "-0.0125rem",
+      "font-letter-spacing-normal": "0rem",
+      "font-line-height-300": "0.75rem",
+      "font-line-height-400": "1rem",
+      "font-line-height-500": "1.25rem",
+      "font-line-height-600": "1.5rem",
+      "font-line-height-700": "1.75rem",
+      "font-line-height-800": "2rem",
+      "font-line-height-1000": "2.5rem",
+      "font-line-height-1200": "3rem"
+    },
+    "height": {
+      "height-0": "0rem",
+      "height-025": "0.0625rem",
+      "height-050": "0.125rem",
+      "height-100": "0.25rem",
+      "height-150": "0.375rem",
+      "height-200": "0.5rem",
+      "height-300": "0.75rem",
+      "height-400": "1rem",
+      "height-500": "1.25rem",
+      "height-600": "1.5rem",
+      "height-700": "1.75rem",
+      "height-800": "2rem",
+      "height-900": "2.25rem",
+      "height-1000": "2.5rem",
+      "height-1200": "3rem",
+      "height-1600": "4rem",
+      "height-2000": "5rem",
+      "height-2400": "6rem",
+      "height-2800": "7rem",
+      "height-3200": "8rem"
+    },
+    "motion": {
+      "motion-duration-0": "0ms",
+      "motion-duration-50": "50ms",
+      "motion-duration-100": "100ms",
+      "motion-duration-150": "150ms",
+      "motion-duration-200": "200ms",
+      "motion-duration-250": "250ms",
+      "motion-duration-300": "300ms",
+      "motion-duration-350": "350ms",
+      "motion-duration-400": "400ms",
+      "motion-duration-450": "450ms",
+      "motion-duration-500": "500ms",
+      "motion-duration-5000": "5000ms",
+      "motion-ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      "motion-ease-in": "cubic-bezier(0.42, 0, 1, 1)",
+      "motion-ease-out": "cubic-bezier(0.19, 0.91, 0.38, 1)",
+      "motion-ease-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+      "motion-linear": "cubic-bezier(0, 0, 1, 1)",
+      "motion-keyframes-bounce": "{ from, 65%, 85% { transform: scale(1) } 75% { transform: scale(0.85) } 82.5% { transform: scale(1.05) } }",
+      "motion-keyframes-fade-in": "{ to { opacity: 1 } }",
+      "motion-keyframes-pulse": "{ from, 75% { transform: scale(0.85); opacity: 1; } to { transform: scale(2.5); opacity: 0; } }",
+      "motion-keyframes-spin": "{ to { transform: rotate(1turn) } }",
+      "motion-keyframes-appear-above": "{ from { transform: translateY(var(--p-space-100)); opacity: 0; } to { transform: none; opacity: 1; } }",
+      "motion-keyframes-appear-below": "{ from { transform: translateY(calc(var(--p-space-100) * -1)); opacity: 0; } to { transform: none; opacity: 1; } }"
+    },
+    "shadow": {
+      "shadow-0": "none",
+      "shadow-100": "0rem 0.0625rem 0rem 0rem rgba(26, 26, 26, 0.07)",
+      "shadow-200": "0rem 0.1875rem 0.0625rem -0.0625rem rgba(26, 26, 26, 0.07)",
+      "shadow-300": "0rem 0.25rem 0.375rem -0.125rem rgba(26, 26, 26, 0.20)",
+      "shadow-400": "0rem 0.5rem 1rem -0.25rem rgba(26, 26, 26, 0.22)",
+      "shadow-500": "0rem 0.75rem 1.25rem -0.5rem rgba(26, 26, 26, 0.24)",
+      "shadow-600": "0rem 1.25rem 1.25rem -0.5rem rgba(26, 26, 26, 0.28)",
+      "shadow-bevel-100": "0.0625rem 0rem 0rem 0rem rgba(0, 0, 0, 0.13) inset, -0.0625rem 0rem 0rem 0rem rgba(0, 0, 0, 0.13) inset, 0rem -0.0625rem 0rem 0rem rgba(0, 0, 0, 0.17) inset, 0rem 0.0625rem 0rem 0rem rgba(204, 204, 204, 0.5) inset",
+      "shadow-inset-100": "0rem 0.0625rem 0.125rem 0rem rgba(26, 26, 26, 0.15) inset, 0rem 0.0625rem 0.0625rem 0rem rgba(26, 26, 26, 0.15) inset",
+      "shadow-inset-200": "0rem 0.125rem 0.0625rem 0rem rgba(26, 26, 26, 0.20) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset, -0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset",
+      "shadow-button": "0rem -0.0625rem 0rem 0rem #b5b5b5 inset, 0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, 0.1) inset, 0rem 0.03125rem 0rem 0.09375rem #FFF inset",
+      "shadow-button-hover": "0rem 0.0625rem 0rem 0rem #EBEBEB inset, -0.0625rem 0rem 0rem 0rem #EBEBEB inset, 0.0625rem 0rem 0rem 0rem #EBEBEB inset, 0rem -0.0625rem 0rem 0rem #CCC inset",
+      "shadow-button-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.122) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.122) inset, 0rem 0.125rem 0.0625rem 0rem rgba(26, 26, 26, 0.2) inset",
+      "shadow-button-primary": "0rem -0.0625rem 0rem 0.0625rem rgba(0, 0, 0, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(48, 48, 48, 1) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.25) inset;",
+      "shadow-button-primary-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.24) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.0625rem 0rem 0rem #000 inset, 0rem -0.0625rem 0rem 0.0625rem #1A1A1A",
+      "shadow-button-primary-inset": "0rem 0.1875rem 0rem 0rem rgb(0, 0, 0) inset",
+      "shadow-button-primary-critical": "0rem -0.0625rem 0rem 0.0625rem rgba(142, 31, 11, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(181, 38, 11, 0.8) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.349) inset",
+      "shadow-button-primary-critical-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.48) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.09375rem 0rem 0rem rgba(0, 0, 0, 0.25) inset",
+      "shadow-button-primary-critical-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0rem 0.125rem 0rem 0rem rgba(0, 0, 0, 0.6) inset",
+      "shadow-button-primary-success": "0rem -0.0625rem 0rem 0.0625rem rgba(12, 81, 50, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(19, 111, 69, 0.8) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.251) inset",
+      "shadow-button-primary-success-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.48) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.09375rem 0rem 0rem rgba(0, 0, 0, 0.25) inset",
+      "shadow-button-primary-success-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0rem 0.125rem 0rem 0rem rgba(0, 0, 0, 0.6) inset",
+      "shadow-border-inset": "0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, 0.08) inset"
+    },
+    "space": {
+      "space-0": "0rem",
+      "space-025": "0.0625rem",
+      "space-050": "0.125rem",
+      "space-100": "0.25rem",
+      "space-150": "0.375rem",
+      "space-200": "0.5rem",
+      "space-300": "0.75rem",
+      "space-400": "1rem",
+      "space-500": "1.25rem",
+      "space-600": "1.5rem",
+      "space-800": "2rem",
+      "space-1000": "2.5rem",
+      "space-1200": "3rem",
+      "space-1600": "4rem",
+      "space-2000": "5rem",
+      "space-2400": "6rem",
+      "space-2800": "7rem",
+      "space-3200": "8rem",
+      "space-button-group-gap": "0.5rem",
+      "space-card-gap": "1rem",
+      "space-card-padding": "1rem",
+      "space-table-cell-padding": "0.375rem"
+    },
+    "text": {
+      "text-heading-3xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-3xl-font-size": "2.25rem",
+      "text-heading-3xl-font-weight": "700",
+      "text-heading-3xl-font-letter-spacing": "-0.03375rem",
+      "text-heading-3xl-font-line-height": "3rem",
+      "text-heading-2xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-2xl-font-size": "1.875rem",
+      "text-heading-2xl-font-weight": "700",
+      "text-heading-2xl-font-letter-spacing": "-0.01875rem",
+      "text-heading-2xl-font-line-height": "2.5rem",
+      "text-heading-xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xl-font-size": "1.5rem",
+      "text-heading-xl-font-weight": "700",
+      "text-heading-xl-font-letter-spacing": "-0.0125rem",
+      "text-heading-xl-font-line-height": "2rem",
+      "text-heading-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-lg-font-size": "1.25rem",
+      "text-heading-lg-font-weight": "650",
+      "text-heading-lg-font-letter-spacing": "-0.0125rem",
+      "text-heading-lg-font-line-height": "1.5rem",
+      "text-heading-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-md-font-size": "0.875rem",
+      "text-heading-md-font-weight": "650",
+      "text-heading-md-font-letter-spacing": "0rem",
+      "text-heading-md-font-line-height": "1.25rem",
+      "text-heading-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-sm-font-size": "0.8125rem",
+      "text-heading-sm-font-weight": "650",
+      "text-heading-sm-font-letter-spacing": "0rem",
+      "text-heading-sm-font-line-height": "1.25rem",
+      "text-heading-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xs-font-size": "0.75rem",
+      "text-heading-xs-font-weight": "650",
+      "text-heading-xs-font-letter-spacing": "0rem",
+      "text-heading-xs-font-line-height": "1rem",
+      "text-body-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-lg-font-size": "0.875rem",
+      "text-body-lg-font-weight": "450",
+      "text-body-lg-font-letter-spacing": "0rem",
+      "text-body-lg-font-line-height": "1.25rem",
+      "text-body-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-md-font-size": "0.8125rem",
+      "text-body-md-font-weight": "450",
+      "text-body-md-font-letter-spacing": "0rem",
+      "text-body-md-font-line-height": "1.25rem",
+      "text-body-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-sm-font-size": "0.75rem",
+      "text-body-sm-font-weight": "450",
+      "text-body-sm-font-letter-spacing": "0rem",
+      "text-body-sm-font-line-height": "1rem",
+      "text-body-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-xs-font-size": "0.6875rem",
+      "text-body-xs-font-weight": "450",
+      "text-body-xs-font-letter-spacing": "0rem",
+      "text-body-xs-font-line-height": "0.75rem"
+    },
+    "width": {
+      "width-0": "0rem",
+      "width-025": "0.0625rem",
+      "width-050": "0.125rem",
+      "width-100": "0.25rem",
+      "width-150": "0.375rem",
+      "width-200": "0.5rem",
+      "width-300": "0.75rem",
+      "width-400": "1rem",
+      "width-500": "1.25rem",
+      "width-600": "1.5rem",
+      "width-700": "1.75rem",
+      "width-800": "2rem",
+      "width-900": "2.25rem",
+      "width-1000": "2.5rem",
+      "width-1200": "3rem",
+      "width-1600": "4rem",
+      "width-2000": "5rem",
+      "width-2400": "6rem",
+      "width-2800": "7rem",
+      "width-3200": "8rem"
+    },
+    "zIndex": {
+      "z-index-0": "auto",
+      "z-index-1": "100",
+      "z-index-2": "400",
+      "z-index-3": "510",
+      "z-index-4": "512",
+      "z-index-5": "513",
+      "z-index-6": "514",
+      "z-index-7": "515",
+      "z-index-8": "516",
+      "z-index-9": "517",
+      "z-index-10": "518",
+      "z-index-11": "519",
+      "z-index-12": "520"
+    }
+  },
+  "light-mobile": {
+    "border": {
+      "border-radius-0": "0rem",
+      "border-radius-050": "0.125rem",
+      "border-radius-100": "0.25rem",
+      "border-radius-150": "0.375rem",
+      "border-radius-200": "0.5rem",
+      "border-radius-300": "0.75rem",
+      "border-radius-400": "1rem",
+      "border-radius-500": "1.25rem",
+      "border-radius-750": "1.875rem",
+      "border-radius-full": "624.9375rem",
+      "border-width-0": "0rem",
+      "border-width-0165": "0.04125rem",
+      "border-width-025": "0.0625rem",
+      "border-width-050": "0.125rem",
+      "border-width-100": "0.25rem"
+    },
+    "breakpoints": {
+      "breakpoints-xs": "0rem",
+      "breakpoints-sm": "30.625rem",
+      "breakpoints-md": "48rem",
+      "breakpoints-lg": "65rem",
+      "breakpoints-xl": "90rem"
+    },
+    "color": {
+      "color-bg": "rgba(241, 241, 241, 1)",
+      "color-bg-inverse": "rgba(26, 26, 26, 1)",
+      "color-bg-surface": "rgba(255, 255, 255, 1)",
+      "color-bg-surface-hover": "rgba(247, 247, 247, 1)",
+      "color-bg-surface-active": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-surface-secondary": "rgba(247, 247, 247, 1)",
+      "color-bg-surface-secondary-hover": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-secondary-active": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-secondary-selected": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-tertiary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-brand-active": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-brand-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-info": "rgba(234, 244, 255, 1)",
+      "color-bg-surface-info-hover": "rgba(224, 240, 255, 1)",
+      "color-bg-surface-info-active": "rgba(202, 230, 255, 1)",
+      "color-bg-surface-success": "rgba(205, 254, 225, 1)",
+      "color-bg-surface-success-hover": "rgba(180, 254, 210, 1)",
+      "color-bg-surface-success-active": "rgba(146, 254, 194, 1)",
+      "color-bg-surface-caution": "rgba(255, 248, 219, 1)",
+      "color-bg-surface-caution-hover": "rgba(255, 244, 191, 1)",
+      "color-bg-surface-caution-active": "rgba(255, 239, 157, 1)",
+      "color-bg-surface-warning": "rgba(255, 241, 227, 1)",
+      "color-bg-surface-warning-hover": "rgba(255, 235, 213, 1)",
+      "color-bg-surface-warning-active": "rgba(255, 228, 198, 1)",
+      "color-bg-surface-critical": "rgba(254, 233, 232, 1)",
+      "color-bg-surface-critical-hover": "rgba(254, 226, 225, 1)",
+      "color-bg-surface-critical-active": "rgba(254, 218, 217, 1)",
+      "color-bg-surface-emphasis": "rgba(240, 242, 255, 1)",
+      "color-bg-surface-emphasis-hover": "rgba(234, 237, 255, 1)",
+      "color-bg-surface-emphasis-active": "rgba(226, 231, 255, 1)",
+      "color-bg-surface-magic": "rgba(248, 247, 255, 1)",
+      "color-bg-surface-magic-hover": "rgba(243, 241, 255, 1)",
+      "color-bg-surface-magic-active": "rgba(233, 229, 255, 1)",
+      "color-bg-surface-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-surface-transparent": "rgba(0, 0, 0, 0)",
+      "color-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-bg-fill-hover": "rgba(250, 250, 250, 1)",
+      "color-bg-fill-active": "rgba(247, 247, 247, 1)",
+      "color-bg-fill-selected": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-secondary": "rgba(241, 241, 241, 1)",
+      "color-bg-fill-secondary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-fill-secondary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary-hover": "rgba(212, 212, 212, 1)",
+      "color-bg-fill-tertiary-active": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-brand": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-hover": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-active": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-selected": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-disabled": "rgba(0, 0, 0, 0.17)",
+      "color-bg-fill-info": "rgba(145, 208, 255, 1)",
+      "color-bg-fill-info-hover": "rgba(81, 192, 255, 1)",
+      "color-bg-fill-info-active": "rgba(0, 148, 213, 1)",
+      "color-bg-fill-info-secondary": "rgba(213, 235, 255, 1)",
+      "color-bg-fill-success": "rgba(41, 132, 90, 1)",
+      "color-bg-fill-success-hover": "rgba(19, 111, 69, 1)",
+      "color-bg-fill-success-active": "rgba(12, 81, 50, 1)",
+      "color-bg-fill-success-secondary": "rgba(180, 254, 210, 1)",
+      "color-bg-fill-warning": "rgba(255, 184, 0, 1)",
+      "color-bg-fill-warning-hover": "rgba(229, 165, 0, 1)",
+      "color-bg-fill-warning-active": "rgba(178, 132, 0, 1)",
+      "color-bg-fill-warning-secondary": "rgba(255, 214, 164, 1)",
+      "color-bg-fill-caution": "rgba(255, 230, 0, 1)",
+      "color-bg-fill-caution-hover": "rgba(234, 211, 0, 1)",
+      "color-bg-fill-caution-active": "rgba(225, 203, 0, 1)",
+      "color-bg-fill-caution-secondary": "rgba(255, 235, 120, 1)",
+      "color-bg-fill-critical": "rgba(229, 28, 0, 1)",
+      "color-bg-fill-critical-hover": "rgba(181, 38, 11, 1)",
+      "color-bg-fill-critical-active": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-selected": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-secondary": "rgba(254, 211, 209, 1)",
+      "color-bg-fill-emphasis": "rgba(0, 91, 211, 1)",
+      "color-bg-fill-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-bg-fill-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-bg-fill-magic": "rgba(128, 81, 255, 1)",
+      "color-bg-fill-magic-secondary": "rgba(233, 229, 255, 1)",
+      "color-bg-fill-magic-secondary-hover": "rgba(228, 222, 255, 1)",
+      "color-bg-fill-magic-secondary-active": "rgba(223, 217, 255, 1)",
+      "color-bg-fill-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-inverse-hover": "rgba(74, 74, 74, 1)",
+      "color-bg-fill-inverse-active": "rgba(97, 97, 97, 1)",
+      "color-bg-fill-transparent": "rgba(0, 0, 0, 0.02)",
+      "color-bg-fill-transparent-hover": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-transparent-active": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-selected": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary": "rgba(0, 0, 0, 0.06)",
+      "color-bg-fill-transparent-secondary-hover": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary-active": "rgba(0, 0, 0, 0.11)",
+      "color-text": "rgba(48, 48, 48, 1)",
+      "color-text-secondary": "rgba(97, 97, 97, 1)",
+      "color-text-disabled": "rgba(181, 181, 181, 1)",
+      "color-text-link": "rgba(0, 91, 211, 1)",
+      "color-text-link-hover": "rgba(0, 66, 153, 1)",
+      "color-text-link-active": "rgba(0, 46, 106, 1)",
+      "color-text-brand": "rgba(74, 74, 74, 1)",
+      "color-text-brand-hover": "rgba(48, 48, 48, 1)",
+      "color-text-brand-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-text-brand-on-bg-fill-hover": "rgba(227, 227, 227, 1)",
+      "color-text-brand-on-bg-fill-active": "rgba(204, 204, 204, 1)",
+      "color-text-brand-on-bg-fill-disabled": "rgba(255, 255, 255, 1)",
+      "color-text-info": "rgba(0, 58, 90, 1)",
+      "color-text-info-hover": "rgba(0, 58, 90, 1)",
+      "color-text-info-active": "rgba(0, 33, 51, 1)",
+      "color-text-info-secondary": "rgba(0, 124, 180, 1)",
+      "color-text-info-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-text-success": "rgba(12, 81, 50, 1)",
+      "color-text-success-hover": "rgba(8, 61, 37, 1)",
+      "color-text-success-active": "rgba(9, 42, 27, 1)",
+      "color-text-success-secondary": "rgba(41, 132, 90, 1)",
+      "color-text-success-on-bg-fill": "rgba(248, 255, 251, 1)",
+      "color-text-caution": "rgba(79, 71, 0, 1)",
+      "color-text-caution-hover": "rgba(51, 46, 0, 1)",
+      "color-text-caution-active": "rgba(31, 28, 0, 1)",
+      "color-text-caution-secondary": "rgba(130, 117, 0, 1)",
+      "color-text-caution-on-bg-fill": "rgba(51, 46, 0, 1)",
+      "color-text-warning": "rgba(94, 66, 0, 1)",
+      "color-text-warning-hover": "rgba(65, 45, 0, 1)",
+      "color-text-warning-active": "rgba(37, 26, 0, 1)",
+      "color-text-warning-secondary": "rgba(149, 111, 0, 1)",
+      "color-text-warning-on-bg-fill": "rgba(37, 26, 0, 1)",
+      "color-text-critical": "rgba(142, 31, 11, 1)",
+      "color-text-critical-hover": "rgba(95, 21, 7, 1)",
+      "color-text-critical-active": "rgba(47, 10, 4, 1)",
+      "color-text-critical-secondary": "rgba(229, 28, 0, 1)",
+      "color-text-critical-on-bg-fill": "rgba(255, 251, 251, 1)",
+      "color-text-emphasis": "rgba(0, 91, 211, 1)",
+      "color-text-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-text-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-text-emphasis-on-bg-fill": "rgba(252, 253, 255, 1)",
+      "color-text-emphasis-on-bg-fill-hover": "rgba(226, 231, 255, 1)",
+      "color-text-emphasis-on-bg-fill-active": "rgba(213, 220, 255, 1)",
+      "color-text-magic": "rgba(87, 0, 209, 1)",
+      "color-text-magic-secondary": "rgba(113, 38, 255, 1)",
+      "color-text-magic-on-bg-fill": "rgba(253, 253, 255, 1)",
+      "color-text-inverse": "rgba(227, 227, 227, 1)",
+      "color-text-inverse-secondary": "rgba(181, 181, 181, 1)",
+      "color-text-link-inverse": "rgba(197, 208, 255, 1)",
+      "color-border": "rgba(227, 227, 227, 1)",
+      "color-border-hover": "rgba(204, 204, 204, 1)",
+      "color-border-disabled": "rgba(235, 235, 235, 1)",
+      "color-border-secondary": "rgba(235, 235, 235, 1)",
+      "color-border-tertiary": "rgba(204, 204, 204, 1)",
+      "color-border-focus": "rgba(0, 91, 211, 1)",
+      "color-border-brand": "rgba(227, 227, 227, 1)",
+      "color-border-info": "rgba(168, 216, 255, 1)",
+      "color-border-success": "rgba(146, 254, 194, 1)",
+      "color-border-caution": "rgba(255, 235, 120, 1)",
+      "color-border-warning": "rgba(255, 200, 121, 1)",
+      "color-border-critical": "rgba(254, 195, 193, 1)",
+      "color-border-critical-secondary": "rgba(142, 31, 11, 1)",
+      "color-border-emphasis": "rgba(0, 91, 211, 1)",
+      "color-border-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-border-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-border-magic": "rgba(228, 222, 255, 1)",
+      "color-border-magic-secondary": "rgba(148, 116, 255, 1)",
+      "color-border-magic-secondary-hover": "rgba(128, 81, 255, 1)",
+      "color-border-inverse": "rgba(97, 97, 97, 1)",
+      "color-border-inverse-hover": "rgba(204, 204, 204, 1)",
+      "color-border-inverse-active": "rgba(227, 227, 227, 1)",
+      "color-icon": "rgba(74, 74, 74, 1)",
+      "color-icon-hover": "rgba(48, 48, 48, 1)",
+      "color-icon-active": "rgba(26, 26, 26, 1)",
+      "color-icon-disabled": "rgba(204, 204, 204, 1)",
+      "color-icon-secondary": "rgba(138, 138, 138, 1)",
+      "color-icon-secondary-hover": "rgba(97, 97, 97, 1)",
+      "color-icon-secondary-active": "rgba(74, 74, 74, 1)",
+      "color-icon-brand": "rgba(26, 26, 26, 1)",
+      "color-icon-info": "rgba(0, 148, 213, 1)",
+      "color-icon-success": "rgba(41, 132, 90, 1)",
+      "color-icon-caution": "rgba(153, 138, 0, 1)",
+      "color-icon-warning": "rgba(178, 132, 0, 1)",
+      "color-icon-critical": "rgba(239, 77, 47, 1)",
+      "color-icon-emphasis": "rgba(0, 91, 211, 1)",
+      "color-icon-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-icon-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-icon-magic": "rgba(128, 81, 255, 1)",
+      "color-icon-inverse": "rgba(227, 227, 227, 1)",
+      "color-avatar-bg-fill": "rgba(181, 181, 181, 1)",
+      "color-avatar-five-bg-fill": "rgba(253, 75, 146, 1)",
+      "color-avatar-five-text-on-bg-fill": "rgba(255, 246, 248, 1)",
+      "color-avatar-four-bg-fill": "rgba(81, 192, 255, 1)",
+      "color-avatar-four-text-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-avatar-one-bg-fill": "rgba(197, 48, 197, 1)",
+      "color-avatar-one-text-on-bg-fill": "rgba(253, 239, 253, 1)",
+      "color-avatar-seven-bg-fill": "rgba(148, 116, 255, 1)",
+      "color-avatar-seven-text-on-bg-fill": "rgba(248, 247, 255, 1)",
+      "color-avatar-six-bg-fill": "rgba(37, 232, 43, 1)",
+      "color-avatar-six-text-on-bg-fill": "rgba(3, 61, 5, 1)",
+      "color-avatar-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-avatar-three-bg-fill": "rgba(44, 224, 212, 1)",
+      "color-avatar-three-text-on-bg-fill": "rgba(3, 60, 57, 1)",
+      "color-avatar-two-bg-fill": "rgba(56, 250, 163, 1)",
+      "color-avatar-two-text-on-bg-fill": "rgba(12, 81, 50, 1)",
+      "color-backdrop-bg": "rgba(0, 0, 0, 0.71)",
+      "color-button-gradient-bg-fill": "none",
+      "color-checkbox-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-checkbox-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-input-bg-surface": "rgba(253, 253, 253, 1)",
+      "color-input-bg-surface-hover": "rgba(250, 250, 250, 1)",
+      "color-input-bg-surface-active": "rgba(247, 247, 247, 1)",
+      "color-input-border": "rgba(138, 138, 138, 1)",
+      "color-input-border-hover": "rgba(97, 97, 97, 1)",
+      "color-input-border-active": "rgba(26, 26, 26, 1)",
+      "color-nav-bg": "rgba(235, 235, 235, 1)",
+      "color-nav-bg-surface": "rgba(0, 0, 0, 0.02)",
+      "color-nav-bg-surface-hover": "rgba(241, 241, 241, 1)",
+      "color-nav-bg-surface-active": "rgba(250, 250, 250, 1)",
+      "color-nav-bg-surface-selected": "rgba(250, 250, 250, 1)",
+      "color-radio-button-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-radio-button-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-video-thumbnail-play-button-bg-fill-hover": "rgba(0, 0, 0, 0.81)",
+      "color-video-thumbnail-play-button-bg-fill": "rgba(0, 0, 0, 0.71)",
+      "color-video-thumbnail-play-button-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-scrollbar-thumb-bg-hover": "rgba(138, 138, 138, 1)"
+    },
+    "font": {
+      "font-family-sans": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "font-family-mono": "ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace",
+      "font-size-275": "0.6875rem",
+      "font-size-300": "0.75rem",
+      "font-size-325": "0.8125rem",
+      "font-size-350": "0.875rem",
+      "font-size-400": "1rem",
+      "font-size-450": "1.125rem",
+      "font-size-500": "1.25rem",
+      "font-size-550": "1.375rem",
+      "font-size-600": "1.5rem",
+      "font-size-750": "1.875rem",
+      "font-size-800": "2rem",
+      "font-size-900": "2.25rem",
+      "font-size-1000": "2.5rem",
+      "font-weight-regular": "450",
+      "font-weight-medium": "550",
+      "font-weight-semibold": "650",
+      "font-weight-bold": "700",
+      "font-letter-spacing-densest": "-0.03375rem",
+      "font-letter-spacing-denser": "-0.01875rem",
+      "font-letter-spacing-dense": "-0.0125rem",
+      "font-letter-spacing-normal": "0rem",
+      "font-line-height-300": "0.75rem",
+      "font-line-height-400": "1rem",
+      "font-line-height-500": "1.25rem",
+      "font-line-height-600": "1.5rem",
+      "font-line-height-700": "1.75rem",
+      "font-line-height-800": "2rem",
+      "font-line-height-1000": "2.5rem",
+      "font-line-height-1200": "3rem"
+    },
+    "height": {
+      "height-0": "0rem",
+      "height-025": "0.0625rem",
+      "height-050": "0.125rem",
+      "height-100": "0.25rem",
+      "height-150": "0.375rem",
+      "height-200": "0.5rem",
+      "height-300": "0.75rem",
+      "height-400": "1rem",
+      "height-500": "1.25rem",
+      "height-600": "1.5rem",
+      "height-700": "1.75rem",
+      "height-800": "2rem",
+      "height-900": "2.25rem",
+      "height-1000": "2.5rem",
+      "height-1200": "3rem",
+      "height-1600": "4rem",
+      "height-2000": "5rem",
+      "height-2400": "6rem",
+      "height-2800": "7rem",
+      "height-3200": "8rem"
+    },
+    "motion": {
+      "motion-duration-0": "0ms",
+      "motion-duration-50": "50ms",
+      "motion-duration-100": "100ms",
+      "motion-duration-150": "150ms",
+      "motion-duration-200": "200ms",
+      "motion-duration-250": "250ms",
+      "motion-duration-300": "300ms",
+      "motion-duration-350": "350ms",
+      "motion-duration-400": "400ms",
+      "motion-duration-450": "450ms",
+      "motion-duration-500": "500ms",
+      "motion-duration-5000": "5000ms",
+      "motion-ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      "motion-ease-in": "cubic-bezier(0.42, 0, 1, 1)",
+      "motion-ease-out": "cubic-bezier(0.19, 0.91, 0.38, 1)",
+      "motion-ease-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+      "motion-linear": "cubic-bezier(0, 0, 1, 1)",
+      "motion-keyframes-bounce": "{ from, 65%, 85% { transform: scale(1) } 75% { transform: scale(0.85) } 82.5% { transform: scale(1.05) } }",
+      "motion-keyframes-fade-in": "{ to { opacity: 1 } }",
+      "motion-keyframes-pulse": "{ from, 75% { transform: scale(0.85); opacity: 1; } to { transform: scale(2.5); opacity: 0; } }",
+      "motion-keyframes-spin": "{ to { transform: rotate(1turn) } }",
+      "motion-keyframes-appear-above": "{ from { transform: translateY(var(--p-space-100)); opacity: 0; } to { transform: none; opacity: 1; } }",
+      "motion-keyframes-appear-below": "{ from { transform: translateY(calc(var(--p-space-100) * -1)); opacity: 0; } to { transform: none; opacity: 1; } }"
+    },
+    "shadow": {
+      "shadow-0": "none",
+      "shadow-100": "none",
+      "shadow-200": "0rem 0.1875rem 0.0625rem -0.0625rem rgba(26, 26, 26, 0.07)",
+      "shadow-300": "0rem 0.25rem 0.375rem -0.125rem rgba(26, 26, 26, 0.20)",
+      "shadow-400": "0rem 0.5rem 1rem -0.25rem rgba(26, 26, 26, 0.22)",
+      "shadow-500": "0rem 0.75rem 1.25rem -0.5rem rgba(26, 26, 26, 0.24)",
+      "shadow-600": "0rem 1.25rem 1.25rem -0.5rem rgba(26, 26, 26, 0.28)",
+      "shadow-bevel-100": "none",
+      "shadow-inset-100": "0rem 0.0625rem 0.125rem 0rem rgba(26, 26, 26, 0.15) inset, 0rem 0.0625rem 0.0625rem 0rem rgba(26, 26, 26, 0.15) inset",
+      "shadow-inset-200": "0rem 0.125rem 0.0625rem 0rem rgba(26, 26, 26, 0.20) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset, -0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset",
+      "shadow-button": "0 0 0 var(--p-border-width-025) var(--p-color-border) inset",
+      "shadow-button-hover": "0 0 0 var(--p-border-width-025) var(--p-color-border) inset",
+      "shadow-button-inset": "0 0 0 var(--p-border-width-025) var(--p-color-border) inset",
+      "shadow-button-primary": "none",
+      "shadow-button-primary-hover": "none",
+      "shadow-button-primary-inset": "none",
+      "shadow-button-primary-critical": "none",
+      "shadow-button-primary-critical-hover": "none",
+      "shadow-button-primary-critical-inset": "none",
+      "shadow-button-primary-success": "none",
+      "shadow-button-primary-success-hover": "none",
+      "shadow-button-primary-success-inset": "none",
+      "shadow-border-inset": "0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, 0.08) inset"
+    },
+    "space": {
+      "space-0": "0rem",
+      "space-025": "0.0625rem",
+      "space-050": "0.125rem",
+      "space-100": "0.25rem",
+      "space-150": "0.375rem",
+      "space-200": "0.5rem",
+      "space-300": "0.75rem",
+      "space-400": "1rem",
+      "space-500": "1.25rem",
+      "space-600": "1.5rem",
+      "space-800": "2rem",
+      "space-1000": "2.5rem",
+      "space-1200": "3rem",
+      "space-1600": "4rem",
+      "space-2000": "5rem",
+      "space-2400": "6rem",
+      "space-2800": "7rem",
+      "space-3200": "8rem",
+      "space-button-group-gap": "0.5rem",
+      "space-card-gap": "0.5rem",
+      "space-card-padding": "1rem",
+      "space-table-cell-padding": "0.375rem"
+    },
+    "text": {
+      "text-heading-3xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-3xl-font-size": "2.25rem",
+      "text-heading-3xl-font-weight": "700",
+      "text-heading-3xl-font-letter-spacing": "-0.03375rem",
+      "text-heading-3xl-font-line-height": "3rem",
+      "text-heading-2xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-2xl-font-size": "2rem",
+      "text-heading-2xl-font-weight": "700",
+      "text-heading-2xl-font-letter-spacing": "-0.01875rem",
+      "text-heading-2xl-font-line-height": "2.5rem",
+      "text-heading-xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xl-font-size": "1.375rem",
+      "text-heading-xl-font-weight": "700",
+      "text-heading-xl-font-letter-spacing": "-0.0125rem",
+      "text-heading-xl-font-line-height": "1.75rem",
+      "text-heading-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-lg-font-size": "1.125rem",
+      "text-heading-lg-font-weight": "650",
+      "text-heading-lg-font-letter-spacing": "-0.0125rem",
+      "text-heading-lg-font-line-height": "1.5rem",
+      "text-heading-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-md-font-size": "1rem",
+      "text-heading-md-font-weight": "650",
+      "text-heading-md-font-letter-spacing": "0rem",
+      "text-heading-md-font-line-height": "1.25rem",
+      "text-heading-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-sm-font-size": "0.875rem",
+      "text-heading-sm-font-weight": "650",
+      "text-heading-sm-font-letter-spacing": "0rem",
+      "text-heading-sm-font-line-height": "1.25rem",
+      "text-heading-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xs-font-size": "0.75rem",
+      "text-heading-xs-font-weight": "650",
+      "text-heading-xs-font-letter-spacing": "0rem",
+      "text-heading-xs-font-line-height": "1rem",
+      "text-body-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-lg-font-size": "1.125rem",
+      "text-body-lg-font-weight": "450",
+      "text-body-lg-font-letter-spacing": "0rem",
+      "text-body-lg-font-line-height": "1.75rem",
+      "text-body-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-md-font-size": "1rem",
+      "text-body-md-font-weight": "450",
+      "text-body-md-font-letter-spacing": "0rem",
+      "text-body-md-font-line-height": "1.5rem",
+      "text-body-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-sm-font-size": "0.875rem",
+      "text-body-sm-font-weight": "450",
+      "text-body-sm-font-letter-spacing": "0rem",
+      "text-body-sm-font-line-height": "1.25rem",
+      "text-body-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-xs-font-size": "0.75rem",
+      "text-body-xs-font-weight": "450",
+      "text-body-xs-font-letter-spacing": "0rem",
+      "text-body-xs-font-line-height": "1rem"
+    },
+    "width": {
+      "width-0": "0rem",
+      "width-025": "0.0625rem",
+      "width-050": "0.125rem",
+      "width-100": "0.25rem",
+      "width-150": "0.375rem",
+      "width-200": "0.5rem",
+      "width-300": "0.75rem",
+      "width-400": "1rem",
+      "width-500": "1.25rem",
+      "width-600": "1.5rem",
+      "width-700": "1.75rem",
+      "width-800": "2rem",
+      "width-900": "2.25rem",
+      "width-1000": "2.5rem",
+      "width-1200": "3rem",
+      "width-1600": "4rem",
+      "width-2000": "5rem",
+      "width-2400": "6rem",
+      "width-2800": "7rem",
+      "width-3200": "8rem"
+    },
+    "zIndex": {
+      "z-index-0": "auto",
+      "z-index-1": "100",
+      "z-index-2": "400",
+      "z-index-3": "510",
+      "z-index-4": "512",
+      "z-index-5": "513",
+      "z-index-6": "514",
+      "z-index-7": "515",
+      "z-index-8": "516",
+      "z-index-9": "517",
+      "z-index-10": "518",
+      "z-index-11": "519",
+      "z-index-12": "520"
+    }
+  },
+  "light-high-contrast-experimental": {
+    "border": {
+      "border-radius-0": "0rem",
+      "border-radius-050": "0.125rem",
+      "border-radius-100": "0.25rem",
+      "border-radius-150": "0.375rem",
+      "border-radius-200": "0.5rem",
+      "border-radius-300": "0.75rem",
+      "border-radius-400": "1rem",
+      "border-radius-500": "1.25rem",
+      "border-radius-750": "1.875rem",
+      "border-radius-full": "624.9375rem",
+      "border-width-0": "0rem",
+      "border-width-0165": "0.04125rem",
+      "border-width-025": "0.0625rem",
+      "border-width-050": "0.125rem",
+      "border-width-100": "0.25rem"
+    },
+    "breakpoints": {
+      "breakpoints-xs": "0rem",
+      "breakpoints-sm": "30.625rem",
+      "breakpoints-md": "48rem",
+      "breakpoints-lg": "65rem",
+      "breakpoints-xl": "90rem"
+    },
+    "color": {
+      "color-bg": "rgba(241, 241, 241, 1)",
+      "color-bg-inverse": "rgba(26, 26, 26, 1)",
+      "color-bg-surface": "rgba(255, 255, 255, 1)",
+      "color-bg-surface-hover": "rgba(247, 247, 247, 1)",
+      "color-bg-surface-active": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-surface-secondary": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-secondary-hover": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-secondary-active": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-secondary-selected": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary": "rgba(243, 243, 243, 1)",
+      "color-bg-surface-tertiary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-tertiary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand": "rgba(227, 227, 227, 1)",
+      "color-bg-surface-brand-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-surface-brand-active": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-brand-selected": "rgba(241, 241, 241, 1)",
+      "color-bg-surface-info": "rgba(234, 244, 255, 1)",
+      "color-bg-surface-info-hover": "rgba(224, 240, 255, 1)",
+      "color-bg-surface-info-active": "rgba(202, 230, 255, 1)",
+      "color-bg-surface-success": "rgba(205, 254, 225, 1)",
+      "color-bg-surface-success-hover": "rgba(180, 254, 210, 1)",
+      "color-bg-surface-success-active": "rgba(146, 254, 194, 1)",
+      "color-bg-surface-caution": "rgba(255, 248, 219, 1)",
+      "color-bg-surface-caution-hover": "rgba(255, 244, 191, 1)",
+      "color-bg-surface-caution-active": "rgba(255, 239, 157, 1)",
+      "color-bg-surface-warning": "rgba(255, 241, 227, 1)",
+      "color-bg-surface-warning-hover": "rgba(255, 235, 213, 1)",
+      "color-bg-surface-warning-active": "rgba(255, 228, 198, 1)",
+      "color-bg-surface-critical": "rgba(254, 233, 232, 1)",
+      "color-bg-surface-critical-hover": "rgba(254, 226, 225, 1)",
+      "color-bg-surface-critical-active": "rgba(254, 218, 217, 1)",
+      "color-bg-surface-emphasis": "rgba(240, 242, 255, 1)",
+      "color-bg-surface-emphasis-hover": "rgba(234, 237, 255, 1)",
+      "color-bg-surface-emphasis-active": "rgba(226, 231, 255, 1)",
+      "color-bg-surface-magic": "rgba(248, 247, 255, 1)",
+      "color-bg-surface-magic-hover": "rgba(243, 241, 255, 1)",
+      "color-bg-surface-magic-active": "rgba(233, 229, 255, 1)",
+      "color-bg-surface-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-surface-transparent": "rgba(0, 0, 0, 0)",
+      "color-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-bg-fill-hover": "rgba(250, 250, 250, 1)",
+      "color-bg-fill-active": "rgba(247, 247, 247, 1)",
+      "color-bg-fill-selected": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-disabled": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-secondary": "rgba(241, 241, 241, 1)",
+      "color-bg-fill-secondary-hover": "rgba(235, 235, 235, 1)",
+      "color-bg-fill-secondary-active": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary": "rgba(227, 227, 227, 1)",
+      "color-bg-fill-tertiary-hover": "rgba(212, 212, 212, 1)",
+      "color-bg-fill-tertiary-active": "rgba(204, 204, 204, 1)",
+      "color-bg-fill-brand": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-hover": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-active": "rgba(26, 26, 26, 1)",
+      "color-bg-fill-brand-selected": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-brand-disabled": "rgba(0, 0, 0, 0.17)",
+      "color-bg-fill-info": "rgba(145, 208, 255, 1)",
+      "color-bg-fill-info-hover": "rgba(81, 192, 255, 1)",
+      "color-bg-fill-info-active": "rgba(0, 148, 213, 1)",
+      "color-bg-fill-info-secondary": "rgba(213, 235, 255, 1)",
+      "color-bg-fill-success": "rgba(41, 132, 90, 1)",
+      "color-bg-fill-success-hover": "rgba(19, 111, 69, 1)",
+      "color-bg-fill-success-active": "rgba(12, 81, 50, 1)",
+      "color-bg-fill-success-secondary": "rgba(180, 254, 210, 1)",
+      "color-bg-fill-warning": "rgba(255, 184, 0, 1)",
+      "color-bg-fill-warning-hover": "rgba(229, 165, 0, 1)",
+      "color-bg-fill-warning-active": "rgba(178, 132, 0, 1)",
+      "color-bg-fill-warning-secondary": "rgba(255, 214, 164, 1)",
+      "color-bg-fill-caution": "rgba(255, 230, 0, 1)",
+      "color-bg-fill-caution-hover": "rgba(234, 211, 0, 1)",
+      "color-bg-fill-caution-active": "rgba(225, 203, 0, 1)",
+      "color-bg-fill-caution-secondary": "rgba(255, 235, 120, 1)",
+      "color-bg-fill-critical": "rgba(229, 28, 0, 1)",
+      "color-bg-fill-critical-hover": "rgba(181, 38, 11, 1)",
+      "color-bg-fill-critical-active": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-selected": "rgba(142, 31, 11, 1)",
+      "color-bg-fill-critical-secondary": "rgba(254, 211, 209, 1)",
+      "color-bg-fill-emphasis": "rgba(0, 91, 211, 1)",
+      "color-bg-fill-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-bg-fill-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-bg-fill-magic": "rgba(128, 81, 255, 1)",
+      "color-bg-fill-magic-secondary": "rgba(233, 229, 255, 1)",
+      "color-bg-fill-magic-secondary-hover": "rgba(228, 222, 255, 1)",
+      "color-bg-fill-magic-secondary-active": "rgba(223, 217, 255, 1)",
+      "color-bg-fill-inverse": "rgba(48, 48, 48, 1)",
+      "color-bg-fill-inverse-hover": "rgba(74, 74, 74, 1)",
+      "color-bg-fill-inverse-active": "rgba(97, 97, 97, 1)",
+      "color-bg-fill-transparent": "rgba(0, 0, 0, 0.02)",
+      "color-bg-fill-transparent-hover": "rgba(0, 0, 0, 0.05)",
+      "color-bg-fill-transparent-active": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-selected": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary": "rgba(0, 0, 0, 0.06)",
+      "color-bg-fill-transparent-secondary-hover": "rgba(0, 0, 0, 0.08)",
+      "color-bg-fill-transparent-secondary-active": "rgba(0, 0, 0, 0.11)",
+      "color-text": "rgba(26, 26, 26, 1)",
+      "color-text-secondary": "rgba(26, 26, 26, 1)",
+      "color-text-disabled": "rgba(181, 181, 181, 1)",
+      "color-text-link": "rgba(0, 91, 211, 1)",
+      "color-text-link-hover": "rgba(0, 66, 153, 1)",
+      "color-text-link-active": "rgba(0, 46, 106, 1)",
+      "color-text-brand": "rgba(26, 26, 26, 1)",
+      "color-text-brand-hover": "rgba(48, 48, 48, 1)",
+      "color-text-brand-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-text-brand-on-bg-fill-hover": "rgba(227, 227, 227, 1)",
+      "color-text-brand-on-bg-fill-active": "rgba(204, 204, 204, 1)",
+      "color-text-brand-on-bg-fill-disabled": "rgba(255, 255, 255, 1)",
+      "color-text-info": "rgba(0, 58, 90, 1)",
+      "color-text-info-hover": "rgba(0, 58, 90, 1)",
+      "color-text-info-active": "rgba(0, 33, 51, 1)",
+      "color-text-info-secondary": "rgba(0, 124, 180, 1)",
+      "color-text-info-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-text-success": "rgba(12, 81, 50, 1)",
+      "color-text-success-hover": "rgba(8, 61, 37, 1)",
+      "color-text-success-active": "rgba(9, 42, 27, 1)",
+      "color-text-success-secondary": "rgba(41, 132, 90, 1)",
+      "color-text-success-on-bg-fill": "rgba(248, 255, 251, 1)",
+      "color-text-caution": "rgba(79, 71, 0, 1)",
+      "color-text-caution-hover": "rgba(51, 46, 0, 1)",
+      "color-text-caution-active": "rgba(31, 28, 0, 1)",
+      "color-text-caution-secondary": "rgba(130, 117, 0, 1)",
+      "color-text-caution-on-bg-fill": "rgba(51, 46, 0, 1)",
+      "color-text-warning": "rgba(94, 66, 0, 1)",
+      "color-text-warning-hover": "rgba(65, 45, 0, 1)",
+      "color-text-warning-active": "rgba(37, 26, 0, 1)",
+      "color-text-warning-secondary": "rgba(149, 111, 0, 1)",
+      "color-text-warning-on-bg-fill": "rgba(37, 26, 0, 1)",
+      "color-text-critical": "rgba(142, 31, 11, 1)",
+      "color-text-critical-hover": "rgba(95, 21, 7, 1)",
+      "color-text-critical-active": "rgba(47, 10, 4, 1)",
+      "color-text-critical-secondary": "rgba(229, 28, 0, 1)",
+      "color-text-critical-on-bg-fill": "rgba(255, 251, 251, 1)",
+      "color-text-emphasis": "rgba(0, 91, 211, 1)",
+      "color-text-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-text-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-text-emphasis-on-bg-fill": "rgba(252, 253, 255, 1)",
+      "color-text-emphasis-on-bg-fill-hover": "rgba(226, 231, 255, 1)",
+      "color-text-emphasis-on-bg-fill-active": "rgba(213, 220, 255, 1)",
+      "color-text-magic": "rgba(87, 0, 209, 1)",
+      "color-text-magic-secondary": "rgba(113, 38, 255, 1)",
+      "color-text-magic-on-bg-fill": "rgba(253, 253, 255, 1)",
+      "color-text-inverse": "rgba(227, 227, 227, 1)",
+      "color-text-inverse-secondary": "rgba(181, 181, 181, 1)",
+      "color-text-link-inverse": "rgba(197, 208, 255, 1)",
+      "color-border": "rgba(138, 138, 138, 1)",
+      "color-border-hover": "rgba(204, 204, 204, 1)",
+      "color-border-disabled": "rgba(235, 235, 235, 1)",
+      "color-border-secondary": "rgba(138, 138, 138, 1)",
+      "color-border-tertiary": "rgba(204, 204, 204, 1)",
+      "color-border-focus": "rgba(0, 91, 211, 1)",
+      "color-border-brand": "rgba(227, 227, 227, 1)",
+      "color-border-info": "rgba(168, 216, 255, 1)",
+      "color-border-success": "rgba(146, 254, 194, 1)",
+      "color-border-caution": "rgba(255, 235, 120, 1)",
+      "color-border-warning": "rgba(255, 200, 121, 1)",
+      "color-border-critical": "rgba(254, 195, 193, 1)",
+      "color-border-critical-secondary": "rgba(142, 31, 11, 1)",
+      "color-border-emphasis": "rgba(0, 91, 211, 1)",
+      "color-border-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-border-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-border-magic": "rgba(228, 222, 255, 1)",
+      "color-border-magic-secondary": "rgba(148, 116, 255, 1)",
+      "color-border-magic-secondary-hover": "rgba(128, 81, 255, 1)",
+      "color-border-inverse": "rgba(97, 97, 97, 1)",
+      "color-border-inverse-hover": "rgba(204, 204, 204, 1)",
+      "color-border-inverse-active": "rgba(227, 227, 227, 1)",
+      "color-icon": "rgba(74, 74, 74, 1)",
+      "color-icon-hover": "rgba(48, 48, 48, 1)",
+      "color-icon-active": "rgba(26, 26, 26, 1)",
+      "color-icon-disabled": "rgba(204, 204, 204, 1)",
+      "color-icon-secondary": "rgba(74, 74, 74, 1)",
+      "color-icon-secondary-hover": "rgba(97, 97, 97, 1)",
+      "color-icon-secondary-active": "rgba(74, 74, 74, 1)",
+      "color-icon-brand": "rgba(26, 26, 26, 1)",
+      "color-icon-info": "rgba(0, 148, 213, 1)",
+      "color-icon-success": "rgba(41, 132, 90, 1)",
+      "color-icon-caution": "rgba(153, 138, 0, 1)",
+      "color-icon-warning": "rgba(178, 132, 0, 1)",
+      "color-icon-critical": "rgba(239, 77, 47, 1)",
+      "color-icon-emphasis": "rgba(0, 91, 211, 1)",
+      "color-icon-emphasis-hover": "rgba(0, 66, 153, 1)",
+      "color-icon-emphasis-active": "rgba(0, 46, 106, 1)",
+      "color-icon-magic": "rgba(128, 81, 255, 1)",
+      "color-icon-inverse": "rgba(227, 227, 227, 1)",
+      "color-avatar-bg-fill": "rgba(181, 181, 181, 1)",
+      "color-avatar-five-bg-fill": "rgba(253, 75, 146, 1)",
+      "color-avatar-five-text-on-bg-fill": "rgba(255, 246, 248, 1)",
+      "color-avatar-four-bg-fill": "rgba(81, 192, 255, 1)",
+      "color-avatar-four-text-on-bg-fill": "rgba(0, 33, 51, 1)",
+      "color-avatar-one-bg-fill": "rgba(197, 48, 197, 1)",
+      "color-avatar-one-text-on-bg-fill": "rgba(253, 239, 253, 1)",
+      "color-avatar-seven-bg-fill": "rgba(148, 116, 255, 1)",
+      "color-avatar-seven-text-on-bg-fill": "rgba(248, 247, 255, 1)",
+      "color-avatar-six-bg-fill": "rgba(37, 232, 43, 1)",
+      "color-avatar-six-text-on-bg-fill": "rgba(3, 61, 5, 1)",
+      "color-avatar-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-avatar-three-bg-fill": "rgba(44, 224, 212, 1)",
+      "color-avatar-three-text-on-bg-fill": "rgba(3, 60, 57, 1)",
+      "color-avatar-two-bg-fill": "rgba(56, 250, 163, 1)",
+      "color-avatar-two-text-on-bg-fill": "rgba(12, 81, 50, 1)",
+      "color-backdrop-bg": "rgba(0, 0, 0, 0.71)",
+      "color-button-gradient-bg-fill": "linear-gradient(180deg, rgba(48, 48, 48, 0) 63.53%, rgba(255, 255, 255, 0.15) 100%)",
+      "color-checkbox-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-checkbox-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-input-bg-surface": "rgba(253, 253, 253, 1)",
+      "color-input-bg-surface-hover": "rgba(250, 250, 250, 1)",
+      "color-input-bg-surface-active": "rgba(247, 247, 247, 1)",
+      "color-input-border": "rgba(74, 74, 74, 1)",
+      "color-input-border-hover": "rgba(97, 97, 97, 1)",
+      "color-input-border-active": "rgba(26, 26, 26, 1)",
+      "color-nav-bg": "rgba(235, 235, 235, 1)",
+      "color-nav-bg-surface": "rgba(0, 0, 0, 0.02)",
+      "color-nav-bg-surface-hover": "rgba(241, 241, 241, 1)",
+      "color-nav-bg-surface-active": "rgba(250, 250, 250, 1)",
+      "color-nav-bg-surface-selected": "rgba(250, 250, 250, 1)",
+      "color-radio-button-bg-surface-disabled": "rgba(0, 0, 0, 0.08)",
+      "color-radio-button-icon-disabled": "rgba(255, 255, 255, 1)",
+      "color-video-thumbnail-play-button-bg-fill-hover": "rgba(0, 0, 0, 0.81)",
+      "color-video-thumbnail-play-button-bg-fill": "rgba(0, 0, 0, 0.71)",
+      "color-video-thumbnail-play-button-text-on-bg-fill": "rgba(255, 255, 255, 1)",
+      "color-scrollbar-thumb-bg-hover": "rgba(138, 138, 138, 1)"
+    },
+    "font": {
+      "font-family-sans": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "font-family-mono": "ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace",
+      "font-size-275": "0.6875rem",
+      "font-size-300": "0.75rem",
+      "font-size-325": "0.8125rem",
+      "font-size-350": "0.875rem",
+      "font-size-400": "1rem",
+      "font-size-450": "1.125rem",
+      "font-size-500": "1.25rem",
+      "font-size-550": "1.375rem",
+      "font-size-600": "1.5rem",
+      "font-size-750": "1.875rem",
+      "font-size-800": "2rem",
+      "font-size-900": "2.25rem",
+      "font-size-1000": "2.5rem",
+      "font-weight-regular": "450",
+      "font-weight-medium": "550",
+      "font-weight-semibold": "650",
+      "font-weight-bold": "700",
+      "font-letter-spacing-densest": "-0.03375rem",
+      "font-letter-spacing-denser": "-0.01875rem",
+      "font-letter-spacing-dense": "-0.0125rem",
+      "font-letter-spacing-normal": "0rem",
+      "font-line-height-300": "0.75rem",
+      "font-line-height-400": "1rem",
+      "font-line-height-500": "1.25rem",
+      "font-line-height-600": "1.5rem",
+      "font-line-height-700": "1.75rem",
+      "font-line-height-800": "2rem",
+      "font-line-height-1000": "2.5rem",
+      "font-line-height-1200": "3rem"
+    },
+    "height": {
+      "height-0": "0rem",
+      "height-025": "0.0625rem",
+      "height-050": "0.125rem",
+      "height-100": "0.25rem",
+      "height-150": "0.375rem",
+      "height-200": "0.5rem",
+      "height-300": "0.75rem",
+      "height-400": "1rem",
+      "height-500": "1.25rem",
+      "height-600": "1.5rem",
+      "height-700": "1.75rem",
+      "height-800": "2rem",
+      "height-900": "2.25rem",
+      "height-1000": "2.5rem",
+      "height-1200": "3rem",
+      "height-1600": "4rem",
+      "height-2000": "5rem",
+      "height-2400": "6rem",
+      "height-2800": "7rem",
+      "height-3200": "8rem"
+    },
+    "motion": {
+      "motion-duration-0": "0ms",
+      "motion-duration-50": "50ms",
+      "motion-duration-100": "100ms",
+      "motion-duration-150": "150ms",
+      "motion-duration-200": "200ms",
+      "motion-duration-250": "250ms",
+      "motion-duration-300": "300ms",
+      "motion-duration-350": "350ms",
+      "motion-duration-400": "400ms",
+      "motion-duration-450": "450ms",
+      "motion-duration-500": "500ms",
+      "motion-duration-5000": "5000ms",
+      "motion-ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      "motion-ease-in": "cubic-bezier(0.42, 0, 1, 1)",
+      "motion-ease-out": "cubic-bezier(0.19, 0.91, 0.38, 1)",
+      "motion-ease-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+      "motion-linear": "cubic-bezier(0, 0, 1, 1)",
+      "motion-keyframes-bounce": "{ from, 65%, 85% { transform: scale(1) } 75% { transform: scale(0.85) } 82.5% { transform: scale(1.05) } }",
+      "motion-keyframes-fade-in": "{ to { opacity: 1 } }",
+      "motion-keyframes-pulse": "{ from, 75% { transform: scale(0.85); opacity: 1; } to { transform: scale(2.5); opacity: 0; } }",
+      "motion-keyframes-spin": "{ to { transform: rotate(1turn) } }",
+      "motion-keyframes-appear-above": "{ from { transform: translateY(var(--p-space-100)); opacity: 0; } to { transform: none; opacity: 1; } }",
+      "motion-keyframes-appear-below": "{ from { transform: translateY(calc(var(--p-space-100) * -1)); opacity: 0; } to { transform: none; opacity: 1; } }"
+    },
+    "shadow": {
+      "shadow-0": "none",
+      "shadow-100": "0rem 0.0625rem 0rem 0rem rgba(26, 26, 26, 0.07)",
+      "shadow-200": "0rem 0.1875rem 0.0625rem -0.0625rem rgba(26, 26, 26, 0.07)",
+      "shadow-300": "0rem 0.25rem 0.375rem -0.125rem rgba(26, 26, 26, 0.20)",
+      "shadow-400": "0rem 0.5rem 1rem -0.25rem rgba(26, 26, 26, 0.22)",
+      "shadow-500": "0rem 0.75rem 1.25rem -0.5rem rgba(26, 26, 26, 0.24)",
+      "shadow-600": "0rem 1.25rem 1.25rem -0.5rem rgba(26, 26, 26, 0.28)",
+      "shadow-bevel-100": "0rem 0.0625rem 0rem 0rem rgba(26, 26, 26, 0.07), 0rem 0.0625rem 0rem 0rem rgba(208, 208, 208, 0.40) inset, 0.0625rem 0rem 0rem 0rem #CCC inset, -0.0625rem 0rem 0rem 0rem #CCC inset, 0rem -0.0625rem 0rem 0rem #999 inset",
+      "shadow-inset-100": "0rem 0.0625rem 0.125rem 0rem rgba(26, 26, 26, 0.15) inset, 0rem 0.0625rem 0.0625rem 0rem rgba(26, 26, 26, 0.15) inset",
+      "shadow-inset-200": "0rem 0.125rem 0.0625rem 0rem rgba(26, 26, 26, 0.20) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset, -0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.12) inset",
+      "shadow-button": "0rem -0.0625rem 0rem 0rem #b5b5b5 inset, 0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, 0.1) inset, 0rem 0.03125rem 0rem 0.09375rem #FFF inset",
+      "shadow-button-hover": "0rem 0.0625rem 0rem 0rem #EBEBEB inset, -0.0625rem 0rem 0rem 0rem #EBEBEB inset, 0.0625rem 0rem 0rem 0rem #EBEBEB inset, 0rem -0.0625rem 0rem 0rem #CCC inset",
+      "shadow-button-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.122) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(26, 26, 26, 0.122) inset, 0rem 0.125rem 0.0625rem 0rem rgba(26, 26, 26, 0.2) inset",
+      "shadow-button-primary": "0rem -0.0625rem 0rem 0.0625rem rgba(0, 0, 0, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(48, 48, 48, 1) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.25) inset;",
+      "shadow-button-primary-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.24) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.0625rem 0rem 0rem #000 inset, 0rem -0.0625rem 0rem 0.0625rem #1A1A1A",
+      "shadow-button-primary-inset": "0rem 0.1875rem 0rem 0rem rgb(0, 0, 0) inset",
+      "shadow-button-primary-critical": "0rem -0.0625rem 0rem 0.0625rem rgba(142, 31, 11, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(181, 38, 11, 0.8) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.349) inset",
+      "shadow-button-primary-critical-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.48) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.09375rem 0rem 0rem rgba(0, 0, 0, 0.25) inset",
+      "shadow-button-primary-critical-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0rem 0.125rem 0rem 0rem rgba(0, 0, 0, 0.6) inset",
+      "shadow-button-primary-success": "0rem -0.0625rem 0rem 0.0625rem rgba(12, 81, 50, 0.8) inset, 0rem 0rem 0rem 0.0625rem rgba(19, 111, 69, 0.8) inset, 0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.251) inset",
+      "shadow-button-primary-success-hover": "0rem 0.0625rem 0rem 0rem rgba(255, 255, 255, 0.48) inset, 0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, -0.0625rem 0rem 0rem 0rem rgba(255, 255, 255, 0.20) inset, 0rem -0.09375rem 0rem 0rem rgba(0, 0, 0, 0.25) inset",
+      "shadow-button-primary-success-inset": "-0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0.0625rem 0rem 0.0625rem 0rem rgba(0, 0, 0, 0.2) inset, 0rem 0.125rem 0rem 0rem rgba(0, 0, 0, 0.6) inset",
+      "shadow-border-inset": "0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, 0.08) inset"
+    },
+    "space": {
+      "space-0": "0rem",
+      "space-025": "0.0625rem",
+      "space-050": "0.125rem",
+      "space-100": "0.25rem",
+      "space-150": "0.375rem",
+      "space-200": "0.5rem",
+      "space-300": "0.75rem",
+      "space-400": "1rem",
+      "space-500": "1.25rem",
+      "space-600": "1.5rem",
+      "space-800": "2rem",
+      "space-1000": "2.5rem",
+      "space-1200": "3rem",
+      "space-1600": "4rem",
+      "space-2000": "5rem",
+      "space-2400": "6rem",
+      "space-2800": "7rem",
+      "space-3200": "8rem",
+      "space-button-group-gap": "0.5rem",
+      "space-card-gap": "1rem",
+      "space-card-padding": "1rem",
+      "space-table-cell-padding": "0.375rem"
+    },
+    "text": {
+      "text-heading-3xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-3xl-font-size": "2.25rem",
+      "text-heading-3xl-font-weight": "700",
+      "text-heading-3xl-font-letter-spacing": "-0.03375rem",
+      "text-heading-3xl-font-line-height": "3rem",
+      "text-heading-2xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-2xl-font-size": "1.875rem",
+      "text-heading-2xl-font-weight": "700",
+      "text-heading-2xl-font-letter-spacing": "-0.01875rem",
+      "text-heading-2xl-font-line-height": "2.5rem",
+      "text-heading-xl-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xl-font-size": "1.5rem",
+      "text-heading-xl-font-weight": "700",
+      "text-heading-xl-font-letter-spacing": "-0.0125rem",
+      "text-heading-xl-font-line-height": "2rem",
+      "text-heading-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-lg-font-size": "1.25rem",
+      "text-heading-lg-font-weight": "650",
+      "text-heading-lg-font-letter-spacing": "-0.0125rem",
+      "text-heading-lg-font-line-height": "1.5rem",
+      "text-heading-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-md-font-size": "0.875rem",
+      "text-heading-md-font-weight": "650",
+      "text-heading-md-font-letter-spacing": "0rem",
+      "text-heading-md-font-line-height": "1.25rem",
+      "text-heading-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-sm-font-size": "0.8125rem",
+      "text-heading-sm-font-weight": "650",
+      "text-heading-sm-font-letter-spacing": "0rem",
+      "text-heading-sm-font-line-height": "1.25rem",
+      "text-heading-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-heading-xs-font-size": "0.75rem",
+      "text-heading-xs-font-weight": "650",
+      "text-heading-xs-font-letter-spacing": "0rem",
+      "text-heading-xs-font-line-height": "1rem",
+      "text-body-lg-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-lg-font-size": "0.875rem",
+      "text-body-lg-font-weight": "450",
+      "text-body-lg-font-letter-spacing": "0rem",
+      "text-body-lg-font-line-height": "1.25rem",
+      "text-body-md-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-md-font-size": "0.8125rem",
+      "text-body-md-font-weight": "450",
+      "text-body-md-font-letter-spacing": "0rem",
+      "text-body-md-font-line-height": "1.25rem",
+      "text-body-sm-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-sm-font-size": "0.75rem",
+      "text-body-sm-font-weight": "450",
+      "text-body-sm-font-letter-spacing": "0rem",
+      "text-body-sm-font-line-height": "1rem",
+      "text-body-xs-font-family": "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "text-body-xs-font-size": "0.6875rem",
+      "text-body-xs-font-weight": "450",
+      "text-body-xs-font-letter-spacing": "0rem",
+      "text-body-xs-font-line-height": "0.75rem"
+    },
+    "width": {
+      "width-0": "0rem",
+      "width-025": "0.0625rem",
+      "width-050": "0.125rem",
+      "width-100": "0.25rem",
+      "width-150": "0.375rem",
+      "width-200": "0.5rem",
+      "width-300": "0.75rem",
+      "width-400": "1rem",
+      "width-500": "1.25rem",
+      "width-600": "1.5rem",
+      "width-700": "1.75rem",
+      "width-800": "2rem",
+      "width-900": "2.25rem",
+      "width-1000": "2.5rem",
+      "width-1200": "3rem",
+      "width-1600": "4rem",
+      "width-2000": "5rem",
+      "width-2400": "6rem",
+      "width-2800": "7rem",
+      "width-3200": "8rem"
+    },
+    "zIndex": {
+      "z-index-0": "auto",
+      "z-index-1": "100",
+      "z-index-2": "400",
+      "z-index-3": "510",
+      "z-index-4": "512",
+      "z-index-5": "513",
+      "z-index-6": "514",
+      "z-index-7": "515",
+      "z-index-8": "516",
+      "z-index-9": "517",
+      "z-index-10": "518",
+      "z-index-11": "519",
+      "z-index-12": "520"
+    }
+  }
+};
+var themeDefault = themes[_src_themes_constants_mjs__WEBPACK_IMPORTED_MODULE_3__.themeNameDefault];
+var isTokenName = (0,_src_themes_utils_mjs__WEBPACK_IMPORTED_MODULE_4__.createIsTokenName)(themes[_src_themes_constants_mjs__WEBPACK_IMPORTED_MODULE_3__.themeNameDefault]);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/colors.mjs":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/colors.mjs ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   azure: () => (/* binding */ azure),
+/* harmony export */   blackAlpha: () => (/* binding */ blackAlpha),
+/* harmony export */   blue: () => (/* binding */ blue),
+/* harmony export */   gray: () => (/* binding */ gray),
+/* harmony export */   green: () => (/* binding */ green),
+/* harmony export */   lime: () => (/* binding */ lime),
+/* harmony export */   magenta: () => (/* binding */ magenta),
+/* harmony export */   orange: () => (/* binding */ orange),
+/* harmony export */   purple: () => (/* binding */ purple),
+/* harmony export */   red: () => (/* binding */ red),
+/* harmony export */   rose: () => (/* binding */ rose),
+/* harmony export */   teal: () => (/* binding */ teal),
+/* harmony export */   yellow: () => (/* binding */ yellow)
+/* harmony export */ });
+var gray = {
+  1: 'rgba(255, 255, 255, 1)',
+  2: 'rgba(253, 253, 253, 1)',
+  3: 'rgba(250, 250, 250, 1)',
+  4: 'rgba(247, 247, 247, 1)',
+  5: 'rgba(243, 243, 243, 1)',
+  6: 'rgba(241, 241, 241, 1)',
+  7: 'rgba(235, 235, 235, 1)',
+  8: 'rgba(227, 227, 227, 1)',
+  9: 'rgba(212, 212, 212, 1)',
+  10: 'rgba(204, 204, 204, 1)',
+  11: 'rgba(181, 181, 181, 1)',
+  12: 'rgba(138, 138, 138, 1)',
+  13: 'rgba(97, 97, 97, 1)',
+  14: 'rgba(74, 74, 74, 1)',
+  15: 'rgba(48, 48, 48, 1)',
+  16: 'rgba(26, 26, 26, 1)'
+};
+var azure = {
+  '1': 'rgba(251, 253, 255, 1)',
+  '2': 'rgba(242, 249, 255, 1)',
+  '3': 'rgba(234, 244, 255, 1)',
+  '4': 'rgba(224, 240, 255, 1)',
+  '5': 'rgba(213, 235, 255, 1)',
+  '6': 'rgba(202, 230, 255, 1)',
+  '7': 'rgba(192, 225, 255, 1)',
+  '8': 'rgba(168, 216, 255, 1)',
+  '9': 'rgba(145, 208, 255, 1)',
+  '10': 'rgba(81, 192, 255, 1)',
+  '11': 'rgba(0, 148, 213, 1)',
+  '12': 'rgba(0, 124, 180, 1)',
+  '13': 'rgba(0, 103, 155, 1)',
+  '14': 'rgba(0, 82, 124, 1)',
+  '15': 'rgba(0, 58, 90, 1)',
+  '16': 'rgba(0, 33, 51, 1)'
+};
+var blue = {
+  '1': 'rgba(252, 253, 255, 1)',
+  '2': 'rgba(246, 248, 255, 1)',
+  '3': 'rgba(240, 242, 255, 1)',
+  '4': 'rgba(234, 237, 255, 1)',
+  '5': 'rgba(226, 231, 255, 1)',
+  '6': 'rgba(219, 225, 255, 1)',
+  '7': 'rgba(213, 220, 255, 1)',
+  '8': 'rgba(197, 208, 255, 1)',
+  '9': 'rgba(186, 199, 255, 1)',
+  '10': 'rgba(151, 173, 255, 1)',
+  '11': 'rgba(65, 136, 255, 1)',
+  '12': 'rgba(0, 113, 233, 1)',
+  '13': 'rgba(0, 91, 211, 1)',
+  '14': 'rgba(0, 66, 153, 1)',
+  '15': 'rgba(0, 46, 106, 1)',
+  '16': 'rgba(0, 22, 51, 1)'
+};
+var green = {
+  '1': 'rgba(248, 255, 251, 1)',
+  '2': 'rgba(227, 255, 237, 1)',
+  '3': 'rgba(205, 254, 225, 1)',
+  '4': 'rgba(180, 254, 210, 1)',
+  '5': 'rgba(146, 254, 194, 1)',
+  '6': 'rgba(99, 253, 176, 1)',
+  '7': 'rgba(56, 250, 163, 1)',
+  '8': 'rgba(53, 238, 155, 1)',
+  '9': 'rgba(50, 225, 147, 1)',
+  '10': 'rgba(46, 211, 137, 1)',
+  '11': 'rgba(50, 160, 110, 1)',
+  '12': 'rgba(41, 132, 90, 1)',
+  '13': 'rgba(19, 111, 69, 1)',
+  '14': 'rgba(12, 81, 50, 1)',
+  '15': 'rgba(8, 61, 37, 1)',
+  '16': 'rgba(9, 42, 27, 1)'
+};
+var lime = {
+  '1': 'rgba(250, 255, 250, 1)',
+  '2': 'rgba(228, 255, 229, 1)',
+  '3': 'rgba(208, 255, 209, 1)',
+  '4': 'rgba(187, 254, 190, 1)',
+  '5': 'rgba(157, 254, 160, 1)',
+  '6': 'rgba(119, 254, 122, 1)',
+  '7': 'rgba(56, 254, 62, 1)',
+  '8': 'rgba(40, 242, 47, 1)',
+  '9': 'rgba(37, 232, 43, 1)',
+  '10': 'rgba(32, 207, 39, 1)',
+  '11': 'rgba(24, 168, 29, 1)',
+  '12': 'rgba(17, 135, 21, 1)',
+  '13': 'rgba(12, 113, 15, 1)',
+  '14': 'rgba(11, 85, 13, 1)',
+  '15': 'rgba(3, 61, 5, 1)',
+  '16': 'rgba(3, 33, 4, 1)'
+};
+var magenta = {
+  '1': 'rgba(255, 253, 255, 1)',
+  '2': 'rgba(255, 245, 255, 1)',
+  '3': 'rgba(253, 239, 253, 1)',
+  '4': 'rgba(254, 231, 254, 1)',
+  '5': 'rgba(252, 223, 252, 1)',
+  '6': 'rgba(251, 215, 251, 1)',
+  '7': 'rgba(251, 207, 251, 1)',
+  '8': 'rgba(249, 190, 249, 1)',
+  '9': 'rgba(248, 177, 248, 1)',
+  '10': 'rgba(246, 141, 246, 1)',
+  '11': 'rgba(225, 86, 225, 1)',
+  '12': 'rgba(197, 48, 197, 1)',
+  '13': 'rgba(159, 38, 159, 1)',
+  '14': 'rgba(121, 26, 121, 1)',
+  '15': 'rgba(86, 16, 86, 1)',
+  '16': 'rgba(52, 6, 52, 1)'
+};
+var orange = {
+  '1': 'rgba(255, 253, 250, 1)',
+  '2': 'rgba(255, 247, 238, 1)',
+  '3': 'rgba(255, 241, 227, 1)',
+  '4': 'rgba(255, 235, 213, 1)',
+  '5': 'rgba(255, 228, 198, 1)',
+  '6': 'rgba(255, 221, 182, 1)',
+  '7': 'rgba(255, 214, 164, 1)',
+  '8': 'rgba(255, 200, 121, 1)',
+  '9': 'rgba(255, 184, 0, 1)',
+  '10': 'rgba(229, 165, 0, 1)',
+  '11': 'rgba(178, 132, 0, 1)',
+  '12': 'rgba(149, 111, 0, 1)',
+  '13': 'rgba(124, 88, 0, 1)',
+  '14': 'rgba(94, 66, 0, 1)',
+  '15': 'rgba(65, 45, 0, 1)',
+  '16': 'rgba(37, 26, 0, 1)'
+};
+var purple = {
+  '1': 'rgba(253, 253, 255, 1)',
+  '2': 'rgba(248, 247, 255, 1)',
+  '3': 'rgba(243, 241, 255, 1)',
+  '4': 'rgba(239, 236, 255, 1)',
+  '5': 'rgba(233, 229, 255, 1)',
+  '6': 'rgba(228, 222, 255, 1)',
+  '7': 'rgba(223, 217, 255, 1)',
+  '8': 'rgba(212, 204, 255, 1)',
+  '9': 'rgba(199, 188, 255, 1)',
+  '10': 'rgba(170, 149, 255, 1)',
+  '11': 'rgba(148, 116, 255, 1)',
+  '12': 'rgba(128, 81, 255, 1)',
+  '13': 'rgba(113, 38, 255, 1)',
+  '14': 'rgba(87, 0, 209, 1)',
+  '15': 'rgba(59, 0, 147, 1)',
+  '16': 'rgba(28, 0, 79, 1)'
+};
+var red = {
+  '1': 'rgba(255, 251, 251, 1)',
+  '2': 'rgba(255, 246, 246, 1)',
+  '3': 'rgba(255, 237, 236, 1)',
+  '4': 'rgba(254, 233, 232, 1)',
+  '5': 'rgba(254, 226, 225, 1)',
+  '6': 'rgba(254, 218, 217, 1)',
+  '7': 'rgba(254, 211, 209, 1)',
+  '8': 'rgba(254, 195, 193, 1)',
+  '9': 'rgba(253, 176, 172, 1)',
+  '10': 'rgba(253, 129, 122, 1)',
+  '11': 'rgba(239, 77, 47, 1)',
+  '12': 'rgba(229, 28, 0, 1)',
+  '13': 'rgba(181, 38, 11, 1)',
+  '14': 'rgba(142, 31, 11, 1)',
+  '15': 'rgba(95, 21, 7, 1)',
+  '16': 'rgba(47, 10, 4, 1)'
+};
+var rose = {
+  '1': 'rgba(255, 253, 253, 1)',
+  '2': 'rgba(255, 246, 248, 1)',
+  '3': 'rgba(255, 239, 243, 1)',
+  '4': 'rgba(255, 232, 238, 1)',
+  '5': 'rgba(255, 225, 232, 1)',
+  '6': 'rgba(255, 217, 227, 1)',
+  '7': 'rgba(254, 209, 221, 1)',
+  '8': 'rgba(254, 193, 210, 1)',
+  '9': 'rgba(254, 181, 202, 1)',
+  '10': 'rgba(254, 142, 177, 1)',
+  '11': 'rgba(253, 75, 146, 1)',
+  '12': 'rgba(227, 12, 118, 1)',
+  '13': 'rgba(185, 7, 95, 1)',
+  '14': 'rgba(141, 4, 72, 1)',
+  '15': 'rgba(100, 2, 49, 1)',
+  '16': 'rgba(62, 1, 28, 1)'
+};
+var teal = {
+  '1': 'rgba(248, 255, 254, 1)',
+  '2': 'rgba(232, 252, 250, 1)',
+  '3': 'rgba(215, 250, 247, 1)',
+  '4': 'rgba(195, 247, 242, 1)',
+  '5': 'rgba(170, 246, 239, 1)',
+  '6': 'rgba(137, 245, 236, 1)',
+  '7': 'rgba(112, 240, 229, 1)',
+  '8': 'rgba(90, 230, 219, 1)',
+  '9': 'rgba(44, 224, 212, 1)',
+  '10': 'rgba(30, 199, 188, 1)',
+  '11': 'rgba(0, 161, 152, 1)',
+  '12': 'rgba(18, 131, 124, 1)',
+  '13': 'rgba(12, 106, 100, 1)',
+  '14': 'rgba(12, 83, 79, 1)',
+  '15': 'rgba(3, 60, 57, 1)',
+  '16': 'rgba(6, 44, 41, 1)'
+};
+var yellow = {
+  '1': 'rgba(255, 253, 246, 1)',
+  '2': 'rgba(255, 248, 219, 1)',
+  '3': 'rgba(255, 244, 191, 1)',
+  '4': 'rgba(255, 239, 157, 1)',
+  '5': 'rgba(255, 235, 120, 1)',
+  '6': 'rgba(255, 230, 0, 1)',
+  '7': 'rgba(247, 223, 0, 1)',
+  '8': 'rgba(234, 211, 0, 1)',
+  '9': 'rgba(225, 203, 0, 1)',
+  '10': 'rgba(197, 178, 0, 1)',
+  '11': 'rgba(153, 138, 0, 1)',
+  '12': 'rgba(130, 117, 0, 1)',
+  '13': 'rgba(105, 95, 0, 1)',
+  '14': 'rgba(79, 71, 0, 1)',
+  '15': 'rgba(51, 46, 0, 1)',
+  '16': 'rgba(31, 28, 0, 1)'
+};
+var blackAlpha = {
+  1: 'rgba(0, 0, 0, 0)',
+  2: 'rgba(0, 0, 0, 0.01)',
+  3: 'rgba(0, 0, 0, 0.02)',
+  4: 'rgba(0, 0, 0, 0.03)',
+  5: 'rgba(0, 0, 0, 0.05)',
+  6: 'rgba(0, 0, 0, 0.06)',
+  7: 'rgba(0, 0, 0, 0.08)',
+  8: 'rgba(0, 0, 0, 0.11)',
+  9: 'rgba(0, 0, 0, 0.17)',
+  10: 'rgba(0, 0, 0, 0.20)',
+  11: 'rgba(0, 0, 0, 0.29)',
+  12: 'rgba(0, 0, 0, 0.46)',
+  13: 'rgba(0, 0, 0, 0.62)',
+  14: 'rgba(0, 0, 0, 0.71)',
+  15: 'rgba(0, 0, 0, 0.81)',
+  16: 'rgba(0, 0, 0, 0.90)'
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs":
+/*!********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs ***!
+  \********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   size: () => (/* binding */ size)
+/* harmony export */ });
+var size = {
+  '0': '0px',
+  '0165': '0.66px',
+  '025': '1px',
+  '050': '2px',
+  '100': '4px',
+  '150': '6px',
+  '200': '8px',
+  '275': '11px',
+  '300': '12px',
+  '325': '13px',
+  '350': '14px',
+  '400': '16px',
+  '450': '18px',
+  '500': '20px',
+  '550': '22px',
+  '600': '24px',
+  '700': '28px',
+  '750': '30px',
+  '800': '32px',
+  '900': '36px',
+  '1000': '40px',
+  '1200': '48px',
+  '1600': '64px',
+  '2000': '80px',
+  '2400': '96px',
+  '2800': '112px',
+  '3200': '128px'
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/border.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/border.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   border: () => (/* binding */ border)
+/* harmony export */ });
+/* harmony import */ var _size_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../size.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs");
+
+
+var border = {
+  'border-radius-0': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[0]
+  },
+  'border-radius-050': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['050']
+  },
+  'border-radius-100': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[100]
+  },
+  'border-radius-150': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[150]
+  },
+  'border-radius-200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[200]
+  },
+  'border-radius-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'border-radius-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'border-radius-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'border-radius-750': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[750]
+  },
+  'border-radius-full': {
+    value: '9999px'
+  },
+  'border-width-0': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['0']
+  },
+  'border-width-0165': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['0165']
+  },
+  'border-width-025': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['025']
+  },
+  'border-width-050': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['050']
+  },
+  'border-width-100': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[100]
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/breakpoints.mjs":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/breakpoints.mjs ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   breakpoints: () => (/* binding */ breakpoints),
+/* harmony export */   breakpointsAliases: () => (/* binding */ breakpointsAliases)
+/* harmony export */ });
+// NOTE: Order is important here: smallest -> largest
+// Exporting as const means it will be typed as a Tuple instead of string[]
+var breakpointsAliases = ['xs', 'sm', 'md', 'lg', 'xl'];
+
+// Convert the Tuple to a union
+
+var breakpoints = {
+  'breakpoints-xs': {
+    value: '0px',
+    description: 'Commonly used for sizing containers (e.g. max-width). See below for media query usage.'
+  },
+  'breakpoints-sm': {
+    value: '490px',
+    description: 'Commonly used for sizing containers (e.g. max-width). See below for media query usage.'
+  },
+  'breakpoints-md': {
+    value: '768px',
+    description: 'Commonly used for sizing containers (e.g. max-width). See below for media query usage.'
+  },
+  'breakpoints-lg': {
+    value: '1040px',
+    description: 'Commonly used for sizing containers (e.g. max-width). See below for media query usage.'
+  },
+  'breakpoints-xl': {
+    value: '1440px',
+    description: 'Commonly used for sizing containers (e.g. max-width). See below for media query usage.'
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/color.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/color.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   color: () => (/* binding */ color)
+/* harmony export */ });
+/* harmony import */ var _colors_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../colors.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/colors.mjs");
+
+
+var color = {
+  'color-bg': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The default background color of the admin.'
+  },
+  'color-bg-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16],
+    description: 'Use for high contrast page or component backgrounds.'
+  },
+  'color-bg-surface': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1],
+    description: 'The background color for elements with the highest level of prominence, like a card.'
+  },
+  'color-bg-surface-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[4],
+    description: 'The hover state color for elements with the highest level of prominence.'
+  },
+  'color-bg-surface-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[5],
+    description: 'The active state (on press) color for elements with the highest level of prominence.'
+  },
+  'color-bg-surface-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The selected state color for elements with the highest level of prominence.'
+  },
+  'color-bg-surface-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[5],
+    description: 'The disabled state color for elements.'
+  },
+  'color-bg-surface-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[4],
+    description: 'The background color for elements with a secondary level of prominence.'
+  },
+  'color-bg-surface-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The hover state color for elements with a secondary level of prominence.'
+  },
+  'color-bg-surface-secondary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The active state (on press) color for elements with a secondary level of prominence.'
+  },
+  'color-bg-surface-secondary-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The selected state color for elements with a secondary level of prominence.'
+  },
+  'color-bg-surface-tertiary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[5],
+    description: 'The background color for elements with a third level of prominence.'
+  },
+  'color-bg-surface-tertiary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The hover state color for elements with a third level of prominence.'
+  },
+  'color-bg-surface-tertiary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The active state (on press) color for elements with a third level of prominence.'
+  },
+  'color-bg-surface-brand': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'Use to apply the key color to elements.'
+  },
+  'color-bg-surface-brand-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The hover state color for key elements.'
+  },
+  'color-bg-surface-brand-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The active state (on press) color for key elements.'
+  },
+  'color-bg-surface-brand-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The selected state color for key elements.'
+  },
+  'color-bg-surface-info': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[3],
+    description: 'Use for backgrounds communicating important information, like banners.'
+  },
+  'color-bg-surface-info-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[4],
+    description: 'The hover state color for communicating important information.'
+  },
+  'color-bg-surface-info-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[6],
+    description: 'The active state (on press) color for communicating important information.'
+  },
+  'color-bg-surface-success': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[3],
+    description: 'Use for backgrounds communicating success, like banners.'
+  },
+  'color-bg-surface-success-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[4],
+    description: 'The hover state color for communicating success.'
+  },
+  'color-bg-surface-success-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[5],
+    description: 'The active state (on press) color for communicating success.'
+  },
+  'color-bg-surface-caution': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[2],
+    description: 'Use for backgrounds communicating caution, like banners.'
+  },
+  'color-bg-surface-caution-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[3],
+    description: 'The hover state for communicating caution.'
+  },
+  'color-bg-surface-caution-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[4],
+    description: 'The active state (on press) color for communicating caution.'
+  },
+  'color-bg-surface-warning': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[3],
+    description: 'Use for backgrounds communicating warning, like banners.'
+  },
+  'color-bg-surface-warning-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[4],
+    description: 'The hover state color for communicating warning.'
+  },
+  'color-bg-surface-warning-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[5],
+    description: 'The active state (on press) color for communicating warning.'
+  },
+  'color-bg-surface-critical': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[4],
+    description: 'Use for backgrounds communicating critical information, like banners or input errors.'
+  },
+  'color-bg-surface-critical-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[5],
+    description: 'The hover state color for communicating critical information.'
+  },
+  'color-bg-surface-critical-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[6],
+    description: 'The active state (on press) color for communicating critical information.'
+  },
+  'color-bg-surface-emphasis': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[3],
+    description: 'Use for backgrounds indicating areas of focus in editors, such as the theme editor.'
+  },
+  'color-bg-surface-emphasis-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[4],
+    description: 'The hover state color for elements indicating areas of focus in editors.'
+  },
+  'color-bg-surface-emphasis-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[5],
+    description: 'The active state (on press) color for elements indicating areas of focus in editors.'
+  },
+  'color-bg-surface-magic': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[2],
+    description: 'Use for backgrounds of elements suggested by magic AI.'
+  },
+  'color-bg-surface-magic-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[3],
+    description: 'The hover state color for elements suggested by magic AI.'
+  },
+  'color-bg-surface-magic-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[5],
+    description: 'The active state (on press) color for elements suggested by magic AI.'
+  },
+  'color-bg-surface-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'Use for elements on bg-inverse.'
+  },
+  'color-bg-surface-transparent': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[1],
+    description: 'Use for elements that need a fully transparent background.'
+  },
+  'color-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1],
+    description: 'The background color of contained elements with a smaller surface area, like a button.'
+  },
+  'color-bg-fill-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[3],
+    description: 'The hover state color of contained elements with a smaller surface area, like a button.'
+  },
+  'color-bg-fill-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[4],
+    description: 'The active state (on press) color of contained elements with a smaller surface area, like a button.'
+  },
+  'color-bg-fill-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The selected state color of contained elements with a smaller surface area, like a button or checkbox.'
+  },
+  'color-bg-fill-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[5],
+    description: 'The disabled state color of contained elements with a smaller surface area, like a button.'
+  },
+  'color-bg-fill-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6],
+    description: 'The background color of elements with a smaller surface area and a secondary level of prominence.'
+  },
+  'color-bg-fill-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The hover state color of elements with a smaller surface area and a secondary level of prominence.'
+  },
+  'color-bg-fill-secondary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The active state (on press) color of elements with a smaller surface area and a secondary level of prominence.'
+  },
+  'color-bg-fill-tertiary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The background color of elements with a smaller surface area and a third level of prominence.'
+  },
+  'color-bg-fill-tertiary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[9],
+    description: 'The hover state color of elements with a smaller surface area and a third level of prominence.'
+  },
+  'color-bg-fill-tertiary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The active state (on press) color of elements with a smaller surface area and a third level of prominence.'
+  },
+  'color-bg-fill-brand': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The background color of main actions, like primary buttons.'
+  },
+  'color-bg-fill-brand-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16],
+    description: 'The hover state color of main actions, like primary buttons.'
+  },
+  'color-bg-fill-brand-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16],
+    description: 'The active state (on press) color of main actions, like primary buttons.'
+  },
+  'color-bg-fill-brand-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The selected state color of main actions, like primary buttons.'
+  },
+  'color-bg-fill-brand-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[9],
+    description: 'The disabled state color of main actions, like primary buttons.'
+  },
+  'color-bg-fill-info': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[9],
+    description: 'Use for backgrounds communicating important information on elements with a smaller surface area, like a badge or button.'
+  },
+  'color-bg-fill-info-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[10],
+    description: 'The hover state color for communicating important information on elements with a smaller surface area.'
+  },
+  'color-bg-fill-info-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[11],
+    description: 'The active state (on press) color for communicating important information on elements with a smaller surface area.'
+  },
+  'color-bg-fill-info-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[5],
+    description: 'Use for backgrounds communicating important information on elements with a smaller surface area, with a secondary level of prominence.'
+  },
+  'color-bg-fill-success': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[12],
+    description: "Use for backgrounds communicating success on elements with a smaller surface area, like a badge or a banner."
+  },
+  'color-bg-fill-success-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[13],
+    description: 'The hover state color for communicating success on elements with a smaller surface area.'
+  },
+  'color-bg-fill-success-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[14],
+    description: 'The active state (on press) color for communicating success on elements with a smaller surface area.'
+  },
+  'color-bg-fill-success-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[4],
+    description: 'Use for backgrounds communicating success on elements with a smaller surface area, with a secondary level of prominence.'
+  },
+  'color-bg-fill-warning': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[9],
+    description: 'Use for backgrounds communicating warning on elements with a smaller surface area, like a badge or a banner.'
+  },
+  'color-bg-fill-warning-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[10],
+    description: 'The hover state color for communicating warning on elements with a smaller surface area.'
+  },
+  'color-bg-fill-warning-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[11],
+    description: 'The active state (on press) color for communicating warning on elements with a smaller surface area.'
+  },
+  'color-bg-fill-warning-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[7],
+    description: 'Use for backgrounds communicating warning on elements with a smaller surface area, with a secondary level of prominence.'
+  },
+  'color-bg-fill-caution': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[6],
+    description: 'Use for backgrounds communicating caution on elements with a smaller surface area, like a badge or a banner.'
+  },
+  'color-bg-fill-caution-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[8],
+    description: 'The hover state color for communicating caution on elements with a smaller surface area.'
+  },
+  'color-bg-fill-caution-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[9],
+    description: 'The active state (on press) color for communicating caution on elements with a smaller surface area.'
+  },
+  'color-bg-fill-caution-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[5],
+    description: 'Use for backgrounds communicating caution on elements with a smaller surface area, with a secondary level of prominence.'
+  },
+  'color-bg-fill-critical': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[12],
+    description: 'Use for backgrounds communicating critical information on elements with a smaller surface area, like a badge or a banner.'
+  },
+  'color-bg-fill-critical-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[13],
+    description: 'The hover state color for communicating critical information on elements with a smaller surface area.'
+  },
+  'color-bg-fill-critical-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[14],
+    description: 'The active state (on press) color for communicating critical information on elements with a smaller surface area.'
+  },
+  'color-bg-fill-critical-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[14],
+    description: 'The selected state color for communicating critical information on elements with a smaller surface area.'
+  },
+  'color-bg-fill-critical-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[7],
+    description: 'Use for backgrounds communicating critical information on elements with a smaller surface area, with a secondary level of prominence.'
+  },
+  'color-bg-fill-emphasis': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'Use for backgrounds indicating areas of focus in editors on elements with a smaller surface area, like a button or a badge.'
+  },
+  'color-bg-fill-emphasis-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[14],
+    description: 'The hover state color for indicating areas of focus in editors on elements with a smaller surface area.'
+  },
+  'color-bg-fill-emphasis-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[15],
+    description: 'The active state (on press) color for indicating areas of focus in editors on elements with a smaller surface area.'
+  },
+  'color-bg-fill-magic': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[12],
+    description: 'The background color of elements suggested by magic AI, like a badge or a banner.'
+  },
+  'color-bg-fill-magic-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[5],
+    description: 'The background color of elements suggested by magic AI, with a secondary level of prominence.'
+  },
+  'color-bg-fill-magic-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[6],
+    description: 'The hover state color of elements suggested by magic AI, with a secondary level of prominence.'
+  },
+  'color-bg-fill-magic-secondary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[7],
+    description: 'The active state (on press) color of elements suggested by magic AI, with a secondary level of prominence.'
+  },
+  'color-bg-fill-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The background color of elements with a smaller surface area on an inverse background.'
+  },
+  'color-bg-fill-inverse-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14],
+    description: 'The hover state color of elements with a smaller surface area on an inverse background.'
+  },
+  'color-bg-fill-inverse-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[13],
+    description: 'The active state (on press) color of elements with a smaller surface area on an inverse background.'
+  },
+  'color-bg-fill-transparent': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[3],
+    description: 'The background color of elements that need to sit on different background colors, like tabs.'
+  },
+  'color-bg-fill-transparent-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[5],
+    description: 'The hover state color of elements that need to sit on different background colors, like tabs.'
+  },
+  'color-bg-fill-transparent-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[7],
+    description: 'The active state (on press) color of elements that need to sit on different background colors, like tabs.'
+  },
+  'color-bg-fill-transparent-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[7],
+    description: 'The selected state color of elements that need to sit on different background colors, like tabs.'
+  },
+  'color-bg-fill-transparent-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[6],
+    description: 'The background color of elements that need to sit on different background colors, with a secondary level of prominence.'
+  },
+  'color-bg-fill-transparent-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[7],
+    description: 'The hover state color of elements that need to sit on different background colors, with a secondary level of prominence.'
+  },
+  'color-bg-fill-transparent-secondary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[8],
+    description: 'The active state (on press) color of elements that need to sit on different background colors, with a secondary level of prominence.'
+  },
+  'color-text': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The default text color.'
+  },
+  'color-text-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[13],
+    description: 'Use for text with a secondary level of prominence.'
+  },
+  'color-text-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[11],
+    description: 'Use for text in a disabled state.'
+  },
+  'color-text-link': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'Use for text links.'
+  },
+  'color-text-link-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[14],
+    description: 'The hover state color for text links.'
+  },
+  'color-text-link-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[15],
+    description: 'The active state (on press) color for text links.'
+  },
+  'color-text-brand': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14],
+    description: 'Use for text that needs to pull attention.'
+  },
+  'color-text-brand-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The hover state color for text that needs to pull attention.'
+  },
+  'color-text-brand-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1],
+    description: 'Use for text on bg-fill-brand, like primary buttons.'
+  },
+  'color-text-brand-on-bg-fill-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The hover state color for text on bg-fill-brand-hover.'
+  },
+  'color-text-brand-on-bg-fill-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The active state (on press) color for text on bg-fill-brand.'
+  },
+  'color-text-brand-on-bg-fill-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1],
+    description: 'The disabled state color for text on bg-fill-brand-disabled.'
+  },
+  'color-text-info': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[15],
+    description: 'Use for text communicating important information.'
+  },
+  'color-text-info-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[15],
+    description: 'The hover state color for text communicating important information.'
+  },
+  'color-text-info-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[16],
+    description: 'The active state (on press) color for text communicating important information.'
+  },
+  'color-text-info-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[12],
+    description: 'Use for text communicating important information with a secondary level of prominence.'
+  },
+  'color-text-info-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[16],
+    description: 'Use for text and icons on bg-fill-info.'
+  },
+  'color-text-success': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[14],
+    description: 'Use for text communicating success.'
+  },
+  'color-text-success-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[15],
+    description: 'The hover state color for text communicating success.'
+  },
+  'color-text-success-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[16],
+    description: 'The active state (on press) color for text communicating success.'
+  },
+  'color-text-success-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[12],
+    description: 'Use for text communicating success with a secondary level of prominence.'
+  },
+  'color-text-success-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[1],
+    description: 'Use for text and icons on bg-fill-success.'
+  },
+  'color-text-caution': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[14],
+    description: 'Use for text communicating caution.'
+  },
+  'color-text-caution-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[15],
+    description: 'The hover state color for text communicating caution.'
+  },
+  'color-text-caution-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[16],
+    description: 'The active state (on press) color for text communicating caution.'
+  },
+  'color-text-caution-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[12],
+    description: 'Use for text communicating caution with a secondary level of prominence.'
+  },
+  'color-text-caution-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[15],
+    description: 'Use for text and icons on bg-fill-caution.'
+  },
+  'color-text-warning': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[14],
+    description: 'Use for text communicating warning.'
+  },
+  'color-text-warning-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[15],
+    description: 'The hover state color for text communicating warning.'
+  },
+  'color-text-warning-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[16],
+    description: 'The active state (on press) color for text communicating warning.'
+  },
+  'color-text-warning-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[12],
+    description: 'Use for text communicating warning with a secondary level of prominence.'
+  },
+  'color-text-warning-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[16],
+    description: 'Use for text and icons on bg-fill-warning.'
+  },
+  'color-text-critical': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[14],
+    description: 'Use for text communicating critical information.'
+  },
+  'color-text-critical-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[15],
+    description: 'The hover state color for text communicating critical information.'
+  },
+  'color-text-critical-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[16],
+    description: 'The active state (on press) color for text communicating critical information.'
+  },
+  'color-text-critical-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[12],
+    description: 'Use for text communicating critical information with a secondary level of prominence.'
+  },
+  'color-text-critical-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[1],
+    description: 'Use for text and icons on bg-fill-critical.'
+  },
+  'color-text-emphasis': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'Use for text indicating areas of focus in editors, like the theme editor.'
+  },
+  'color-text-emphasis-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[14],
+    description: 'The hover state color for text indicating areas of focus.'
+  },
+  'color-text-emphasis-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[15],
+    description: 'The active state (on press) color for text indicating areas of focus.'
+  },
+  'color-text-emphasis-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[1],
+    description: 'Use for text and icons on bg-fill-emphasis.'
+  },
+  'color-text-emphasis-on-bg-fill-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[5],
+    description: 'Use for text and icons on bg-fill-emphasis-hover.'
+  },
+  'color-text-emphasis-on-bg-fill-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[7],
+    description: 'Use for text and icons on bg-fill-emphasis-active.'
+  },
+  'color-text-magic': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[14],
+    description: 'Use for text suggested by magic AI.'
+  },
+  'color-text-magic-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[13],
+    description: 'Use for text suggested by magic AI with a secondary level of prominence.'
+  },
+  'color-text-magic-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[1],
+    description: 'Use for text and icons on bg-fill-magic.'
+  },
+  'color-text-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'Use for text on an inverse background.'
+  },
+  'color-text-inverse-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[11],
+    description: 'Use for secondary text on an inverse background.'
+  },
+  'color-text-link-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[8],
+    description: 'Use for text links on an inverse background.'
+  },
+  'color-border': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The default color for borders on any element.'
+  },
+  'color-border-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The hover color for borders on any element.'
+  },
+  'color-border-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The disabled color for borders on any element.'
+  },
+  'color-border-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7],
+    description: 'The color for hr elements or any visual dividers.'
+  },
+  'color-border-tertiary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The border color on any element. Pair with bg-surface-tertiary or bg-fill-tertiary.'
+  },
+  'color-border-focus': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'The focus ring for any interactive element in a focused state.'
+  },
+  'color-border-brand': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'Use for borders paired with brand colors.'
+  },
+  'color-border-info': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[8],
+    description: 'Use for borders communicating information.'
+  },
+  'color-border-success': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[5],
+    description: 'Use for borders communicating success.'
+  },
+  'color-border-caution': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[5],
+    description: 'Use for borders communicating caution.'
+  },
+  'color-border-warning': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[8],
+    description: 'Use for borders communicating warning.'
+  },
+  'color-border-critical': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[8],
+    description: 'Use for borders communicating critical information.'
+  },
+  'color-border-critical-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[14],
+    description: 'Use for borders communicating critical information, such as borders on invalid text fields.'
+  },
+  'color-border-emphasis': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'Use for borders indicating areas of focus.'
+  },
+  'color-border-emphasis-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[14],
+    description: 'The hover state color for borders indicating areas of focus.'
+  },
+  'color-border-emphasis-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[15],
+    description: 'The active state (on press) color for borders indicating areas of focus.'
+  },
+  'color-border-magic': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[6],
+    description: 'Use for borders suggested by magic AI.'
+  },
+  'color-border-magic-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[11],
+    description: 'Use for borders suggested by magic AI, such as borders on text fields.'
+  },
+  'color-border-magic-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[12],
+    description: 'Use for borders suggested by magic AI, such as borders on text fields.'
+  },
+  'color-border-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[13],
+    description: 'Use for borders on an inverse background, such as borders on the global search.'
+  },
+  'color-border-inverse-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The hover state color for borders on an inverse background.'
+  },
+  'color-border-inverse-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'The active state (on press) color for borders on an inverse background.'
+  },
+  'color-icon': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14],
+    description: 'The default color for icons.'
+  },
+  'color-icon-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[15],
+    description: 'The hover state color for icons.'
+  },
+  'color-icon-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16],
+    description: 'The active state (on press) color for icons.'
+  },
+  'color-icon-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[10],
+    description: 'The disabled state color for icons.'
+  },
+  'color-icon-secondary': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[12],
+    description: 'Use for secondary icons.'
+  },
+  'color-icon-secondary-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[13],
+    description: 'The hover state color for secondary icons.'
+  },
+  'color-icon-secondary-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14],
+    description: 'The active state (on press) color for secondary icons.'
+  },
+  'color-icon-brand': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16],
+    description: 'Use for icons that need to pull more focus.'
+  },
+  'color-icon-info': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[11],
+    description: 'Use for icons communicating information.'
+  },
+  'color-icon-success': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[12],
+    description: 'Use for icons communicating success.'
+  },
+  'color-icon-caution': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.yellow[11],
+    description: 'Use for icons communicating caution.'
+  },
+  'color-icon-warning': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.orange[11],
+    description: 'Use for icons communicating warning.'
+  },
+  'color-icon-critical': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.red[11],
+    description: 'Use for icons communicating critical information.'
+  },
+  'color-icon-emphasis': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[13],
+    description: 'Use for icons indicating areas of focus in editors, like the theme editor.'
+  },
+  'color-icon-emphasis-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[14],
+    description: 'The hover color for icons indicating areas of focus in editors.'
+  },
+  'color-icon-emphasis-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blue[15],
+    description: 'The active state (on press) color for icons indicating areas of focus in editors.'
+  },
+  'color-icon-magic': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[12],
+    description: 'Use for icons suggested by magic AI.'
+  },
+  'color-icon-inverse': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[8],
+    description: 'Use for icons on an inverse background.'
+  },
+  'color-avatar-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[11]
+  },
+  'color-avatar-five-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.rose[11]
+  },
+  'color-avatar-five-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.rose[2]
+  },
+  'color-avatar-four-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[10]
+  },
+  'color-avatar-four-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.azure[16]
+  },
+  'color-avatar-one-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.magenta[12]
+  },
+  'color-avatar-one-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.magenta[3]
+  },
+  'color-avatar-seven-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[11]
+  },
+  'color-avatar-seven-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.purple[2]
+  },
+  'color-avatar-six-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.lime[9]
+  },
+  'color-avatar-six-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.lime[15]
+  },
+  'color-avatar-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1]
+  },
+  'color-avatar-three-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.teal[9]
+  },
+  'color-avatar-three-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.teal[15]
+  },
+  'color-avatar-two-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[7]
+  },
+  'color-avatar-two-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.green[14]
+  },
+  'color-backdrop-bg': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[14]
+  },
+  'color-button-gradient-bg-fill': {
+    value: 'linear-gradient(180deg, rgba(48, 48, 48, 0) 63.53%, rgba(255, 255, 255, 0.15) 100%)'
+  },
+  'color-checkbox-bg-surface-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[7]
+  },
+  'color-checkbox-icon-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1]
+  },
+  'color-input-bg-surface': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[2]
+  },
+  'color-input-bg-surface-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[3]
+  },
+  'color-input-bg-surface-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[4]
+  },
+  'color-input-border': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[12]
+  },
+  'color-input-border-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[13]
+  },
+  'color-input-border-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16]
+  },
+  'color-nav-bg': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[7]
+  },
+  'color-nav-bg-surface': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[3]
+  },
+  'color-nav-bg-surface-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6]
+  },
+  'color-nav-bg-surface-active': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[3]
+  },
+  'color-nav-bg-surface-selected': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[3]
+  },
+  'color-radio-button-bg-surface-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[7]
+  },
+  'color-radio-button-icon-disabled': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1]
+  },
+  'color-video-thumbnail-play-button-bg-fill-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[15]
+  },
+  'color-video-thumbnail-play-button-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.blackAlpha[14]
+  },
+  'color-video-thumbnail-play-button-text-on-bg-fill': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[1]
+  },
+  'color-scrollbar-thumb-bg-hover': {
+    value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[12]
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/font.mjs":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/font.mjs ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   font: () => (/* binding */ font)
+/* harmony export */ });
+/* harmony import */ var _size_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../size.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs");
+
+
+var font = {
+  'font-family-sans': {
+    value: "'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+  },
+  'font-family-mono': {
+    value: "ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace"
+  },
+  'font-size-275': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[275]
+  },
+  'font-size-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'font-size-325': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[325]
+  },
+  'font-size-350': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[350]
+  },
+  'font-size-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'font-size-450': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[450]
+  },
+  'font-size-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'font-size-550': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[550]
+  },
+  'font-size-600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[600]
+  },
+  'font-size-750': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[750]
+  },
+  'font-size-800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[800]
+  },
+  'font-size-900': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[900]
+  },
+  'font-size-1000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1000]
+  },
+  'font-weight-regular': {
+    value: '450'
+  },
+  'font-weight-medium': {
+    value: '550'
+  },
+  'font-weight-semibold': {
+    value: '650'
+  },
+  'font-weight-bold': {
+    value: '700'
+  },
+  'font-letter-spacing-densest': {
+    value: '-0.54px'
+  },
+  'font-letter-spacing-denser': {
+    value: '-0.3px'
+  },
+  'font-letter-spacing-dense': {
+    value: '-0.2px'
+  },
+  'font-letter-spacing-normal': {
+    value: '0px'
+  },
+  'font-line-height-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'font-line-height-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'font-line-height-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'font-line-height-600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[600]
+  },
+  'font-line-height-700': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[700]
+  },
+  'font-line-height-800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[800]
+  },
+  'font-line-height-1000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1000]
+  },
+  'font-line-height-1200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1200]
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/height.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/height.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   height: () => (/* binding */ height)
+/* harmony export */ });
+/* harmony import */ var _size_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../size.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs");
+
+
+var height = {
+  'height-0': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[0]
+  },
+  'height-025': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['025']
+  },
+  'height-050': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['050']
+  },
+  'height-100': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[100]
+  },
+  'height-150': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[150]
+  },
+  'height-200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[200]
+  },
+  'height-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'height-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'height-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'height-600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[600]
+  },
+  'height-700': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[700]
+  },
+  'height-800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[800]
+  },
+  'height-900': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[900]
+  },
+  'height-1000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1000]
+  },
+  'height-1200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1200]
+  },
+  'height-1600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1600]
+  },
+  'height-2000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2000]
+  },
+  'height-2400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2400]
+  },
+  'height-2800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2800]
+  },
+  'height-3200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[3200]
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/index.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/index.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   metaThemeBase: () => (/* binding */ metaThemeBase)
+/* harmony export */ });
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+/* harmony import */ var _border_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./border.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/border.mjs");
+/* harmony import */ var _breakpoints_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./breakpoints.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/breakpoints.mjs");
+/* harmony import */ var _color_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./color.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/color.mjs");
+/* harmony import */ var _font_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./font.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/font.mjs");
+/* harmony import */ var _height_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./height.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/height.mjs");
+/* harmony import */ var _motion_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./motion.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/motion.mjs");
+/* harmony import */ var _shadow_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./shadow.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/shadow.mjs");
+/* harmony import */ var _space_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./space.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/space.mjs");
+/* harmony import */ var _text_mjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./text.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/text.mjs");
+/* harmony import */ var _width_mjs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./width.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/width.mjs");
+/* harmony import */ var _zIndex_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./zIndex.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/zIndex.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+
+var metaThemeBase = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createMetaThemeBase)({
+  border: _border_mjs__WEBPACK_IMPORTED_MODULE_1__.border,
+  breakpoints: _breakpoints_mjs__WEBPACK_IMPORTED_MODULE_2__.breakpoints,
+  color: _color_mjs__WEBPACK_IMPORTED_MODULE_3__.color,
+  font: _font_mjs__WEBPACK_IMPORTED_MODULE_4__.font,
+  height: _height_mjs__WEBPACK_IMPORTED_MODULE_5__.height,
+  motion: _motion_mjs__WEBPACK_IMPORTED_MODULE_6__.motion,
+  shadow: _shadow_mjs__WEBPACK_IMPORTED_MODULE_7__.shadow,
+  space: _space_mjs__WEBPACK_IMPORTED_MODULE_8__.space,
+  text: _text_mjs__WEBPACK_IMPORTED_MODULE_9__.text,
+  width: _width_mjs__WEBPACK_IMPORTED_MODULE_10__.width,
+  zIndex: _zIndex_mjs__WEBPACK_IMPORTED_MODULE_11__.zIndex
+});
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/motion.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/motion.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   motion: () => (/* binding */ motion)
+/* harmony export */ });
+var motion = {
+  'motion-duration-0': {
+    value: '0ms'
+  },
+  'motion-duration-50': {
+    value: '50ms'
+  },
+  'motion-duration-100': {
+    value: '100ms'
+  },
+  'motion-duration-150': {
+    value: '150ms'
+  },
+  'motion-duration-200': {
+    value: '200ms'
+  },
+  'motion-duration-250': {
+    value: '250ms'
+  },
+  'motion-duration-300': {
+    value: '300ms'
+  },
+  'motion-duration-350': {
+    value: '350ms'
+  },
+  'motion-duration-400': {
+    value: '400ms'
+  },
+  'motion-duration-450': {
+    value: '450ms'
+  },
+  'motion-duration-500': {
+    value: '500ms'
+  },
+  'motion-duration-5000': {
+    value: '5000ms'
+  },
+  'motion-ease': {
+    value: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+    description: 'Responds quickly and finishes with control. A great default for any user interaction.'
+  },
+  'motion-ease-in': {
+    value: 'cubic-bezier(0.42, 0, 1, 1)',
+    description: 'Starts slowly and finishes at top speed. Use sparingly.'
+  },
+  'motion-ease-out': {
+    value: 'cubic-bezier(0.19, 0.91, 0.38, 1)',
+    description: 'Starts at top speed and finishes slowly. Use sparingly.'
+  },
+  'motion-ease-in-out': {
+    value: 'cubic-bezier(0.42, 0, 0.58, 1)',
+    description: 'Starts and finishes with equal speed. A good default for transitions triggered by the system.'
+  },
+  'motion-linear': {
+    value: 'cubic-bezier(0, 0, 1, 1)',
+    description: 'Moves with constant speed. Use for continuous and mechanical animations, such as rotating spinners.'
+  },
+  'motion-keyframes-bounce': {
+    value: '{ from, 65%, 85% { transform: scale(1) } 75% { transform: scale(0.85) } 82.5% { transform: scale(1.05) } }'
+  },
+  'motion-keyframes-fade-in': {
+    value: '{ to { opacity: 1 } }'
+  },
+  'motion-keyframes-pulse': {
+    value: '{ from, 75% { transform: scale(0.85); opacity: 1; } to { transform: scale(2.5); opacity: 0; } }'
+  },
+  'motion-keyframes-spin': {
+    value: '{ to { transform: rotate(1turn) } }'
+  },
+  'motion-keyframes-appear-above': {
+    value: '{ from { transform: translateY(var(--p-space-100)); opacity: 0; } to { transform: none; opacity: 1; } }'
+  },
+  'motion-keyframes-appear-below': {
+    value: '{ from { transform: translateY(calc(var(--p-space-100) * -1)); opacity: 0; } to { transform: none; opacity: 1; } }'
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/shadow.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/shadow.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   shadow: () => (/* binding */ shadow)
+/* harmony export */ });
+var shadow = {
+  'shadow-0': {
+    value: 'none'
+  },
+  'shadow-100': {
+    value: '0px 1px 0px 0px rgba(26, 26, 26, 0.07)'
+  },
+  'shadow-200': {
+    value: '0px 3px 1px -1px rgba(26, 26, 26, 0.07)'
+  },
+  'shadow-300': {
+    value: '0px 4px 6px -2px rgba(26, 26, 26, 0.20)'
+  },
+  'shadow-400': {
+    value: '0px 8px 16px -4px rgba(26, 26, 26, 0.22)'
+  },
+  'shadow-500': {
+    value: '0px 12px 20px -8px rgba(26, 26, 26, 0.24)'
+  },
+  'shadow-600': {
+    value: '0px 20px 20px -8px rgba(26, 26, 26, 0.28)'
+  },
+  'shadow-bevel-100': {
+    value: '1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, 0px -1px 0px 0px rgba(0, 0, 0, 0.17) inset, 0px 1px 0px 0px rgba(204, 204, 204, 0.5) inset'
+  },
+  'shadow-inset-100': {
+    value: '0px 1px 2px 0px rgba(26, 26, 26, 0.15) inset, 0px 1px 1px 0px rgba(26, 26, 26, 0.15) inset'
+  },
+  'shadow-inset-200': {
+    value: '0px 2px 1px 0px rgba(26, 26, 26, 0.20) inset, 1px 0px 1px 0px rgba(26, 26, 26, 0.12) inset, -1px 0px 1px 0px rgba(26, 26, 26, 0.12) inset'
+  },
+  'shadow-button': {
+    value: '0px -1px 0px 0px #b5b5b5 inset, 0px 0px 0px 1px rgba(0, 0, 0, 0.1) inset, 0px 0.5px 0px 1.5px #FFF inset'
+  },
+  'shadow-button-hover': {
+    value: '0px 1px 0px 0px #EBEBEB inset, -1px 0px 0px 0px #EBEBEB inset, 1px 0px 0px 0px #EBEBEB inset, 0px -1px 0px 0px #CCC inset'
+  },
+  'shadow-button-inset': {
+    value: '-1px 0px 1px 0px rgba(26, 26, 26, 0.122) inset, 1px 0px 1px 0px rgba(26, 26, 26, 0.122) inset, 0px 2px 1px 0px rgba(26, 26, 26, 0.2) inset'
+  },
+  'shadow-button-primary': {
+    value: '0px -1px 0px 1px rgba(0, 0, 0, 0.8) inset, 0px 0px 0px 1px rgba(48, 48, 48, 1) inset, 0px 0.5px 0px 1.5px rgba(255, 255, 255, 0.25) inset;'
+  },
+  'shadow-button-primary-hover': {
+    value: '0px 1px 0px 0px rgba(255, 255, 255, 0.24) inset, 1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, -1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, 0px -1px 0px 0px #000 inset, 0px -1px 0px 1px #1A1A1A'
+  },
+  'shadow-button-primary-inset': {
+    value: '0px 3px 0px 0px rgb(0, 0, 0) inset'
+  },
+  'shadow-button-primary-critical': {
+    value: '0px -1px 0px 1px rgba(142, 31, 11, 0.8) inset, 0px 0px 0px 1px rgba(181, 38, 11, 0.8) inset, 0px 0.5px 0px 1.5px rgba(255, 255, 255, 0.349) inset'
+  },
+  'shadow-button-primary-critical-hover': {
+    value: '0px 1px 0px 0px rgba(255, 255, 255, 0.48) inset, 1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, -1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, 0px -1.5px 0px 0px rgba(0, 0, 0, 0.25) inset'
+  },
+  'shadow-button-primary-critical-inset': {
+    value: '-1px 0px 1px 0px rgba(0, 0, 0, 0.2) inset, 1px 0px 1px 0px rgba(0, 0, 0, 0.2) inset, 0px 2px 0px 0px rgba(0, 0, 0, 0.6) inset'
+  },
+  'shadow-button-primary-success': {
+    value: '0px -1px 0px 1px rgba(12, 81, 50, 0.8) inset, 0px 0px 0px 1px rgba(19, 111, 69, 0.8) inset, 0px 0.5px 0px 1.5px rgba(255, 255, 255, 0.251) inset'
+  },
+  'shadow-button-primary-success-hover': {
+    value: '0px 1px 0px 0px rgba(255, 255, 255, 0.48) inset, 1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, -1px 0px 0px 0px rgba(255, 255, 255, 0.20) inset, 0px -1.5px 0px 0px rgba(0, 0, 0, 0.25) inset'
+  },
+  'shadow-button-primary-success-inset': {
+    value: '-1px 0px 1px 0px rgba(0, 0, 0, 0.2) inset, 1px 0px 1px 0px rgba(0, 0, 0, 0.2) inset, 0px 2px 0px 0px rgba(0, 0, 0, 0.6) inset'
+  },
+  'shadow-border-inset': {
+    value: '0px 0px 0px 1px rgba(0, 0, 0, 0.08) inset'
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/space.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/space.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   space: () => (/* binding */ space)
+/* harmony export */ });
+/* harmony import */ var _size_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../size.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs");
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+
+
+
+var space = {
+  'space-0': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[0]
+  },
+  'space-025': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['025']
+  },
+  'space-050': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['050']
+  },
+  'space-100': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[100]
+  },
+  'space-150': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[150]
+  },
+  'space-200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[200]
+  },
+  'space-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'space-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'space-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'space-600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[600]
+  },
+  'space-800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[800]
+  },
+  'space-1000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1000]
+  },
+  'space-1200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1200]
+  },
+  'space-1600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1600]
+  },
+  'space-2000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2000]
+  },
+  'space-2400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2400]
+  },
+  'space-2800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2800]
+  },
+  'space-3200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[3200]
+  },
+  'space-button-group-gap': {
+    value: createVar('space-200')
+  },
+  'space-card-gap': {
+    value: createVar('space-400')
+  },
+  'space-card-padding': {
+    value: createVar('space-400')
+  },
+  'space-table-cell-padding': {
+    value: createVar('space-150')
+  }
+};
+function createVar(spaceTokenName) {
+  return "var(" + (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createVarName)(spaceTokenName) + ")";
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/text.mjs":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/text.mjs ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   text: () => (/* binding */ text)
+/* harmony export */ });
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+
+
+var text = {
+  // heading-3xl
+  'text-heading-3xl-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-3xl-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-900')
+  },
+  'text-heading-3xl-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-bold')
+  },
+  'text-heading-3xl-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-densest')
+  },
+  'text-heading-3xl-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-1200')
+  },
+  // heading-2xl
+  'text-heading-2xl-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-2xl-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-750')
+  },
+  'text-heading-2xl-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-bold')
+  },
+  'text-heading-2xl-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-denser')
+  },
+  'text-heading-2xl-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-1000')
+  },
+  // heading-xl
+  'text-heading-xl-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-xl-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-600')
+  },
+  'text-heading-xl-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-bold')
+  },
+  'text-heading-xl-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-dense')
+  },
+  'text-heading-xl-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-800')
+  },
+  // heading-lg
+  'text-heading-lg-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-lg-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-500')
+  },
+  'text-heading-lg-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-semibold')
+  },
+  'text-heading-lg-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-dense')
+  },
+  'text-heading-lg-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-600')
+  },
+  // heading-md
+  'text-heading-md-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-md-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-350')
+  },
+  'text-heading-md-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-semibold')
+  },
+  'text-heading-md-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-heading-md-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-500')
+  },
+  // heading-sm
+  'text-heading-sm-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-sm-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-325')
+  },
+  'text-heading-sm-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-semibold')
+  },
+  'text-heading-sm-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-heading-sm-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-500')
+  },
+  // heading-xs
+  'text-heading-xs-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-heading-xs-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-300')
+  },
+  'text-heading-xs-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-semibold')
+  },
+  'text-heading-xs-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-heading-xs-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-400')
+  },
+  // body-lg
+  'text-body-lg-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-body-lg-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-350')
+  },
+  'text-body-lg-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-regular')
+  },
+  'text-body-lg-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-body-lg-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-500')
+  },
+  // body-md
+  'text-body-md-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-body-md-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-325')
+  },
+  'text-body-md-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-regular')
+  },
+  'text-body-md-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-body-md-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-500')
+  },
+  // body-sm
+  'text-body-sm-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-body-sm-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-300')
+  },
+  'text-body-sm-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-regular')
+  },
+  'text-body-sm-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-body-sm-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-400')
+  },
+  // body-xs
+  'text-body-xs-font-family': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-family-sans')
+  },
+  'text-body-xs-font-size': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-275')
+  },
+  'text-body-xs-font-weight': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-weight-regular')
+  },
+  'text-body-xs-font-letter-spacing': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-letter-spacing-normal')
+  },
+  'text-body-xs-font-line-height': {
+    value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-300')
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/width.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/width.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   width: () => (/* binding */ width)
+/* harmony export */ });
+/* harmony import */ var _size_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../size.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/size.mjs");
+
+
+var width = {
+  'width-0': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[0]
+  },
+  'width-025': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['025']
+  },
+  'width-050': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size['050']
+  },
+  'width-100': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[100]
+  },
+  'width-150': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[150]
+  },
+  'width-200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[200]
+  },
+  'width-300': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[300]
+  },
+  'width-400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[400]
+  },
+  'width-500': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[500]
+  },
+  'width-600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[600]
+  },
+  'width-700': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[700]
+  },
+  'width-800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[800]
+  },
+  'width-900': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[900]
+  },
+  'width-1000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1000]
+  },
+  'width-1200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1200]
+  },
+  'width-1600': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[1600]
+  },
+  'width-2000': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2000]
+  },
+  'width-2400': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2400]
+  },
+  'width-2800': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[2800]
+  },
+  'width-3200': {
+    value: _size_mjs__WEBPACK_IMPORTED_MODULE_0__.size[3200]
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/zIndex.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/zIndex.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   zIndex: () => (/* binding */ zIndex)
+/* harmony export */ });
+var zIndex = {
+  'z-index-0': {
+    value: 'auto'
+  },
+  'z-index-1': {
+    value: '100'
+  },
+  'z-index-2': {
+    value: '400'
+  },
+  'z-index-3': {
+    value: '510'
+  },
+  'z-index-4': {
+    value: '512'
+  },
+  'z-index-5': {
+    value: '513'
+  },
+  'z-index-6': {
+    value: '514'
+  },
+  'z-index-7': {
+    value: '515'
+  },
+  'z-index-8': {
+    value: '516'
+  },
+  'z-index-9': {
+    value: '517'
+  },
+  'z-index-10': {
+    value: '518'
+  },
+  'z-index-11': {
+    value: '519'
+  },
+  'z-index-12': {
+    value: '520'
+  }
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/constants.mjs":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/constants.mjs ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   themeNameDefault: () => (/* binding */ themeNameDefault),
+/* harmony export */   themeNameLight: () => (/* binding */ themeNameLight),
+/* harmony export */   themeNames: () => (/* binding */ themeNames)
+/* harmony export */ });
+var themeNameLight = 'light';
+var themeNameDefault = themeNameLight;
+var themeNames = [themeNameLight, 'light-mobile', 'light-high-contrast-experimental'];
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/index.mjs":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/index.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createMetaTheme: () => (/* reexport safe */ _utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createMetaTheme),
+/* harmony export */   metaThemeDefault: () => (/* binding */ metaThemeDefault),
+/* harmony export */   metaThemeDefaultPartial: () => (/* binding */ metaThemeDefaultPartial),
+/* harmony export */   metaThemePartials: () => (/* binding */ metaThemePartials),
+/* harmony export */   metaThemes: () => (/* binding */ metaThemes)
+/* harmony export */ });
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs");
+/* harmony import */ var _constants_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/constants.mjs");
+/* harmony import */ var _light_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./light.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light.mjs");
+/* harmony import */ var _light_high_contrast_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./light-high-contrast.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-high-contrast.mjs");
+/* harmony import */ var _light_mobile_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./light-mobile.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-mobile.mjs");
+
+
+
+
+
+
+var metaThemes = {
+  light: _light_mjs__WEBPACK_IMPORTED_MODULE_2__.metaThemeLight,
+  'light-mobile': _light_mobile_mjs__WEBPACK_IMPORTED_MODULE_4__.metaThemeLightMobile,
+  'light-high-contrast-experimental': _light_high_contrast_mjs__WEBPACK_IMPORTED_MODULE_3__.metaThemeLightHighContrast
+};
+var metaThemePartials = {
+  light: _light_mjs__WEBPACK_IMPORTED_MODULE_2__.metaThemeLightPartial,
+  'light-mobile': _light_mobile_mjs__WEBPACK_IMPORTED_MODULE_4__.metaThemeLightMobilePartial,
+  'light-high-contrast-experimental': _light_high_contrast_mjs__WEBPACK_IMPORTED_MODULE_3__.metaThemeLightHighContrastPartial
+};
+var metaThemeDefaultPartial = metaThemePartials[_constants_mjs__WEBPACK_IMPORTED_MODULE_1__.themeNameDefault];
+var metaThemeDefault = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createMetaTheme)(metaThemeDefaultPartial);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-high-contrast.mjs":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-high-contrast.mjs ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   metaThemeLightHighContrast: () => (/* binding */ metaThemeLightHighContrast),
+/* harmony export */   metaThemeLightHighContrastPartial: () => (/* binding */ metaThemeLightHighContrastPartial)
+/* harmony export */ });
+/* harmony import */ var _colors_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../colors.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/colors.mjs");
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs");
+
+
+
+var metaThemeLightHighContrastPartial = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createMetaThemePartial)({
+  color: {
+    'color-text': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16]
+    },
+    'color-text-secondary': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16]
+    },
+    'color-text-brand': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[16]
+    },
+    'color-icon-secondary': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14]
+    },
+    'color-border': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[12]
+    },
+    'color-input-border': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[14]
+    },
+    'color-border-secondary': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[12]
+    },
+    'color-bg-surface-secondary': {
+      value: _colors_mjs__WEBPACK_IMPORTED_MODULE_0__.gray[6]
+    }
+  },
+  shadow: {
+    'shadow-bevel-100': {
+      value: '0px 1px 0px 0px rgba(26, 26, 26, 0.07), 0px 1px 0px 0px rgba(208, 208, 208, 0.40) inset, 1px 0px 0px 0px #CCC inset, -1px 0px 0px 0px #CCC inset, 0px -1px 0px 0px #999 inset'
+    }
+  }
+});
+var metaThemeLightHighContrast = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createMetaTheme)(metaThemeLightHighContrastPartial);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-mobile.mjs":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light-mobile.mjs ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   metaThemeLightMobile: () => (/* binding */ metaThemeLightMobile),
+/* harmony export */   metaThemeLightMobilePartial: () => (/* binding */ metaThemeLightMobilePartial)
+/* harmony export */ });
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs");
+
+
+
+var buttonShadow = "0 0 0 " + (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('border-width-025') + " " + (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('color-border') + " inset";
+var metaThemeLightMobilePartial = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createMetaThemePartial)({
+  color: {
+    'color-button-gradient-bg-fill': {
+      value: 'none'
+    }
+  },
+  shadow: {
+    'shadow-100': {
+      value: 'none'
+    },
+    'shadow-bevel-100': {
+      value: 'none'
+    },
+    'shadow-button': {
+      value: buttonShadow
+    },
+    'shadow-button-hover': {
+      value: buttonShadow
+    },
+    'shadow-button-inset': {
+      value: buttonShadow
+    },
+    'shadow-button-primary': {
+      value: 'none'
+    },
+    'shadow-button-primary-hover': {
+      value: 'none'
+    },
+    'shadow-button-primary-inset': {
+      value: 'none'
+    },
+    'shadow-button-primary-critical': {
+      value: 'none'
+    },
+    'shadow-button-primary-critical-hover': {
+      value: 'none'
+    },
+    'shadow-button-primary-critical-inset': {
+      value: 'none'
+    },
+    'shadow-button-primary-success': {
+      value: 'none'
+    },
+    'shadow-button-primary-success-hover': {
+      value: 'none'
+    },
+    'shadow-button-primary-success-inset': {
+      value: 'none'
+    }
+  },
+  space: {
+    'space-card-gap': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('space-200')
+    }
+  },
+  text: {
+    // heading-2xl
+    'text-heading-2xl-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-800')
+    },
+    // heading-xl
+    'text-heading-xl-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-550')
+    },
+    'text-heading-xl-font-line-height': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-700')
+    },
+    // heading-lg
+    'text-heading-lg-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-450')
+    },
+    // heading-md
+    'text-heading-md-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-400')
+    },
+    // heading-sm
+    'text-heading-sm-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-350')
+    },
+    // body-lg
+    'text-body-lg-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-450')
+    },
+    'text-body-lg-font-line-height': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-700')
+    },
+    // body-md
+    'text-body-md-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-400')
+    },
+    'text-body-md-font-line-height': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-600')
+    },
+    // body-sm
+    'text-body-sm-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-350')
+    },
+    'text-body-sm-font-line-height': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-500')
+    },
+    // body-xs
+    'text-body-xs-font-size': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-size-300')
+    },
+    'text-body-xs-font-line-height': {
+      value: (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createVar)('font-line-height-400')
+    }
+  }
+});
+var metaThemeLightMobile = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_1__.createMetaTheme)(metaThemeLightMobilePartial);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light.mjs":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/light.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   metaThemeLight: () => (/* binding */ metaThemeLight),
+/* harmony export */   metaThemeLightPartial: () => (/* binding */ metaThemeLightPartial)
+/* harmony export */ });
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs");
+
+
+var metaThemeLightPartial = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createMetaThemePartial)({});
+var metaThemeLight = (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_0__.createMetaTheme)(metaThemeLightPartial);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/utils.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createIsTokenName: () => (/* binding */ createIsTokenName),
+/* harmony export */   createMetaTheme: () => (/* binding */ createMetaTheme),
+/* harmony export */   createMetaThemePartial: () => (/* binding */ createMetaThemePartial),
+/* harmony export */   createThemeClassName: () => (/* binding */ createThemeClassName)
+/* harmony export */ });
+/* harmony import */ var _virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../_virtual/_rollupPluginBabelHelpers.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/_virtual/_rollupPluginBabelHelpers.mjs");
+/* harmony import */ var deepmerge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/cjs.js");
+/* harmony import */ var _utils_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs");
+/* harmony import */ var _base_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base/index.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/src/themes/base/index.mjs");
+
+
+
+
+
+/**
+ * Mimics the behavior of an identity function:
+ * - Validates the input matches the `MetaThemeShape` type exactly
+ * - Converts all `px` values to `rem`
+ * - Infers all members
+ *
+ * @example
+ * ```
+ * const example = createMetaThemePartial({
+ *   color: {
+ *     bg: {value: '#fff'},
+ *   },
+ * })
+ * ```
+ *
+ * Where `typeof example` is inferred as `{ color: { bg: { value: string } } }`
+ */
+function createMetaThemePartial(metaThemePartial) {
+  return Object.fromEntries(Object.entries(metaThemePartial).map(function (_ref) {
+    var _ref2 = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.slicedToArray)(_ref, 2),
+      tokenGroupName = _ref2[0],
+      tokenGroup = _ref2[1];
+    return [tokenGroupName, tokenGroup && _utils_mjs__WEBPACK_IMPORTED_MODULE_2__.tokenGroupNamesToRems.includes(tokenGroupName) ? (0,_utils_mjs__WEBPACK_IMPORTED_MODULE_2__.tokenGroupToRems)(tokenGroup) : tokenGroup];
+  }));
+}
+function createMetaTheme(metaThemePartial) {
+  return deepmerge__WEBPACK_IMPORTED_MODULE_1__(_base_index_mjs__WEBPACK_IMPORTED_MODULE_3__.metaThemeBase, metaThemePartial);
+}
+function createThemeClassName(themeName) {
+  return "p-theme-" + themeName;
+}
+function createIsTokenName(theme) {
+  var tokenNames = new Set((0,_utils_mjs__WEBPACK_IMPORTED_MODULE_2__.getTokenNames)(theme));
+  return function (tokenName) {
+    return tokenNames.has(tokenName);
+  };
+}
+
+/**
+ * Important: Do not export from Polaris tokens. This utility is exposed
+ * in the `toValues` build step to ensure the `metaTheme` isn't in client bundles.
+ */
+createIsTokenName(_base_index_mjs__WEBPACK_IMPORTED_MODULE_3__.metaThemeBase);
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@shopify/polaris-tokens/dist/esm/src/utils.mjs ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createMetaThemeBase: () => (/* binding */ createMetaThemeBase),
+/* harmony export */   createVar: () => (/* binding */ createVar),
+/* harmony export */   createVarName: () => (/* binding */ createVarName),
+/* harmony export */   getMediaConditions: () => (/* binding */ getMediaConditions),
+/* harmony export */   getThemeVarNames: () => (/* binding */ getThemeVarNames),
+/* harmony export */   getTokenNames: () => (/* binding */ getTokenNames),
+/* harmony export */   getUnit: () => (/* binding */ getUnit),
+/* harmony export */   rem: () => (/* binding */ rem),
+/* harmony export */   toEm: () => (/* binding */ toEm),
+/* harmony export */   toPx: () => (/* binding */ toPx),
+/* harmony export */   toPxs: () => (/* binding */ toPxs),
+/* harmony export */   toRem: () => (/* binding */ toRem),
+/* harmony export */   tokenGroupNamesToRems: () => (/* binding */ tokenGroupNamesToRems),
+/* harmony export */   tokenGroupToRems: () => (/* binding */ tokenGroupToRems)
+/* harmony export */ });
+/* harmony import */ var _virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_virtual/_rollupPluginBabelHelpers.mjs */ "./node_modules/@shopify/polaris-tokens/dist/esm/_virtual/_rollupPluginBabelHelpers.mjs");
+
+
+var _templateObject;
+var BASE_FONT_SIZE = 16;
+var UNIT_PX = 'px';
+var UNIT_EM = 'em';
+var UNIT_REM = 'rem';
+
+// https://regex101.com/r/zvY2bu/1
+var DIGIT_REGEX = new RegExp(String.raw(_templateObject || (_templateObject = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.taggedTemplateLiteralLoose)(["-?d+(?:.d+|d*)"], ["-?\\d+(?:\\.\\d+|\\d*)"]))));
+var UNIT_REGEX = new RegExp(UNIT_PX + "|" + UNIT_EM + "|" + UNIT_REM);
+function getUnit(value) {
+  if (value === void 0) {
+    value = '';
+  }
+  var unit = value.match(new RegExp(DIGIT_REGEX.source + "(" + UNIT_REGEX.source + ")"));
+  return unit && unit[1];
+}
+function toPx(value) {
+  if (value === void 0) {
+    value = '';
+  }
+  var unit = getUnit(value);
+  if (!unit) return value;
+  if (unit === UNIT_PX) {
+    return value;
+  }
+  if (unit === UNIT_EM || unit === UNIT_REM) {
+    return "" + parseFloat(value) * BASE_FONT_SIZE + UNIT_PX;
+  }
+}
+function toPxs(value) {
+  return value.replace(new RegExp(DIGIT_REGEX.source + "(" + UNIT_EM + "|" + UNIT_REM + ")", 'g'), function (emOrRem) {
+    var _toPx;
+    return (_toPx = toPx(emOrRem)) != null ? _toPx : emOrRem;
+  });
+}
+function toEm(value, fontSize) {
+  if (value === void 0) {
+    value = '';
+  }
+  if (fontSize === void 0) {
+    fontSize = BASE_FONT_SIZE;
+  }
+  var unit = getUnit(value);
+  if (!unit) return value;
+  if (unit === UNIT_EM) {
+    return value;
+  }
+  if (unit === UNIT_PX) {
+    return "" + parseFloat(value) / fontSize + UNIT_EM;
+  }
+  if (unit === UNIT_REM) {
+    return "" + parseFloat(value) * BASE_FONT_SIZE / fontSize + UNIT_EM;
+  }
+}
+function toRem(value) {
+  if (value === void 0) {
+    value = '';
+  }
+  var unit = getUnit(value);
+  if (!unit) return value;
+  if (unit === UNIT_REM) {
+    return value;
+  }
+  if (unit === UNIT_EM) {
+    return "" + parseFloat(value) + UNIT_REM;
+  }
+  if (unit === UNIT_PX) {
+    return "" + parseFloat(value) / BASE_FONT_SIZE + UNIT_REM;
+  }
+}
+function rem(value) {
+  return value.replace(new RegExp(DIGIT_REGEX.source + "(" + UNIT_PX + ")", 'g'), function (px) {
+    var _toRem;
+    return (_toRem = toRem(px)) != null ? _toRem : px;
+  });
+}
+function tokenGroupToRems(metaTokenGroup) {
+  return Object.fromEntries(Object.entries(metaTokenGroup).map(function (_ref) {
+    var _ref2 = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.slicedToArray)(_ref, 2),
+      tokenName = _ref2[0],
+      tokenProperties = _ref2[1];
+    return [tokenName, Object.assign(Object.assign({}, tokenProperties), {}, {
+      value: rem(tokenProperties.value)
+    })];
+  })
+  // We loose the `metaTokenGroup` inference after transforming the object with
+  // `Object.fromEntries()` and `Object.entries()`. Thus, we cast the result
+  // back to `T` since we are simply converting the `value` from px to rem.
+  );
+}
+
+function createVarName(tokenName) {
+  return "--p-" + tokenName;
+}
+function createVar(tokenName) {
+  return "var(" + createVarName(tokenName) + ")";
+}
+function getTokenNames(theme) {
+  return Object.values(theme).flatMap(function (tokenGroup) {
+    return Object.keys(tokenGroup);
+  });
+}
+
+/**
+ * Allowed Polaris token custom properties.
+ *
+ * Result: ['--p-color-bg', '--p-color-text', etc...]
+ */
+function getThemeVarNames(theme) {
+  return getTokenNames(theme).map(createVarName);
+}
+
+/**
+ * Alias direction used for composing Polaris `breakpoints` utilities.
+ */
+
+/**
+ * A collection of directional media conditions for a given Polaris `breakpoints` alias.
+ */
+
+/**
+ * Media conditions for all Polaris `breakpoints` aliases.
+ */
+
+function getMediaConditions(breakpoints) {
+  var breakpointEntries = Object.entries(breakpoints);
+  var lastBreakpointIndex = breakpointEntries.length - 1;
+  return Object.fromEntries(breakpointEntries.map(function (entry, index) {
+    var _ref3 = entry,
+      _ref4 = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.slicedToArray)(_ref3, 2),
+      breakpointsTokenName = _ref4[0],
+      breakpoint = _ref4[1];
+    var upMediaCondition = getUpMediaCondition(breakpoint);
+    var downMediaCondition = getDownMediaCondition(breakpoint);
+    var onlyMediaCondition = index === lastBreakpointIndex ? upMediaCondition : upMediaCondition + " and " + getDownMediaCondition(breakpointEntries[index + 1][1]);
+    return [breakpointsTokenName, {
+      // Media condition for the current breakpoint and up
+      up: upMediaCondition,
+      // Media condition for current breakpoint and down
+      down: downMediaCondition,
+      // Media condition for only the current breakpoint
+      only: onlyMediaCondition
+    }];
+  }));
+}
+function getUpMediaCondition(breakpoint) {
+  return "(min-width: " + toEm(breakpoint) + ")";
+}
+
+/**
+ * Down media condition breakpoints are being subtracted by 0.04px to prevent
+ * them from overwriting up media queries. We experimented with multiple offsets
+ * and felt that 0.04px would be the safest across different pixel densities,
+ * while being representable in ems with 4 decimal places of precision.
+ */
+function getDownMediaCondition(breakpoint) {
+  var _toPx2;
+  var offsetBreakpoint = parseFloat((_toPx2 = toPx(breakpoint)) != null ? _toPx2 : '') - 0.04;
+  return "(max-width: " + toEm(offsetBreakpoint + "px") + ")";
+}
+var tokenGroupNamesToRems = ['border', 'breakpoints', 'font', 'height', 'shadow', 'space', 'text', 'width'];
+
+/**
+ * Mimics the behavior of an identity function:
+ * - Validates the input matches the `MetaThemeShape` type exactly
+ * - Converts all `px` values to `rem`
+ * - Infers all members
+ *
+ * @example
+ * ```
+ * const example = createMetaThemeBase({
+ *   color: {
+ *     bg: {value: '#fff'},
+ *   },
+ * })
+ * ```
+ *
+ * Where `typeof example` is inferred as `{ color: { bg: { value: string } } }`
+ */
+function createMetaThemeBase(metaTheme) {
+  return Object.fromEntries(Object.entries(metaTheme).map(function (_ref5) {
+    var _ref6 = (0,_virtual_rollupPluginBabelHelpers_mjs__WEBPACK_IMPORTED_MODULE_0__.slicedToArray)(_ref5, 2),
+      tokenGroupName = _ref6[0],
+      tokenGroup = _ref6[1];
+    return [tokenGroupName, tokenGroupNamesToRems.includes(tokenGroupName) ? tokenGroupToRems(tokenGroup) : tokenGroup];
+  }));
+}
+
+
 
 
 /***/ }),

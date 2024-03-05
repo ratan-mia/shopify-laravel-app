@@ -1,8 +1,10 @@
 @extends('shopify-app::layouts.default')
 
 @section('content')
+
+<link href="https://unpkg.com/@shopify/polaris@12.20.0/build/esm/styles.css" rel="stylesheet" />
 <!-- You are: (shop domain name) -->
-<p>You are: {{ $shopDomain ?? Auth::user()->name }}</p>
+{{-- <p>You are: {{ $shopDomain ?? Auth::user()->name }}</p> --}}
 
 <div id="root"></div>
 @endsection
@@ -12,9 +14,9 @@
 
 <script src="{{asset('/js/app.js')}}"></script>
 
-<script>
+{{-- <script>
     actions.TitleBar.create(app, {
         title: 'Welcome'
     });
-</script>
+</script> --}}
 @endsection
