@@ -10,7 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './bootstrap';
 import AppFrame from './components/Routing/AppFrame';
-
+import translations from '@shopify/polaris/locales/en.json';
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -27,7 +27,7 @@ if (document.getElementById('root')) {
 
         <React.StrictMode>
             <BrowserRouter>
-            <AppProvider>
+            <AppProvider i18n={translations}>
                 <AppFrame/>
             </AppProvider>
             </BrowserRouter>

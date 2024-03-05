@@ -1,9 +1,9 @@
 import React from 'react'
-import { Route } from 'react-router'
+import { Route, Routes } from 'react-router'
 import Home from '../Home'
 import Settings from '../Settings'
 
-export default function Routes() {
+export default function MainRouter() {
     return (
         <div>
             <Routes>
@@ -13,7 +13,6 @@ export default function Routes() {
                 <Route path="/settings">
                     <Settings />
                 </Route>
-
             </Routes>
 
         </div>
