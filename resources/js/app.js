@@ -1,8 +1,7 @@
+import { AppProvider } from '@shopify/polaris';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AppProvider } from '@shopify/polaris';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+import { BrowserRouter } from 'react-router-dom';
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
@@ -27,9 +26,12 @@ if (document.getElementById('root')) {
     Index.render(
 
         <React.StrictMode>
+            <BrowserRouter>
             <AppProvider>
                 <AppFrame/>
             </AppProvider>
+            </BrowserRouter>
+
         </React.StrictMode>
 
     )

@@ -6,12 +6,16 @@ import Settings from '../Settings'
 export default function Routes() {
     return (
         <div>
-            <Route path="/">
-                <Home />
-            </Route>
-            <Route path="/settings">
-                <Settings />
-            </Route>
+            <Routes>
+                <Route path="/">
+                    <Home />
+                </Route>
+                <Route path="/settings">
+                    <Settings />
+                </Route>
+
+            </Routes>
+
         </div>
     )
 }

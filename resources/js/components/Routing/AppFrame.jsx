@@ -2,6 +2,7 @@
 import {Frame, Navigation} from '@shopify/polaris';
 import {HomeIcon, OrderIcon} from '@shopify/polaris-icons';
 import React from 'react';
+import Routes from './Routes';
 
 export default function AppFrame() {
 
@@ -30,5 +31,7 @@ export default function AppFrame() {
     );
 
 
-    return <Frame navigation={navigationMarkup}></Frame>
+    return <Frame navigation={navigationMarkup}>
+        <Routes/>
+    </Frame>
 }
