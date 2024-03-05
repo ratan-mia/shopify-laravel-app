@@ -50,9 +50,6 @@ export default function Navbar() {
         {!isFullscreen && (
           <Button onClick={() => setFullscreen(true)}>Go Fullscreen</Button>
         )}
-        <Text variant="headingLg" as="p">
-          Page content
-        </Text>
       </div>
     </div>
   );
