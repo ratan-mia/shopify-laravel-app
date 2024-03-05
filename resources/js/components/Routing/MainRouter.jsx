@@ -1,20 +1,15 @@
-import React from 'react'
-import { Route, Routes } from 'react-router'
-import Home from '../Home'
-import Settings from '../Settings'
+import React from 'react';
+import { Route, Routes } from 'react-router';
+import Home from '../Home';
+import Settings from '../Settings';
 
 export default function MainRouter() {
     return (
         <div>
             <Routes>
-                <Route path="/">
-                    <Home />
-                </Route>
-                <Route path="/settings">
-                    <Settings />
-                </Route>
+                <Route path="/" element={<Home />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
-
         </div>
-    )
+    );
 }
