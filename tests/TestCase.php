@@ -1,10 +1,9 @@
 <?php
 
 namespace Tests;
-use Pest\Laravel\Concerns\ProvidesRoutes;
-// use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Pest\Laravel\Testing\Concerns\MakesHttpRequests;
 
+
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {

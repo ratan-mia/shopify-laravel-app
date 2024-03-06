@@ -21,16 +21,3 @@ function Example() {
 
 export default Example;
 
-if (document.getElementById('root')) {
-    const Index = ReactDOM.createRoot(document.getElementById('root'));
-
-    Index.render(
-
-        <React.StrictMode>
-            <AppProvider>
-                <Navbar />
-            </AppProvider>
-        </React.StrictMode>
-
-    )
-}
