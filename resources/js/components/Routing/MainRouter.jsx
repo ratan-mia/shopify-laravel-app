@@ -7,8 +7,8 @@ export default function MainRouter() {
     return (
         <div>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/settings" element={<Settings />} />
+                <Route exact path="/" element={<Home />} />
+                <Route exact path="/settings" element={<Settings />} />
             </Routes>
         </div>
     );

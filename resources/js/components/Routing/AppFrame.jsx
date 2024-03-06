@@ -7,17 +7,18 @@ import MainRouter from './MainRouter';
 export default function AppFrame() {
 
     const navigationMarkup = (
-        <Navigation location="/">
+        <Navigation location={location.pathname}>
             <Navigation.Section
                 items={[
                     {
                         url: '/',
                         label: 'Home',
+                        exactMatch:true,
                         icon: HomeIcon,
                     },
                     {
                         url: '/settings',
-                        excludePaths: ['#'],
+                        exactMatch:true,
                         label: 'Settings',
                         icon: OrderIcon,
                         badge: '15',

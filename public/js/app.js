@@ -16051,15 +16051,16 @@ __webpack_require__.r(__webpack_exports__);
 
 function AppFrame() {
   var navigationMarkup = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_2__.Navigation, {
-    location: "/"
+    location: location.pathname
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_shopify_polaris__WEBPACK_IMPORTED_MODULE_2__.Navigation.Section, {
     items: [{
       url: '/',
       label: 'Home',
+      exactMatch: true,
       icon: _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_3__.S
     }, {
       url: '/settings',
-      excludePaths: ['#'],
+      exactMatch: true,
       label: 'Settings',
       icon: _shopify_polaris_icons__WEBPACK_IMPORTED_MODULE_4__.S,
       badge: '15'
@@ -16094,9 +16095,11 @@ __webpack_require__.r(__webpack_exports__);
 
 function MainRouter() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router__WEBPACK_IMPORTED_MODULE_3__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router__WEBPACK_IMPORTED_MODULE_3__.Route, {
+    exact: true,
     path: "/",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Home__WEBPACK_IMPORTED_MODULE_1__["default"], null)
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router__WEBPACK_IMPORTED_MODULE_3__.Route, {
+    exact: true,
     path: "/settings",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Settings__WEBPACK_IMPORTED_MODULE_2__["default"], null)
   })));
