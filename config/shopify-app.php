@@ -168,7 +168,7 @@ return [
     |
     */
 
-    'api_version' => env('SHOPIFY_API_VERSION', '2024-01'),
+    'api_version' => env('SHOPIFY_API_VERSION', '2023-04'),
 
     /*
     |--------------------------------------------------------------------------
@@ -201,7 +201,7 @@ return [
     |
     */
 
-    'api_scopes' => env('SHOPIFY_API_SCOPES', 'read_products,write_products,read_themes'),
+    'api_scopes' => env('SHOPIFY_API_SCOPES', 'read_products,write_products,read_themes,read_orders'),
 
     /*
     |--------------------------------------------------------------------------
@@ -330,42 +330,6 @@ return [
 
     'billing_redirect' => env('SHOPIFY_BILLING_REDIRECT', '/billing/process'),
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Enable legacy support for features
-    |--------------------------------------------------------------------------
-    |
-    */
-    'app_legacy_supports' => [
-        'after_authenticate_job' => true,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Register listeners to the events
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'listen' => [
-        \Osiset\ShopifyApp\Messaging\Events\AppInstalledEvent::class => [
-            // \App\Listeners\MyListener::class,
-        ],
-        \Osiset\ShopifyApp\Messaging\Events\ShopAuthenticatedEvent::class => [
-            // \App\Listeners\MyListener::class,
-        ],
-        \Osiset\ShopifyApp\Messaging\Events\ShopDeletedEvent::class => [
-            // \App\Listeners\MyListener::class,
-        ],
-        \Osiset\ShopifyApp\Messaging\Events\AppUninstalledEvent::class => [
-            // \App\Listeners\MyListener::class,
-        ],
-        \Osiset\ShopifyApp\Messaging\Events\PlanActivatedEvent::class => [
-            // \App\Listeners\MyListener::class,
-        ],
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Shopify Webhooks
@@ -381,22 +345,10 @@ return [
     */
 
     'webhooks' => [
-        /*
-            [
-                'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'ORDERS_CREATE'),
-                'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://some-app.com/webhook/orders-create')
-            ], [
-                'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'APP_PURCHASES_ONE_TIME_UPDATE'),
-                'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),
-            ]
-            // In certain situations you may wish to map the webhook to a specific class
-            // To do this, change the array to an associative array with a 'class' key
-            'orders-create' => [
-                'topic' => env('SHOPIFY_WEBHOOK_3_TOPIC', 'ORDERS_PAID'),
-                'address' => env('SHOPIFY_WEBHOOK_3_ADDRESS', 'https://some-app.com/webhook/orders-create'),
-                'class' => \App\Shopify\Actions\ExampleAppJob::class
-            ],
-        */
+        [
+            'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'app/uninstalled'),
+            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://dear-workable-earwig.ngrok-free.app/webhook/app-uninstalled')
+        ],
     ],
 
     /*
@@ -416,8 +368,7 @@ return [
                 'display_scope' => env('SHOPIFY_SCRIPTTAG_1_DISPLAY_SCOPE', 'online_store')
             ],
             ...
-        */
-    ],
+        */],
 
     /*
     |--------------------------------------------------------------------------
@@ -428,21 +379,15 @@ return [
     | This, like webhooks and scripttag jobs, will fire every time a shop
     | authenticates, not just once.
     |
-    |
     */
 
-    /*
-     * @deprecated This will be removed in the next major version.
-     * @see
-     */
     'after_authenticate_job' => [
         /*
             [
                 'job' => env('AFTER_AUTHENTICATE_JOB'), // example: \App\Jobs\AfterAuthorizeJob::class
                 'inline' => env('AFTER_AUTHENTICATE_JOB_INLINE', false) // False = dispatch job for later, true = dispatch immediately
             ],
-        */
-    ],
+        */],
 
     /*
     |--------------------------------------------------------------------------
@@ -539,26 +484,26 @@ return [
     */
 
     'theme_support' => [
-        /*
+        /**
          * Specify the name of the template the app will integrate with
          */
         'templates' => ['product', 'collection', 'index'],
-        /*
+        /**
          * Interval for caching the request: minutes, seconds, hours, days, etc.
          */
         'cache_interval' => 'hours',
-        /*
+        /**
          * Cache duration
          */
         'cache_duration' => '12',
-         /*
+        /**
          * At which levels of theme support the use of "theme app extension" is not available
          * and script tags will be installed.
          * Available levels: FULL, PARTIAL, UNSUPPORTED.
          */
         'unacceptable_levels' => [
-            Osiset\ShopifyApp\Objects\Enums\ThemeSupportLevel::UNSUPPORTED,
-        ],
+            Osiset\ShopifyApp\Objects\Enums\ThemeSupportLevel::UNSUPPORTED
+        ]
     ],
 
     /*
@@ -583,6 +528,4 @@ return [
     |
     */
     'frontend_engine' => env('SHOPIFY_FRONTEND_ENGINE', 'BLADE'),
-
-    'iframe_ancestors' => '',
 ];
