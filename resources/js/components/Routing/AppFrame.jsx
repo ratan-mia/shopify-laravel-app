@@ -1,11 +1,11 @@
-// AppFrame.js
+
 import { Frame, Navigation } from '@shopify/polaris';
-import { HomeMajorMonotone, OrdersMajorMonotone } from '@shopify/polaris-icons';
+import { HomeIcon, OrderIcon } from '@shopify/polaris-icons';
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import MainRouter from './MainRouter';
 
 export default function AppFrame() {
+
     const navigationMarkup = (
         <Navigation location={location.pathname}>
             <Navigation.Section
@@ -13,23 +13,26 @@ export default function AppFrame() {
                     {
                         url: '/',
                         label: 'Home',
-                        icon: HomeMajorMonotone,
+                        exactMatch:true,
+                        icon: HomeIcon,
                     },
                     {
                         url: '/settings',
+                        exactMatch:true,
                         label: 'Settings',
-                        icon: OrdersMajorMonotone,
+                        icon: OrderIcon,
+                        badge: '15',
                     },
+
                 ]}
             />
         </Navigation>
+
+
     );
 
-    return (
-        <Router>
-            <Frame navigation={navigationMarkup}>
-                <MainRouter />
-            </Frame>
-        </Router>
-    );
+
+    return <Frame navigation={navigationMarkup}>
+        <MainRouter/>
+    </Frame>
 }

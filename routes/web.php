@@ -19,4 +19,4 @@ Route::get('/', function () {
 
 Route::get('/{path?}', function () {
     return view('welcome');
-})->middleware(['verify.shopify'])->name('home');
+})->middleware(['verify.shopify'])->where('path', '.*');
