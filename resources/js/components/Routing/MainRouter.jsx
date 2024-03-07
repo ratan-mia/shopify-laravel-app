@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
+import { createBrowserRouter } from 'react-router-dom';
+import ErrorPage from '../ErrorPage';
 import Home from '../Home';
 import Settings from '../Settings';
 
@@ -13,3 +15,16 @@ export default function MainRouter() {
         </div>
     );
 }
+
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Home />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: '/settings',
+        element: <Settings />,
+    }
+]);

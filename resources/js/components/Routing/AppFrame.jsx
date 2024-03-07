@@ -1,6 +1,6 @@
 
-import {Frame, Navigation} from '@shopify/polaris';
-import {HomeIcon, OrderIcon} from '@shopify/polaris-icons';
+import { Frame, Navigation } from '@shopify/polaris';
+import { HomeIcon, OrderIcon } from '@shopify/polaris-icons';
 import React from 'react';
 import MainRouter from './MainRouter';
 
