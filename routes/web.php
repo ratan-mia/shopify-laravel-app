@@ -25,7 +25,7 @@ Route::get('/{path?}', function () {
     return view('welcome');
 })->middleware(['verify.shopify'])->where('path', '.*');
 
-Route::get('/', [\App\Http\Controllers\ProductController::class, 'index'])->middleware(['verify.shopify'])->name('home');
+Route::get('/home', [\App\Http\Controllers\ProductController::class, 'index'])->middleware(['verify.shopify'])->name('home');
 
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])
     ->middleware(['verify.shopify'])->name('product.index');
